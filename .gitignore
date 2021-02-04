@@ -1,0 +1,6 @@
+# Folders (virtual envs, IDE...)
+env-kamilib/
+.idea/
+
+# Python files
+test-on-fly.py
