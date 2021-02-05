@@ -8,8 +8,11 @@ Common code for all metrics.
 # Authors : Lucas Terriel <lucas.terriel@inria.fr>
 # Licence : MIT
 
-
 import decimal
+
+__all__ = [
+    "_truncate_score"
+]
 
 def _truncate_score(score):
     """truncate the result to 2 digits after the decimal point (does not display zeros)

@@ -1,6 +1,7 @@
 # Folders (virtual envs, IDE...)
 env-kamilib/
 .idea/
+__pycache__
 
 # Python files
 test-on-fly.py
