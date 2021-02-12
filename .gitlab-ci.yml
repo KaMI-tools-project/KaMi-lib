@@ -1,4 +1,4 @@
-image: "python:3.6"
+image: "python:3.5.2"
 
 
 stages:
@@ -8,7 +8,7 @@ stages:
 
 Job_build:
   stage: build
-  image: python:3.6
+  image: python:3.5.2
   script:
     - apt-get update -q -y
     - apt-get install -y python-pip
@@ -19,12 +19,13 @@ Job_build:
 
 Job_pytest:
   stage: test
-  image: python:3.6
+  image: python:3.5.2
   script:
     - pytest
 
 pylint:
   stage: Static Analysis
+  image: python:3.5.2
   script:
     - pylint kami/metrics/*.py
     - pylint kami/parser/*.py
