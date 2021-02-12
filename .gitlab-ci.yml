@@ -1,5 +1,5 @@
 default:
-  image: python:3.5.2
+  image: python:3.8
 
 
 stages:
@@ -9,23 +9,24 @@ stages:
 
 Job_build:
   stage: build
-  image: python:3.5.2
+  image: python:3.8
   script:
-    - apt-get update -q -y
-    - apt-get install -y python-pip
-    - python -V
+    - apt-get update 
+    - apt install python3.8
+    - apt install python3-pip
+    - python3.8 --version
     - pip3 install -r requirements.txt
 
 
 Job_pytest:
   stage: test
-  image: python:3.5.2
+  image: python:3.8
   script:
     - pytest
 
 pylint:
   stage: Static Analysis
-  image: python:3.5.2
+  image: python:3.8
   script:
     - pylint kami/metrics/*.py
     - pylint kami/parser/*.py
