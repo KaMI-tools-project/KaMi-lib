@@ -1,7 +1,5 @@
 default:
-  image: python:3.5.2
-
-
+  image: python:3.6.7
 
 stages:
   - build
@@ -10,7 +8,7 @@ stages:
 
 Job_build:
   stage: build
-  image: python:3.5.2
+  image: python:3.6.7
 
   script:
     - python --version
@@ -20,14 +18,14 @@ Job_build:
 
 Job_pytest:
   stage: test
-  image: python:3.5.2
+  image: python:3.6.7
 
   script:
     - pytest
 
 pylint:
   stage: Static Analysis
-  image: python:3.5.2
+  image: python:3.6.7
 
   script:
     - pylint kami/metrics/*.py
