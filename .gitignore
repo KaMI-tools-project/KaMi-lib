@@ -2,6 +2,7 @@
 env-kamilib/
 .idea/
 __pycache__
+.pytest_cache
 
 # Python files
 test-on-fly.py

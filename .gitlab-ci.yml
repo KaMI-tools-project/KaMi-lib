@@ -1,0 +1,21 @@
+image: "python:3.8.5"
+
+before_script:
+  - python --version
+  - pip install -r requirements.txt
+
+stages:
+  - Test
+  - Static Analysis
+
+pytest:
+  stage: Test
+  script:
+    - pytest
+
+pylint:
+  stage: Static Analysis
+  script:
+    - pylint kami/metrics/*.py
+    - pylint kami/parser/*.py
+    - pylint kami/kamutils/*.py
