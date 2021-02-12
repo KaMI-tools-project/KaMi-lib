@@ -1,15 +1,25 @@
-image: "python:3.8.5"
+image: "python:3.6"
 
-before_script:
-  - python --version
-  - pip install -r requirements.txt
 
 stages:
-  - Test
+  - build
+  - test
   - Static Analysis
 
-pytest:
-  stage: Test
+Job_build:
+  stage: build
+  image: python:3.6
+  script:
+    - apt-get update -q -y
+    - apt-get install -y python-pip
+    - python -V
+    - pip install -r requirements.txt
+  artifacts:
+    untracked: true
+
+Job_pytest:
+  stage: test
+  image: python:3.6
   script:
     - pytest
 
