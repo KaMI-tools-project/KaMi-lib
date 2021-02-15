@@ -26,5 +26,4 @@ pylint:
   allow_failure: true
 
   script:
-    - pylint --disable=all kami
-    - echo "** BUILD, TESTS AND STATS DONE **"
+    - pylint kami
