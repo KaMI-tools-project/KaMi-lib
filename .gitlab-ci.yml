@@ -23,6 +23,7 @@ Job_pytest:
 pylint:
   stage: Static Analysis
   image: python:3.8
+  allow_failure: true
 
   script:
     - pylint kami/metrics/*.py
