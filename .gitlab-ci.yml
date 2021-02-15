@@ -11,7 +11,6 @@ Job_build:
     - python3 -V
     - pip3 --version
     - pip3 install --upgrade setuptools
-    - pip3 install cython
     - pip3 install cPython
     - pip3 install -r requirements.txt
 
