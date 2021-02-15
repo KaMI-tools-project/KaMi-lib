@@ -9,6 +9,7 @@ Job_build:
 
   script:
     - python3 -V
+    - pip --version
     - pip install -r requirements.txt
 
 
