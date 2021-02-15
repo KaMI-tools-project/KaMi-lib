@@ -9,7 +9,6 @@ lxml
 mccabe
 numpy
 packaging
-pkg-resources
 pluggy
 py
 pylint
