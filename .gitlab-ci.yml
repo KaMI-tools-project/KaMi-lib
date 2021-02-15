@@ -26,4 +26,4 @@ pylint:
   allow_failure: true
 
   script:
-    - pylint kami
+    - pylint --disable=all kami
