@@ -17,7 +17,7 @@ __all__ = [
 
 
 class Scorer:
-    """Global class to compute classic HTR/OCR metrics
+    """Global class to compute classic HTR/OCR metrics.
 
     Args:
         reference (str): Human readable string describing the reference to compare with prediction (ground truth).
