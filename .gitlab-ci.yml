@@ -8,8 +8,6 @@ Job_build:
   image: python:3.8
 
   script:
-    - sudo apt-get update -q -y
-    - sudo apt-get install -y python-pip
     - python -V
     - pip install -r requirements.txt
 
