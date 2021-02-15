@@ -1,4 +1,4 @@
-- badges here
+[![pipeline status](https://gitlab.inria.fr/dh-projects/kami/kami-lib/badges/master/pipeline.svg)](https://gitlab.inria.fr/dh-projects/kami/kami-lib/-/commits/master)
 
 # KaMI (Kraken Model Inspector)
 
