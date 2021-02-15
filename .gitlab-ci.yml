@@ -26,7 +26,5 @@ pylint:
   allow_failure: true
 
   script:
-    - pylint kami/metrics/*.py
-    - pylint kami/parser/*.py
-    - pylint kami/kamutils/*.py
+    - pylint kami
     - echo "** BUILD, TESTS AND STATS DONE **"
