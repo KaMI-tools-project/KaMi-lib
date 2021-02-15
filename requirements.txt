@@ -1,5 +1,3 @@
-cython
-cPython
 astroid
 attrs
 beautifulsoup4
