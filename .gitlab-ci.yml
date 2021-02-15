@@ -20,7 +20,7 @@ Job_pytest:
   script:
     - pip3 install pytest pytest-cov
     - pytest
-    - pytest --cov=src/
+    - pytest --cov=kami/ tests/*.py
     - coverage xml
   artifacts:
     reports:
