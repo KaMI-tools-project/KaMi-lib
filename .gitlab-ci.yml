@@ -10,7 +10,6 @@ Job_build:
   script:
     - python3 -V
     - pip3 --version
-    - sudo apt-get install python3.6-dev libmysqlclient-dev
     - pip3 install --upgrade setuptools
     - pip3 install -r requirements.txt
 
