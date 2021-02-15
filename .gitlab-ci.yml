@@ -39,3 +39,4 @@ Job_pylint:
 
   script:
     - pylint --disable=all kami
+    
