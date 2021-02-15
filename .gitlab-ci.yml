@@ -18,7 +18,13 @@ Job_pytest:
   image: python:3.8
 
   script:
+    - pip3 install pytest pytest-cov
     - pytest
+    - pytest --cov=src/
+    - coverage xml
+  artifacts:
+    reports:
+      cobertura: coverage.xml
 
 pylint:
   stage: Static Analysis
