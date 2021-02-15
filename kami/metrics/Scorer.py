@@ -28,14 +28,14 @@ class Scorer:
                                             to False.
         truncate_score (:obj:`bool`, optional): To truncate final
                                             score. Defaults to False.
-        round (:obj:`str`, optional): To set the number of digits
+        round_digits (:obj:`str`, optional): To set the number of digits
                                     after the decimal point.
                                     Defaults to ".01".
 
     Attributes:
         opt_percent (bool): User option on percentage.
         opt_truncate (bool): User option on truncate.
-        round (str): User option set type of truncate.
+        round_digits (str): User option set type of truncate.
         reference (str): User reference string.
         prediction (str): User prediction string.
         length_char_reference (int): Total characters in reference string.

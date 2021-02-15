@@ -10,9 +10,9 @@ class testMetrics(unittest.TestCase):
     prediction_same = "Six semaines plus tard, Claude peignait un matin dans un flot de soleil qui tombait par la baie vitrée de l’atelier."
     prediction_change = "Six semaiNEs plus tard, lCCaude peignait un MA dans un flotille de soleil qui tombait baie vitrée de l’atelier."
     prediction_empty = ""
-    my_scorer_1 = kamiScorer(reference, prediction_same, show_percent=True, truncate_score=True, round='.001')
-    my_scorer_2 = kamiScorer(reference, prediction_change, show_percent=True, truncate_score=True, round='.001')
-    my_scorer_3 = kamiScorer(reference, prediction_empty, show_percent=True, truncate_score=True, round='.001')
+    my_scorer_1 = kamiScorer(reference, prediction_same, show_percent=True, truncate_score=True, round_digits='.001')
+    my_scorer_2 = kamiScorer(reference, prediction_change, show_percent=True, truncate_score=True, round_digits='.001')
+    my_scorer_3 = kamiScorer(reference, prediction_empty, show_percent=True, truncate_score=True, round_digits='.001')
 
     def test_success_with_same_string(self):
         assert self.my_scorer_1.board == {'levensthein_distance_char': 0,
