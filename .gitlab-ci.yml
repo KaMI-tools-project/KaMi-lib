@@ -5,23 +5,25 @@ stages:
 
 Job_build:
   stage: build
-  image: python:3
+  image: python:3.8
 
   script:
+    - apt-get update -q -y
+    - apt-get install -y python-pip
     - python -V
     - pip install -r requirements.txt
 
 
 Job_pytest:
   stage: test
-  image: python:3
+  image: python:3.8
 
   script:
     - pytest
 
 pylint:
   stage: Static Analysis
-  image: python:3
+  image: python:3.8
 
   script:
     - pylint kami/metrics/*.py
