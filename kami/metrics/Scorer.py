@@ -3,9 +3,7 @@
 # Authors : Lucas Terriel <lucas.terriel@inria.fr>
 # Licence : MIT
 
-from Levenshtein import (distance,
-                         hamming,
-                         editops)
+import Levenshtein
 
 from ._base import (_truncate_score,
                     _hot_encode,
@@ -20,11 +18,19 @@ class Scorer:
     """Global class to compute classic HTR/OCR metrics.
 
     Args:
-        reference (str): Human readable string describing the reference to compare with prediction (ground truth).
-        prediction (str): Human readable string describing the prediction to compare with reference.
-        show_percent (:obj:`bool`, optional): To pass final scores in percentage. Defaults to False.
-        truncate_score (:obj:`bool`, optional): To truncate final score. Defaults to False.
-        round (:obj:`str`, optional): To set the number of digits after the decimal point. Defaults to ".01".
+        reference (str): Human readable string describing
+                        the reference to compare with
+                        prediction (ground truth).
+        prediction (str): Human readable string describing the
+                        prediction to compare with reference.
+        show_percent (:obj:`bool`, optional): To pass final scores
+                                            in percentage. Defaults
+                                            to False.
+        truncate_score (:obj:`bool`, optional): To truncate final
+                                            score. Defaults to False.
+        round (:obj:`str`, optional): To set the number of digits
+                                    after the decimal point.
+                                    Defaults to ".01".
 
     Attributes:
         opt_percent (bool): User option on percentage.
@@ -49,7 +55,8 @@ class Scorer:
         cip (float): Character information preserve.
         cil (float): Character information lost.
         mer (float): Match error rate.
-        board (dict): A general board of all above metrics in key (name of metric) / value (score) struct
+        board (dict): A general board of all above metrics in
+                     key (name of metric) / value (score) struct
     """
 
     # Collection of distance metrics #
@@ -69,9 +76,12 @@ class Scorer:
             int : result of Levensthein distance on characters
         """
         # Computes levensthein on words level
-        lev_distance_words = distance(*_hot_encode([self.reference.split(), self.prediction.split()]))
+        lev_distance_words = Levenshtein.distance(*_hot_encode(
+            [self.reference.split(), self.prediction.split()]
+        )
+                                      )
         # Computes levensthein on char level
-        lev_distance_char = distance(self.reference, self.prediction)
+        lev_distance_char = Levenshtein.distance(self.reference, self.prediction)
 
         return lev_distance_words, lev_distance_char
 
@@ -91,7 +101,7 @@ class Scorer:
         if self.length_char_reference != self.length_char_prediction:
             hamming_score = "Ø"
         else:
-            hamming_score = hamming(self.reference, self.prediction)
+            hamming_score = Levenshtein.hamming(self.reference, self.prediction)
         return hamming_score
 
     # Collection of HTR/OCR metrics #
@@ -124,7 +134,7 @@ class Scorer:
             wer = _get_percent(wer)
 
         if self.opt_truncate:
-            wer = _truncate_score(wer, self.round)
+            wer = _truncate_score(wer, self.round_digits)
 
         return wer
 
@@ -148,7 +158,7 @@ class Scorer:
             cer = _get_percent(cer)
 
         if self.opt_truncate:
-            cer = _truncate_score(cer, self.round)
+            cer = _truncate_score(cer, self.round_digits)
 
         return cer
 
@@ -176,7 +186,7 @@ class Scorer:
             wacc = _get_percent(wacc)
 
         if self.opt_truncate:
-            wacc = _truncate_score(wacc, self.round)
+            wacc = _truncate_score(wacc, self.round_digits)
 
         return wacc
 
@@ -185,7 +195,8 @@ class Scorer:
         """Computes the character information preserved (CIP).
 
         It is roughly equivalent to word accuracy but it work on character.
-        In kami, It is calculated as number of (H/total characters of reference) * (H/total characters of hypothesis)
+        In kami, It is calculated as number of
+        (H/total characters of reference) * (H/total characters of hypothesis)
         where H number of correctly recognized characters.
 
         Args:
@@ -196,11 +207,13 @@ class Scorer:
             int : result of word information preserved (opt : truncate / decimal or percentage)
         """
         if self.prediction:
-            cip = (float(self.H) / self.length_char_reference) * (float(self.H) / len(self.prediction))
+            cip = (float(self.H)
+                   / self.length_char_reference) * (float(self.H) /
+                                                    len(self.prediction))
             if self.opt_percent:
                 cip = _get_percent(cip)
             if self.opt_truncate:
-                cip = _truncate_score(cip, self.round)
+                cip = _truncate_score(cip, self.round_digits)
         else:
             cip = 0
         return cip
@@ -219,7 +232,10 @@ class Scorer:
             int : result of word information lost (opt : truncate / decimal or percentage)
         """
         if self.prediction:
-            cil = (1 - (float(self.H) / self.length_char_reference) * (float(self.H) / len(self.prediction)))
+            cil = (1 - (float(self.H)
+                        / self.length_char_reference)
+                  * (float(self.H) /
+                     len(self.prediction)))
         else:
             cil = 0
 
@@ -227,7 +243,7 @@ class Scorer:
             cil = _get_percent(cil)
 
         if self.opt_truncate:
-            cil = _truncate_score(cil, self.round)
+            cil = _truncate_score(cil, self.round_digits)
 
         return cil
 
@@ -255,7 +271,7 @@ class Scorer:
             mer = _get_percent(mer)
 
         if self.opt_truncate:
-            mer = _truncate_score(mer, self.round)
+            mer = _truncate_score(mer, self.round_digits)
 
         return mer
 
@@ -276,7 +292,7 @@ class Scorer:
             int : number of insertions (added characters)
         """
 
-        result_editops = editops(self.reference, self.prediction)
+        result_editops = Levenshtein.editops(self.reference, self.prediction)
 
         substitutions = sum(1 if operations[0] == "replace" else 0 for operations in result_editops)
         deletions = sum(1 if operations[0] == "delete" else 0 for operations in result_editops)
@@ -291,11 +307,16 @@ class Scorer:
     def __str__(self):
         return f"class {self.__class__.__name__}"
 
-    def __init__(self, reference, prediction, show_percent=False, truncate_score=False, round='.01'):
+    def __init__(self,
+                 reference,
+                 prediction,
+                 show_percent=False,
+                 truncate_score=False,
+                 round_digits='.01'):
         # Options
         self.opt_percent = show_percent
         self.opt_truncate = truncate_score
-        self.round = round
+        self.round_digits = round_digits
         # Strings to compare
         self.reference = reference
         self.prediction = prediction
@@ -332,5 +353,3 @@ class Scorer:
             "deletions": self.D,
             "insertions": self.I,
         }
-
-
