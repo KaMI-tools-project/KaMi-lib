@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 """Metrics to assess text recognition (OCR/HTR)
 """
 # Authors : Lucas Terriel <lucas.terriel@inria.fr>

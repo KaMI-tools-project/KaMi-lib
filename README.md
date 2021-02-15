@@ -1,5 +1,4 @@
-[![pipeline status](https://gitlab.inria.fr/dh-projects/kami/kami-lib/badges/master/pipeline.svg)](https://gitlab.inria.fr/dh-projects/kami/kami-lib/-/commits/master) [![coverage report](https://gitlab.inria.fr/dh-projects/kami/kami-lib/badges/master/coverage.svg)](https://gitlab.inria.fr/dh-projects/kami/kami-lib/-/commits/master)
-![Linter](https://img.shields.io/badge/Linter-Pylint-blue)
+[![pipeline status](https://gitlab.inria.fr/dh-projects/kami/kami-lib/badges/master/pipeline.svg)](https://gitlab.inria.fr/dh-projects/kami/kami-lib/-/commits/master) [![coverage report](https://gitlab.inria.fr/dh-projects/kami/kami-lib/badges/master/coverage.svg)](https://gitlab.inria.fr/dh-projects/kami/kami-lib/-/commits/master) ![Linter](https://img.shields.io/badge/Linter-Pylint-blue)
 # KaMI (Kraken Model Inspector)
 
 <!--![KaMI lib logo](./docs/static/kramin_carmin_lib.png)-->

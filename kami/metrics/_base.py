@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 """Common code for all metrics.
 """
 # Authors : Lucas Terriel <lucas.terriel@inria.fr>

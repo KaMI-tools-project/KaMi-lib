@@ -18,7 +18,7 @@ Job_pytest:
   image: python:3.8
 
   script:
-    - pytest
+    - pytest tests/*.py
   
 
 Job_coverage:
