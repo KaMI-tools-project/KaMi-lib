@@ -8,7 +8,7 @@ Job_build:
   image: python:3.8
 
   script:
-    - python -V
+    - python3 -V
     - pip install -r requirements.txt
 
 
