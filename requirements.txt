@@ -1,4 +1,4 @@
-Cython
+cython
 cPython
 astroid
 attrs
