@@ -18,15 +18,23 @@ Job_pytest:
   image: python:3.8
 
   script:
-    - pip3 install pytest pytest-cov
-    - pytest
-    - pytest --cov=kami/ tests/*.py
-    - coverage xml
-  artifacts:
-    reports:
-      cobertura: coverage.xml
+    - pytest kami
+  
 
-pylint:
+Job_coverage:
+
+  stage: test
+  image: python:3.8
+  script:
+      - pip3 install pytest pytest-cov
+      - pytest --cov=kami/ tests/*.py
+      - coverage report -m
+      - coverage-badge
+
+  coverage: '/TOTAL.+ ([0-9]{1,3}%)/'
+
+
+Job_pylint:
   stage: Static Analysis
   image: python:3.8
   allow_failure: true
