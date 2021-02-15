@@ -8,7 +8,7 @@ Job_build:
   image: python:3
 
   script:
-    - python --version
+    - python3 --version
     - pip install --upgrade pip
     - pip install -r requirements.txt
 
