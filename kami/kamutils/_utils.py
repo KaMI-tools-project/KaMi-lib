@@ -11,7 +11,7 @@ from termcolor import cprint
 import time
 
 # TODO(Luca) : Pylint
-def report_log(message, type_log="I") -> None:
+def _report_log(message, type_log="I") -> None:
     """Print a log report
 
     letter code to specify type of report
@@ -26,11 +26,11 @@ def report_log(message, type_log="I") -> None:
 
     """
     if type_log == "I":  # Info
-        return print(f"[INFO ℹ] {message}")
+        return print(f"[INFO    ℹ] {message}")
     elif type_log == "W":  # Warning
         return cprint(f"[WARNING ▲] {message}", "yellow")
     elif type_log == "E":  # Error
-        return cprint(f"[ERROR ⤬]  {message}", "red")
+        return cprint(f"[ERROR   ⤬]  {message}", "red")
     elif type_log == "S": # Success
         return cprint(f"[SUCCESS ✓]  {message}", "green")
     elif type_log == "V": # Verbose
@@ -40,13 +40,13 @@ def report_log(message, type_log="I") -> None:
         return print(message)
 
 # TODO(Luca) : documentation
-def timing(f):
+def _timing(f):
     @wraps(f)
     def wrapper(*args, **kwargs):
         start = time.time()
         result = f(*args, **kwargs)
         end = time.time()
-        report_log(f'Total execution : {end-start} secs')
+        _report_log(f'Total execution : {end-start} secs')
         return result
     return wrapper
 

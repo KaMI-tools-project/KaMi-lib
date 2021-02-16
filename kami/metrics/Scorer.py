@@ -7,9 +7,9 @@
 
 import Levenshtein
 
-from ._base import (_truncate_score,
-                    _hot_encode,
-                    _get_percent)
+from ._base_metrics import (_truncate_score,
+                            _hot_encode,
+                            _get_percent)
 
 __all__ = [
     "Scorer",

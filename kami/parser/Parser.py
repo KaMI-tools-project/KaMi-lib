@@ -6,7 +6,7 @@
 
 from bs4 import BeautifulSoup
 
-from ..kamutils._utils import report_log
+from ..kamutils._utils import _report_log
 
 
 XML_STANDARD = ["PcGts", "alto"] #, "TEI"]

@@ -59,4 +59,4 @@ class testMetrics(unittest.TestCase):
                                           'insertions': 0}
 
 
-
+    # TODO(Luca) : test with no strings
