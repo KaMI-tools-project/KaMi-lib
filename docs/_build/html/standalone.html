@@ -1,0 +1,410 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>KaMI as «standalone» python package for text preprocessing and compute OCR/HTR metrics &mdash; KaMI (Kraken Model Inspector) Python package documentation 1.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Create a complete pipeline with KaMI" href="pipeline.html" />
+    <link rel="prev" title="Installation" href="installation.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> KaMI (Kraken Model Inspector) Python package documentation
+          
+
+          
+            
+            <img src="_static/kramin_carmin_lib.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">KaMI as «standalone» python package for text preprocessing and compute OCR/HTR metrics</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#the-transformation-module-to-preprocess-text-data">The <code class="docutils literal notranslate"><span class="pre">transformation</span></code> module to preprocess text data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#the-evaluation-module-to-assess-text-recognition-ocr-htr-metrics">The <code class="docutils literal notranslate"><span class="pre">evaluation</span></code> module to assess text recognition (OCR/HTR) metrics</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#metrics-overview-in-kami">Metrics overview in KaMI</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#distance-metrics">Distance metrics</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#recognition-measure">Recognition measure</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#access-to-different-metrics-with-kami-metrics-evaluation-scorer">Access to different metrics with <code class="xref py py-class docutils literal notranslate"><span class="pre">kami.metrics.evaluation.Scorer()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#references">References</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pipeline.html">Create a complete pipeline with KaMI</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">KaMI (Kraken Model Inspector) Python package documentation</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>KaMI as «standalone» python package for text preprocessing and compute OCR/HTR metrics</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/standalone.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-kami.preprocessing.transformation">
+<span id="kami-as-standalone-python-package-for-text-preprocessing-and-compute-ocr-htr-metrics"></span><h1>KaMI as «standalone» python package for text preprocessing and compute OCR/HTR metrics<a class="headerlink" href="#module-kami.preprocessing.transformation" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="the-transformation-module-to-preprocess-text-data">
+<h2>The <code class="docutils literal notranslate"><span class="pre">transformation</span></code> module to preprocess text data<a class="headerlink" href="#the-transformation-module-to-preprocess-text-data" title="Permalink to this headline">¶</a></h2>
+</div>
+<dl class="py class">
+<dt id="kami.preprocessing.transformation.Composer">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">kami.preprocessing.transformation.</span></code><code class="sig-name descname"><span class="pre">Composer</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">strings</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">functions_clean</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keep_punct</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">append_stop_words</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keep_stop_words</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/kami/preprocessing/transformation.html#Composer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#kami.preprocessing.transformation.Composer" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<span class="target" id="module-kami.metrics.evaluation"></span><div class="section" id="the-evaluation-module-to-assess-text-recognition-ocr-htr-metrics">
+<h2>The <code class="docutils literal notranslate"><span class="pre">evaluation</span></code> module to assess text recognition (OCR/HTR) metrics<a class="headerlink" href="#the-evaluation-module-to-assess-text-recognition-ocr-htr-metrics" title="Permalink to this headline">¶</a></h2>
+<p>Use this module standalone with <a class="reference internal" href="#kami.metrics.evaluation.Scorer" title="kami.metrics.evaluation.Scorer"><code class="xref py py-class docutils literal notranslate"><span class="pre">kami.metrics.evaluation.Scorer()</span></code></a>
+class in evaluation or as part of KaMI <code class="xref py py-class docutils literal notranslate"><span class="pre">kami.pipeline.Core()</span></code> class
+in pipeline module to assess text recognition (OCR/HTR) metrics.</p>
+<div class="section" id="metrics-overview-in-kami">
+<h3>Metrics overview in KaMI<a class="headerlink" href="#metrics-overview-in-kami" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="distance-metrics">
+<h4>Distance metrics<a class="headerlink" href="#distance-metrics" title="Permalink to this headline">¶</a></h4>
+<p>To compute distance KaMI use C extension module from
+<a class="reference external" href="https://rawgit.com/ztane/python-Levenshtein/master/docs/Levenshtein.html">Python-Levensthein</a>
+package.</p>
+<dl class="simple">
+<dt><strong>Levenshtein distance</strong> (or edit distance) :</dt><dd><p>Gives a measure of the difference between two strings.
+It is equal to the minimum number of characters that must be deleted,
+inserted or replaced to switch from one string to another.</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In KaMI, you can access to distance on words and characters. These two kind of distance are utils
+for compute WER and CER.</p>
+</div>
+<dl class="simple">
+<dt><strong>Hamming distance</strong> :</dt><dd><p>It very close from Levenshtein distance definition but gives a measure only between two strings
+have the same length.</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="recognition-measure">
+<h4>Recognition measure<a class="headerlink" href="#recognition-measure" title="Permalink to this headline">¶</a></h4>
+<dl>
+<dt><strong>Word Error Rate (WER)</strong>:</dt><dd><p>The word error rate is derived from the Levenshtein distance
+which works at word level instead of characters. It indicates the
+rate of incorrectly recognized words compared to a reference text.
+The lower the rate (minimum 0.0), the better the recognition.
+The maximum rate is not limited and can exceed 1.0 in the event
+of very poor recognition if there are many insertions.</p>
+<p>In KaMI, the WER is bounded between 0 and 1 and it is calculated as</p>
+<div class="math notranslate nohighlight">
+\[\frac{D(R,H)}{total\,words} \,where \,D \,is \,Levenshtein \,distance\]</div>
+</dd>
+<dt><strong>Character Error Rate (CER)</strong>:</dt><dd><p>As WER, the character error rate which works at character level
+instead of words. In Kami as WER, the rate is bounded between 0 and 1.</p>
+</dd>
+<dt><strong>Word accuracy (Wacc)</strong>:</dt><dd><p>The word accuracy calculates the number of perfectly recognized words
+and helps assess overall recognition of HTR/ OCR.
+This recognition rate can be negative.</p>
+<p>In kami, it is calculated as (1-WER), where 1 corresponding to
+the best score.</p>
+</dd>
+<dt><strong>Character information preserved (CIP)</strong>:</dt><dd><p>It is roughly equivalent to word accuracy but it work on character.</p>
+<p>In kami, It is calculated as number of
+(H/total characters of reference) * (H/total characters of hypothesis)
+where H number of correctly recognized characters.</p>
+</dd>
+<dt><strong>Character information lost (CIL)</strong>:</dt><dd><p>In kami, It is calculated as 1 - CIP. The lower the rate,
+the more information has disappeared.</p>
+</dd>
+<dt><strong>Match error rate (MER)</strong>:</dt><dd><p>the lower the rate, more errors are minimized and
+better the recognition of characters is effective. It corresponds to an
+overall error ratio of text recognition. It’s a another way
+to compute CER.</p>
+<p>In kami, It is calculated as S + D + I / H + S + D + I</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="access-to-different-metrics-with-kami-metrics-evaluation-scorer">
+<h3>Access to different metrics with <a class="reference internal" href="#kami.metrics.evaluation.Scorer" title="kami.metrics.evaluation.Scorer"><code class="xref py py-class docutils literal notranslate"><span class="pre">kami.metrics.evaluation.Scorer()</span></code></a><a class="headerlink" href="#access-to-different-metrics-with-kami-metrics-evaluation-scorer" title="Permalink to this headline">¶</a></h3>
+<p>First, can use attribute define in <a class="reference internal" href="#kami.metrics.evaluation.Scorer" title="kami.metrics.evaluation.Scorer"><code class="xref py py-class docutils literal notranslate"><span class="pre">kami.metrics.evaluation.Scorer()</span></code></a> (see the documentation)</p>
+<blockquote>
+<div><dl class="field-list simple">
+<dt class="field-odd">Example</dt>
+<dd class="field-odd"><p></p></dd>
+</dl>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="go">&gt;&gt;&gt;</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>Note catch individually hints, substitutions characters…</p>
+<blockquote>
+<div><dl class="field-list simple">
+<dt class="field-odd">Example</dt>
+<dd class="field-odd"><p></p></dd>
+</dl>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="go">&gt;&gt;&gt;</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>You can retrieve all the metrics in dictionnary with .. py:attribute:: <cite>.board</cite> attribute</p>
+<blockquote>
+<div><dl class="field-list simple">
+<dt class="field-odd">Example</dt>
+<dd class="field-odd"><p></p></dd>
+</dl>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="go">&gt;&gt;&gt;</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Can truncate and percentage score with parameters.
+See the documentation <a class="reference internal" href="#kami.metrics.evaluation.Scorer" title="kami.metrics.evaluation.Scorer"><code class="xref py py-class docutils literal notranslate"><span class="pre">kami.metrics.evaluation.Scorer()</span></code></a> documentation.</p>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#kami.metrics.evaluation.Scorer" title="kami.metrics.evaluation.Scorer"><code class="xref py py-class docutils literal notranslate"><span class="pre">kami.metrics.evaluation.Scorer()</span></code></a> and <code class="xref py py-class docutils literal notranslate"><span class="pre">kami.pipeline.Core()</span></code></p>
+</div>
+</div></blockquote>
+</div>
+</div>
+<dl class="py class">
+<dt id="kami.metrics.evaluation.Scorer">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">kami.metrics.evaluation.</span></code><code class="sig-name descname"><span class="pre">Scorer</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">reference</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prediction</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_percent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">truncate_score</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">round_digits</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'.01'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/kami/metrics/evaluation.html#Scorer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#kami.metrics.evaluation.Scorer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Global class to compute classic HTR/OCR metrics.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>reference</strong> (<em>str</em>) – Reference string or text (ground truth).</p></li>
+<li><p><strong>prediction</strong> (<em>str</em>) – Hypothesis string or text to compare with reference.</p></li>
+<li><p><strong>show_percent</strong> (<em>bool</em>) – Option to show score as percentage.</p></li>
+<li><p><strong>truncate_score</strong> (<em>bool</em>) – Option to truncate score.</p></li>
+<li><p><strong>round_digits</strong> (<em>str</em>) – Option to select number of digit after the round score truncted.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Variables</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>opt_percent</strong> – User option on percentage.</p></li>
+<li><p><strong>opt_truncate</strong> – User option on truncate.</p></li>
+<li><p><strong>round_digits</strong> – User option set type of truncate.</p></li>
+<li><p><strong>reference</strong> – User reference string.</p></li>
+<li><p><strong>prediction</strong> – User prediction string.</p></li>
+<li><p><strong>length_char_reference</strong> – Total characters in reference string.</p></li>
+<li><p><strong>length_char_prediction</strong> – Total characters in prediction string.</p></li>
+<li><p><strong>length_words_reference</strong> – Total words in reference string.</p></li>
+<li><p><strong>length_words_prediction</strong> – Total words in prediction string.</p></li>
+<li><p><strong>lev_distance_words</strong> – Levensthein distance on words.</p></li>
+<li><p><strong>lev_distance_char</strong> – Levensthein distance on characters.</p></li>
+<li><p><strong>hamming</strong> – Hamming distance.</p></li>
+<li><p><strong>wer</strong> – Word error rate.</p></li>
+<li><p><strong>cer</strong> – Character error rate.</p></li>
+<li><p><strong>wacc</strong> – Word accuracy.</p></li>
+<li><p><strong>hints</strong> – Total number of Hints between reference and prediction.</p></li>
+<li><p><strong>substs</strong> – Total number of Substitutions between reference and prediction.</p></li>
+<li><p><strong>deletions</strong> – Total number of Deletions between reference and prediction.</p></li>
+<li><p><strong>insertions</strong> – Total number of Insertions between reference and prediction.</p></li>
+<li><p><strong>cip</strong> – Character information preserve.</p></li>
+<li><p><strong>cil</strong> – Character information lost.</p></li>
+<li><p><strong>mer</strong> – Match error rate.</p></li>
+<li><p><strong>board</strong> – A general board of all above metrics in
+key (name of metric) / value (score) struct</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>OCR/HTR metrics in attributes of <a class="reference internal" href="#kami.metrics.evaluation.Scorer" title="kami.metrics.evaluation.Scorer"><code class="xref py py-class docutils literal notranslate"><span class="pre">kami.metrics.evaluation.Scorer()</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<div class="section" id="references">
+<h2>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Text preprocessing</p></li>
+</ul>
+<p><strong>[1]</strong></p>
+<ul class="simple">
+<li><p>HTR/OCR Metrics</p></li>
+</ul>
+<p><strong>[1]</strong> <a class="reference external" href="https://en.wikipedia.org/wiki/Levenshtein_distance">Levenshtein distance wiképédia article</a>.</p>
+<p><strong>[2]</strong>  <a class="reference external" href="https://en.wikipedia.org/wiki/Hamming_distance">Hamming distance wiképédia article</a>.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="pipeline.html" class="btn btn-neutral float-right" title="Create a complete pipeline with KaMI" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="installation.html" class="btn btn-neutral float-left" title="Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, L. Terriel, A. Chagué.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

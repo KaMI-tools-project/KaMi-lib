@@ -1,0 +1,353 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>kami.preprocessing.transformation &mdash; KaMI (Kraken Model Inspector) Python package documentation 1.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> KaMI (Kraken Model Inspector) Python package documentation
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../standalone.html">KaMI as «standalone» python package for text preprocessing and compute OCR/HTR metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pipeline.html">Create a complete pipeline with KaMI</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">KaMI (Kraken Model Inspector) Python package documentation</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>kami.preprocessing.transformation</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for kami.preprocessing.transformation</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1"># Authors : Lucas Terriel &lt;lucas.terriel@inria.fr&gt;</span>
+<span class="c1"># Licence : MIT</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    The ``transformation`` module to preprocess text data</span>
+<span class="sd">    =====================================================</span>
+
+
+
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">string</span>
+<span class="kn">import</span> <span class="nn">re</span>
+
+<span class="kn">from</span> <span class="nn">kami.kamutils._utils</span> <span class="kn">import</span> <span class="n">_report_log</span>
+<span class="kn">from</span> <span class="nn">._base_preprocessing</span> <span class="kn">import</span> <span class="n">_cleanner</span>
+
+<span class="k">class</span> <span class="nc">_InitComposer</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Private class to control strings (1 or 2 sequences, no empties strings).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">strings</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">strings</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">_report_log</span><span class="p">(</span><span class="s1">&#39;It seems you use kami text preprocessing &#39;</span>
+                        <span class="s1">&#39;on one string (reference).&#39;</span><span class="p">,</span> <span class="s1">&#39;V&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">reference</span> <span class="o">=</span> <span class="n">strings</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">hypothesis</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">reference</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">_report_log</span><span class="p">(</span><span class="s1">&#39;It seems your reference string is empty.&#39;</span><span class="p">,</span> <span class="s1">&#39;E&#39;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">pass</span>
+
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">strings</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">reference</span> <span class="o">=</span> <span class="n">strings</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">hypothesis</span> <span class="o">=</span> <span class="n">strings</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">reference</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">_report_log</span><span class="p">(</span><span class="s1">&#39;It seems your reference string is empty.&#39;</span><span class="p">,</span> <span class="s1">&#39;E&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hypothesis</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">hypothesis</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">pass</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">strings</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="n">_report_log</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;The Kami composer deal with only one or two texts/strings.&quot;</span><span class="p">,</span> <span class="s2">&quot;E&quot;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="Composer"><a class="viewcode-back" href="../../../standalone.html#kami.preprocessing.transformation.Composer">[docs]</a><span class="k">class</span> <span class="nc">Composer</span><span class="p">(</span><span class="n">_InitComposer</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                 <span class="o">*</span><span class="n">strings</span><span class="p">,</span>
+                 <span class="n">functions_clean</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">keep_punct</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">append_stop_words</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">keep_stop_words</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">strings</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">functions_clean</span> <span class="o">=</span> <span class="n">functions_clean</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">keep_punct</span> <span class="o">=</span> <span class="n">keep_punct</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">append_stop_words</span> <span class="o">=</span> <span class="n">append_stop_words</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">keep_stop_words</span> <span class="o">=</span> <span class="n">keep_stop_words</span>
+
+        <span class="n">_type_sequence</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">if</span> <span class="n">functions_clean</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;1&#39;</span><span class="p">)</span>
+            <span class="n">_report_log</span><span class="p">(</span><span class="s1">&#39;Indicate your clean functions want apply. No filters were applied.&#39;</span><span class="p">,</span> <span class="s1">&#39;W&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">reference</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">reference</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">hypothesis</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hypothesis</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">reference</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">hypothesis</span> \
+                <span class="ow">and</span> <span class="n">functions_clean</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;2&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">reference</span> <span class="o">=</span> <span class="n">_cleanner</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">reference</span><span class="p">,</span>
+                                       <span class="bp">self</span><span class="o">.</span><span class="n">functions_clean</span><span class="p">,</span>
+                                       <span class="bp">self</span><span class="o">.</span><span class="n">keep_punct</span><span class="p">,</span>
+                                       <span class="bp">self</span><span class="o">.</span><span class="n">append_stop_words</span><span class="p">,</span>
+                                       <span class="bp">self</span><span class="o">.</span><span class="n">keep_stop_words</span><span class="p">,</span>
+                                       <span class="n">_type_sequence</span><span class="o">=</span><span class="s1">&#39;same string&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">hypothesis</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">reference</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">reference</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hypothesis</span> \
+                <span class="ow">and</span> <span class="n">functions_clean</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> \
+                <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">hypothesis</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;3&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">reference</span> <span class="o">=</span> <span class="n">_cleanner</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">reference</span><span class="p">,</span>
+                                       <span class="bp">self</span><span class="o">.</span><span class="n">functions_clean</span><span class="p">,</span>
+                                       <span class="bp">self</span><span class="o">.</span><span class="n">keep_punct</span><span class="p">,</span>
+                                       <span class="bp">self</span><span class="o">.</span><span class="n">append_stop_words</span><span class="p">,</span>
+                                       <span class="bp">self</span><span class="o">.</span><span class="n">keep_stop_words</span><span class="p">,</span>
+                                       <span class="n">_type_sequence</span><span class="o">=</span><span class="s1">&#39;reference&#39;</span><span class="p">,)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">hypothesis</span> <span class="o">=</span> <span class="n">_cleanner</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hypothesis</span><span class="p">,</span>
+                                        <span class="bp">self</span><span class="o">.</span><span class="n">functions_clean</span><span class="p">,</span>
+                                        <span class="bp">self</span><span class="o">.</span><span class="n">keep_punct</span><span class="p">,</span>
+                                        <span class="bp">self</span><span class="o">.</span><span class="n">append_stop_words</span><span class="p">,</span>
+                                        <span class="bp">self</span><span class="o">.</span><span class="n">keep_stop_words</span><span class="p">,</span>
+                                        <span class="n">_type_sequence</span><span class="o">=</span><span class="s1">&#39;hypothesis&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">hypothesis</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;4&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">reference</span> <span class="o">=</span> <span class="n">_cleanner</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">reference</span><span class="p">,</span>
+                                       <span class="bp">self</span><span class="o">.</span><span class="n">functions_clean</span><span class="p">,</span>
+                                       <span class="bp">self</span><span class="o">.</span><span class="n">keep_punct</span><span class="p">,</span>
+                                       <span class="bp">self</span><span class="o">.</span><span class="n">append_stop_words</span><span class="p">,</span>
+                                       <span class="bp">self</span><span class="o">.</span><span class="n">keep_stop_words</span><span class="p">,</span>
+                                       <span class="n">_type_sequence</span><span class="o">=</span><span class="s1">&#39;reference&#39;</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">hypothesis</span> <span class="o">=</span> <span class="s1">&#39;No hypothesis string to perform&#39;</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Look up actual state of strings transformations&quot;&quot;&quot;</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        My Kami cleanner text processing</span>
+<span class="s2">        --------------------------------</span>
+<span class="s2">        &quot;&quot;&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">hypothesis</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;You applied Kami text preprocessing on one sequence (reference) as standalone program&quot;</span><span class="p">)</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        * Options choosen:</span>
+<span class="s2">        &quot;&quot;&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">functions_clean</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">keep_punct</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">append_stop_words</span> <span class="ow">and</span>  <span class="bp">self</span><span class="o">.</span><span class="n">keep_stop_words</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        No cleanning functions choosen</span>
+<span class="s2">            &quot;&quot;&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">function</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">functions_clean</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        - </span><span class="si">{</span><span class="n">function</span><span class="si">}</span><span class="s2"></span>
+<span class="s2">                      &quot;&quot;&quot;</span><span class="p">)</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        &lt;|&gt; </span>
+<span class="s2">        * Actual Reference sequence : </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">reference</span><span class="si">}</span><span class="s2"> </span>
+<span class="s2">        &lt;|&gt; </span>
+<span class="s2">        &quot;&quot;&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">hypothesis</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        * Actual Hypothesis sequence : </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">hypothesis</span><span class="si">}</span><span class="s2"></span>
+<span class="s2">            &quot;&quot;&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;-----------------&quot;</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, L. Terriel, A. Chagué.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,7 +1,7 @@
 import pytest
 import unittest
 
-from kami.metrics.Scorer import Scorer as kamiScorer
+from kami.metrics.evaluation import Scorer as kamiScorer
 
 """Run python -m pytest tests in root dir"""
 

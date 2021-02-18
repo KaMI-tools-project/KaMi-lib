@@ -1,12 +1,117 @@
 # -*- coding: utf-8 -*-
-
-"""Metrics to assess text recognition (OCR/HTR)
-"""
 # Authors : Lucas Terriel <lucas.terriel@inria.fr>
 # Licence : MIT
+"""
+    The ``evaluation`` module to assess text recognition (OCR/HTR) metrics
+    ======================================================================
+
+    Use this module standalone with :py:class:`kami.metrics.evaluation.Scorer()`
+    class in evaluation or as part of KaMI :py:class:`kami.pipeline.Core()` class
+    in pipeline module to assess text recognition (OCR/HTR) metrics.
+
+    Metrics overview in KaMI
+    ------------------------
+
+    Distance metrics
+    ****************
+
+    To compute distance KaMI use C extension module from
+    `Python-Levensthein <https://rawgit.com/ztane/python-Levenshtein/master/docs/Levenshtein.html>`_
+    package.
+
+    **Levenshtein distance** (or edit distance) :
+                                                 Gives a measure of the difference between two strings.
+                                                 It is equal to the minimum number of characters that must be deleted,
+                                                 inserted or replaced to switch from one string to another.
+
+    .. note :: In KaMI, you can access to distance on words and characters. These two kind of distance are utils
+              for compute WER and CER.
+
+    **Hamming distance** :
+                          It very close from Levenshtein distance definition but gives a measure only between two strings
+                          have the same length.
+
+    Recognition measure
+    *******************
+
+    **Word Error Rate (WER)**:
+                              The word error rate is derived from the Levenshtein distance
+                              which works at word level instead of characters. It indicates the
+                              rate of incorrectly recognized words compared to a reference text.
+                              The lower the rate (minimum 0.0), the better the recognition.
+                              The maximum rate is not limited and can exceed 1.0 in the event
+                              of very poor recognition if there are many insertions.
+
+                              In KaMI, the WER is bounded between 0 and 1 and it is calculated as
+
+                              .. math::
+
+                                \\frac{D(R,H)}{total\,words} \,where \,D \,is \,Levenshtein \,distance
+
+    **Character Error Rate (CER)**:
+                                   As WER, the character error rate which works at character level
+                                   instead of words. In Kami as WER, the rate is bounded between 0 and 1.
+
+    **Word accuracy (Wacc)**:
+                              The word accuracy calculates the number of perfectly recognized words
+                              and helps assess overall recognition of HTR/ OCR.
+                              This recognition rate can be negative.
+
+                              In kami, it is calculated as (1-WER), where 1 corresponding to
+                              the best score.
+
+    **Character information preserved (CIP)**:
+                                              It is roughly equivalent to word accuracy but it work on character.
+
+                                              In kami, It is calculated as number of
+                                              (H/total characters of reference) * (H/total characters of hypothesis)
+                                              where H number of correctly recognized characters.
+
+    **Character information lost (CIL)**:
+                                          In kami, It is calculated as 1 - CIP. The lower the rate,
+                                          the more information has disappeared.
+
+    **Match error rate (MER)**:
+                                the lower the rate, more errors are minimized and
+                                better the recognition of characters is effective. It corresponds to an
+                                overall error ratio of text recognition. It's a another way
+                                to compute CER.
+
+                                In kami, It is calculated as S + D + I / H + S + D + I
+
+
+    Access to different metrics with :py:class:`kami.metrics.evaluation.Scorer()`
+    -----------------------------------------------------------------------------
+
+    First, can use attribute define in :py:class:`kami.metrics.evaluation.Scorer()` (see the documentation)
+
+        :Example:
+
+        >>>
+
+    Note catch individually hints, substitutions characters...
+
+        :Example:
+
+        >>>
+
+    You can retrieve all the metrics in dictionnary with .. py:attribute:: `.board` attribute
+
+        :Example:
+
+        >>>
+
+
+        .. note:: Can truncate and percentage score with parameters.
+                 See the documentation :py:class:`kami.metrics.evaluation.Scorer()` documentation.
+
+        .. seealso:: :py:class:`kami.metrics.evaluation.Scorer()` and :py:class:`kami.pipeline.Core()`
+
+
+"""
+
 
 import Levenshtein
-
 from ._base_metrics import (_truncate_score,
                             _hot_encode,
                             _get_percent)
@@ -16,90 +121,89 @@ __all__ = [
 ]
 
 
+
 class Scorer:
     """Global class to compute classic HTR/OCR metrics.
 
-    Args:
-        reference (str): Human readable string describing
-                        the reference to compare with
-                        prediction (ground truth).
-        prediction (str): Human readable string describing the
-                        prediction to compare with reference.
-        show_percent (:obj:`bool`, optional): To pass final scores
-                                            in percentage. Defaults
-                                            to False.
-        truncate_score (:obj:`bool`, optional): To truncate final
-                                            score. Defaults to False.
-        round_digits (:obj:`str`, optional): To set the number of digits
-                                    after the decimal point.
-                                    Defaults to ".01".
+    :param reference: Reference string or text (ground truth).
+    :type reference: str
+    :param prediction: Hypothesis string or text to compare with reference.
+    :type prediction: str
+    :param show_percent: Option to show score as percentage.
+    :type show_percent: bool
+    :param truncate_score: Option to truncate score.
+    :type truncate_score: bool
+    :param round_digits: Option to select number of digit after the round score truncted.
+    :type round_digits: str
 
-    Attributes:
-        opt_percent (bool): User option on percentage.
-        opt_truncate (bool): User option on truncate.
-        round_digits (str): User option set type of truncate.
-        reference (str): User reference string.
-        prediction (str): User prediction string.
-        length_char_reference (int): Total characters in reference string.
-        length_char_prediction (int): Total characters in prediction string.
-        length_words_reference (int): Total words in reference string.
-        length_words_prediction (int): Total words in prediction string.
-        lev_distance_words (int): Levensthein distance on words.
-        lev_distance_char (int): Levensthein distance on characters.
-        hamming (str or float): Hamming distance.
-        wer (float): Word error rate.
-        cer (float): Character error rate.
-        wacc (float): Word accuracy.
-        H (int): Total number of Hints between reference and prediction.
-        S (int): Total number of Substitutions between reference and prediction.
-        D (int): Total number of Deletions between reference and prediction.
-        I (int): Total number of Insertions between reference and prediction.
-        cip (float): Character information preserve.
-        cil (float): Character information lost.
-        mer (float): Match error rate.
-        board (dict): A general board of all above metrics in
+
+    :cvar opt_percent: User option on percentage.
+    :type opt_percent: bool
+    :cvar opt_truncate: User option on truncate.
+    :type opt_truncate:
+    :cvar round_digits: User option set type of truncate.
+    :type round_digits: str
+    :cvar reference: User reference string.
+    :type reference: str
+    :cvar prediction: User prediction string.
+    :type prediction: str
+    :cvar length_char_reference: Total characters in reference string.
+    :type length_char_reference: int
+    :cvar length_char_prediction: Total characters in prediction string.
+    :type length_char_prediction: int
+    :cvar length_words_reference: Total words in reference string.
+    :type length_words_reference: int
+    :cvar length_words_prediction: Total words in prediction string.
+    :type length_words_prediction: int
+    :cvar lev_distance_words: Levensthein distance on words.
+    :type lev_distance_words: int
+    :cvar lev_distance_char: Levensthein distance on characters.
+    :type lev_distance_char: int
+    :cvar hamming: Hamming distance.
+    :type hamming: str or float
+    :cvar wer: Word error rate.
+    :type wer: float
+    :cvar cer: Character error rate.
+    :type cer: float
+    :cvar wacc: Word accuracy.
+    :type wacc: float
+    :cvar hints: Total number of Hints between reference and prediction.
+    :type hints: int
+    :cvar substs: Total number of Substitutions between reference and prediction.
+    :type substs: int
+    :cvar deletions: Total number of Deletions between reference and prediction.
+    :type deletions: int
+    :cvar insertions: Total number of Insertions between reference and prediction.
+    :type insertions: int
+    :cvar cip: Character information preserve.
+    :type cip: float
+    :cvar cil: Character information lost.
+    :type cil: float
+    :cvar mer: Match error rate.
+    :type mer: float
+    :cvar board: A general board of all above metrics in
                      key (name of metric) / value (score) struct
+    :type board: dict
+    :returns: OCR/HTR metrics in attributes of :py:class:`kami.metrics.evaluation.Scorer()`
     """
+
 
     # Collection of distance metrics #
 
     def _levensthein_distance(self):
-        """C extension module to compute Levensthein distance
-        from Python-Levensthein
-
-        See also : https://rawgit.com/ztane/python-Levenshtein/master/docs/Levenshtein.html
-
-        Args:
-            reference (str) : reference string (ground truth)
-            prediction (str) : prediction string to compare (hypothesis)
-
-        Returns:
-            int : result of Levensthein distance on words
-            int : result of Levensthein distance on characters
-        """
+        """Compute Levensthein distance from C extension module Python-Levensthein."""
         # Computes levensthein on words level
         lev_distance_words = Levenshtein.distance(*_hot_encode(
             [self.reference.split(), self.prediction.split()]
         )
-                                      )
+                                                  )
         # Computes levensthein on char level
         lev_distance_char = Levenshtein.distance(self.reference, self.prediction)
 
         return lev_distance_words, lev_distance_char
 
     def _hamming_distance(self):
-        """C extension module to compute Hamming distance on two strings of same
-        length from Python-Levensthein
-
-        See also : https://rawgit.com/ztane/python-Levenshtein/master/docs/Levenshtein.html
-
-        Args:
-            reference (str) : reference string (ground truth)
-            prediction (str) : prediction string to compare (hypothesis)
-
-        Returns:
-            int : result of hamming distance or Ø if two strings have not the same length
-        """
+        """Compute Hamming distance from C extension module Python-Levensthein."""
         if self.length_char_reference != self.length_char_prediction:
             hamming_score = "Ø"
         else:
@@ -108,28 +212,7 @@ class Scorer:
 
     # Collection of HTR/OCR metrics #
     def _wer(self):
-        """Computes the word error rate (WER).
-
-        The word error rate is derived from the Levenshtein distance
-        which works at word level instead of characters. It indicates the
-        rate of incorrectly recognized words compared to a reference text.
-        The lower the rate (minimum 0.0), the better the recognition.
-        The maximum rate is not limited and can exceed 1.0 in the event
-        of very poor recognition if there are many insertions.
-
-        In kami, the rate is bounded between 0 and 1 and
-        it is calculated as D(R,H)/total words in reference
-        where D is Levenshtein distance and equivalent to
-        S (incorrectly recognized words) + I (added words) + D (deletions words).
-
-        Args:
-            reference (str) : reference string (ground truth)
-            prediction (str) : prediction string to compare (hypothesis)
-
-        Returns:
-            int : result of word error rate (opt : truncate / decimal or percentage)
-
-        """
+        """Computes the word error rate (WER)."""
         wer = (self.lev_distance_words / self.length_words_reference)
 
         if self.opt_percent:
@@ -141,20 +224,8 @@ class Scorer:
         return wer
 
     def _cer(self):
-        """Computes the character error rate (CER).
-
-        As WER, the character error rate which works at character level
-        instead of words. In Kami as WER, the rate is bounded between 0 and 1.
-
-        Args:
-            reference (str) : reference string (ground truth)
-            prediction (str) : prediction string to compare (hypothesis)
-
-        Returns:
-            int : result of character error rate (opt : truncate / decimal or percentage)
-        """
+        """Computes the character error rate (CER)."""
         cer = (self.lev_distance_char / self.length_char_reference)
-
 
         if self.opt_percent:
             cer = _get_percent(cer)
@@ -165,24 +236,8 @@ class Scorer:
         return cer
 
     def _wacc(self):
-        """Computes the word accuracy (Wacc).
-
-        The word accuracy calculates the number of perfectly recognized words
-        and helps assess overall recognition of HTR/ OCR.
-        This recognition rate can be negative.
-
-        In kami, it is calculated as (1-WER), where 1 corresponding to
-        the best score.
-
-        Args:
-            reference (str) : reference string (ground truth)
-            prediction (str) : prediction string to compare (hypothesis)
-
-        Returns:
-            int : result of word accuracy (opt : truncate / decimal or percentage)
-        """
+        """Computes the word accuracy (Wacc)."""
         wacc = (1 - (self.lev_distance_words / self.length_words_reference))
-
 
         if self.opt_percent:
             wacc = _get_percent(wacc)
@@ -192,25 +247,11 @@ class Scorer:
 
         return wacc
 
-
     def _cip(self):
-        """Computes the character information preserved (CIP).
-
-        It is roughly equivalent to word accuracy but it work on character.
-        In kami, It is calculated as number of
-        (H/total characters of reference) * (H/total characters of hypothesis)
-        where H number of correctly recognized characters.
-
-        Args:
-            reference (str) : reference string (ground truth)
-            prediction (str) : prediction string to compare (hypothesis)
-
-        Returns:
-            int : result of word information preserved (opt : truncate / decimal or percentage)
-        """
+        """Computes the character information preserved (CIP)."""
         if self.prediction:
-            cip = (float(self.H)
-                   / self.length_char_reference) * (float(self.H) /
+            cip = (float(self.hints)
+                   / self.length_char_reference) * (float(self.hints) /
                                                     len(self.prediction))
             if self.opt_percent:
                 cip = _get_percent(cip)
@@ -221,23 +262,12 @@ class Scorer:
         return cip
 
     def _cil(self):
-        """Computes the character information lost (CIL).
-
-        In kami, It is calculated as 1 - CIP. The lower the rate,
-        the more information has disappeared.
-
-        Args:
-            reference (str) : reference string (ground truth)
-            prediction (str) : prediction string to compare (hypothesis)
-
-        Returns:
-            int : result of word information lost (opt : truncate / decimal or percentage)
-        """
+        """Computes the character information lost (CIL)."""
         if self.prediction:
-            cil = (1 - (float(self.H)
+            cil = (1 - (float(self.hints)
                         / self.length_char_reference)
-                  * (float(self.H) /
-                     len(self.prediction)))
+                   * (float(self.hints) /
+                      len(self.prediction)))
         else:
             cil = 0
 
@@ -250,24 +280,17 @@ class Scorer:
         return cil
 
     def _mer(self):
-        """Computes the match error rate (MER).
-
-
-        the lower the rate, more errors are minimized and
-        better the recognition of characters is effective. It corresponds to an
-        overall error ratio of text recognition. It's a another way
-        to compute CER.
-
-        In kami, It is calculated as S + D + I / H + S + D + I
-
-        Args:
-            reference (str) : reference string (ground truth)
-            prediction (str) : prediction string to compare (hypothesis)
-
-        Returns:
-            int : result of match error rate (opt : truncate / decimal or percentage)
-        """
-        mer = float(self.S + self.D + self.I) / float(self.H + self.S + self.D + self.I)
+        """Computes the match error rate (MER)."""
+        mer = float(
+            self.substs
+            + self.deletions
+            + self.insertions) \
+            / float(
+            self.hints
+            + self.substs
+            + self.deletions
+            + self.insertions
+        )
 
         if self.opt_percent:
             mer = _get_percent(mer)
@@ -278,21 +301,8 @@ class Scorer:
         return mer
 
     def _get_operation_counts(self):
-        """Based on editops function from C extension module python-Levenshtein.
-         Find sequence of edit operations transforming one string to another.
-
-        See also : https://rawgit.com/ztane/python-Levenshtein/master/docs/Levenshtein.html
-
-        Args:
-            reference (str) : reference string (ground truth)
-            prediction (str) : prediction string to compare (hypothesis)
-
-        Returns:
-            int : number of hints (corrects characters)
-            int : number of subsitutions (substituted characters)
-            int : number of deletions (removed characters)
-            int : number of insertions (added characters)
-        """
+        """Find sequence of edit operations transforming one string to another.
+        Based on editops function from C extension module python-Levenshtein."""
 
         result_editops = Levenshtein.editops(self.reference, self.prediction)
 
@@ -335,7 +345,7 @@ class Scorer:
         self.wer = self._wer()
         self.cer = self._cer()
         self.wacc = self._wacc()
-        self.H, self.S, self.D, self.I = self._get_operation_counts()
+        self.hints, self.substs, self.deletions, self.insertions = self._get_operation_counts()
         self.cip = self._cip()
         self.cil = self._cil()
         self.mer = self._mer()
@@ -350,8 +360,8 @@ class Scorer:
             "mer": self.mer,
             "cil": self.cil,
             "cip": self.cip,
-            "hits": self.H,
-            "substitutions": self.S,
-            "deletions": self.D,
-            "insertions": self.I,
+            "hits": self.hints,
+            "substitutions": self.substs,
+            "deletions": self.deletions,
+            "insertions": self.insertions,
         }

@@ -1,4 +1,15 @@
-""""""
+# -*- coding: utf-8 -*-
+# Authors : Lucas Terriel <lucas.terriel@inria.fr>
+# Licence : MIT
+"""
+
+    The ``transformation`` module to preprocess text data
+    =====================================================
+
+
+
+
+"""
 
 import string
 import re
@@ -37,7 +48,7 @@ class _InitComposer:
 
 class Composer(_InitComposer):
     """
-    DOCU
+
     """
     def __init__(self,
                  *strings,

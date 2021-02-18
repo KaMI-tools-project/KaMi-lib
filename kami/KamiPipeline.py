@@ -1,0 +1,2 @@
+class Core():
+    pass
