@@ -152,9 +152,11 @@
 
 
 import Levenshtein
+
 from ._base_metrics import (_truncate_score,
                             _hot_encode,
                             _get_percent)
+from kami.kamutils._utils import _report_log
 
 __all__ = [
     "Scorer",
@@ -371,37 +373,46 @@ class Scorer:
         self.round_digits = round_digits
         # Strings to compare
         self.reference = reference
-        self.prediction = prediction
-        # Length set of sentences
-        self.length_char_reference = len(reference)
-        self.length_char_prediction = len(prediction)
-        self.length_words_reference = len(reference.split())
-        self.length_words_prediction = len(prediction.split())
-        # Distances
-        self.lev_distance_words, \
-        self.lev_distance_char = self._levensthein_distance()
-        self.hamming = self._hamming_distance()
-        # HTR/OCR Metrics
-        self.wer = self._wer()
-        self.cer = self._cer()
-        self.wacc = self._wacc()
-        self.hits, self.substs, self.deletions, self.insertions = self._get_operation_counts()
-        self.cip = self._cip()
-        self.cil = self._cil()
-        self.mer = self._mer()
-        # Summary of all metrics
-        self.board = {
-            "levensthein_distance_char": self.lev_distance_char,
-            "levensthein_distance_words": self.lev_distance_words,
-            "hamming_distance": self.hamming,
-            "wer": self.wer,
-            "cer": self.cer,
-            "wacc": self.wacc,
-            "mer": self.mer,
-            "cil": self.cil,
-            "cip": self.cip,
-            "hits": self.hits,
-            "substitutions": self.substs,
-            "deletions": self.deletions,
-            "insertions": self.insertions,
-        }
+        if prediction == "No hypothesis string to perform":
+            _report_log("It seems you used Composer with only one reference; cannot perform metrics on one string",
+                            "E")
+        else:
+            self.prediction = prediction
+        try:
+            # Length set of sentences
+            self.length_char_reference = len(reference)
+            self.length_char_prediction = len(prediction)
+            self.length_words_reference = len(reference.split())
+            self.length_words_prediction = len(prediction.split())
+            # Distances
+            self.lev_distance_words, \
+            self.lev_distance_char = self._levensthein_distance()
+            self.hamming = self._hamming_distance()
+            # HTR/OCR Metrics
+            self.wer = self._wer()
+            self.cer = self._cer()
+            self.wacc = self._wacc()
+            self.hits, self.substs, self.deletions, self.insertions = self._get_operation_counts()
+            self.cip = self._cip()
+            self.cil = self._cil()
+            self.mer = self._mer()
+            # Summary of all metrics
+            self.board = {
+                "levensthein_distance_char": self.lev_distance_char,
+                "levensthein_distance_words": self.lev_distance_words,
+                "hamming_distance": self.hamming,
+                "wer": self.wer,
+                "cer": self.cer,
+                "wacc": self.wacc,
+                "mer": self.mer,
+                "cil": self.cil,
+                "cip": self.cip,
+                "hits": self.hits,
+                "substitutions": self.substs,
+                "deletions": self.deletions,
+                "insertions": self.insertions
+                         }
+        except AttributeError:
+            _report_log("No computations on one string, try to insert reference and hypothesis "
+                        "directly in Scorer() or verify they are two strings Composer()",
+                        "E")

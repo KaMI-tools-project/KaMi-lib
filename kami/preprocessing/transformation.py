@@ -67,14 +67,12 @@ class Composer(_InitComposer):
         _type_sequence = None
 
         if functions_clean is None:
-            print('1')
             _report_log('Indicate your clean functions want apply. No filters were applied.', 'W')
             self.reference = self.reference
             self.hypothesis = self.hypothesis
 
         if self.reference == self.hypothesis \
                 and functions_clean is not None:
-            print('2')
             self.reference = _cleanner(self.reference,
                                        self.functions_clean,
                                        self.keep_punct,
@@ -85,8 +83,8 @@ class Composer(_InitComposer):
 
         if self.reference != self.hypothesis \
                 and functions_clean is not None \
-                and self.hypothesis is not None:
-            print('3')
+                and self.hypothesis is not None \
+                and self.hypothesis != "":
             self.reference = _cleanner(self.reference,
                                        self.functions_clean,
                                        self.keep_punct,
@@ -101,8 +99,24 @@ class Composer(_InitComposer):
                                         self.keep_stop_words,
                                         _type_sequence='hypothesis')
 
+        if self.reference != self.hypothesis \
+                and functions_clean is not None \
+                and self.hypothesis == "":
+            self.reference = _cleanner(self.reference,
+                                       self.functions_clean,
+                                       self.keep_punct,
+                                       self.append_stop_words,
+                                       self.keep_stop_words,
+                                       _type_sequence='reference', )
+
+            self.hypothesis = _cleanner(self.hypothesis,
+                                        self.functions_clean,
+                                        self.keep_punct,
+                                        self.append_stop_words,
+                                        self.keep_stop_words,
+                                        _type_sequence='hypothesis')
+
         if self.hypothesis is None:
-            print('4')
             self.reference = _cleanner(self.reference,
                                        self.functions_clean,
                                        self.keep_punct,
