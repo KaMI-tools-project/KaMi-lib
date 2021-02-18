@@ -262,17 +262,49 @@ to compute CER.</p>
 <dt class="field-odd">Example</dt>
 <dd class="field-odd"><p></p></dd>
 </dl>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="go">&gt;&gt;&gt;</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">kami.metrics.evaluation</span> <span class="k">as</span> <span class="nn">kamiscorer</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">my_scorer</span> <span class="o">=</span> <span class="n">kamiscorer</span><span class="o">.</span><span class="n">Scorer</span><span class="p">(</span><span class="s2">&quot;Les treize ans de Maxime ?&quot;</span><span class="p">,</span> <span class="s2">&quot;Les tesise aS de MAxime ?&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">my_scorer</span><span class="o">.</span><span class="n">wer</span>
+<span class="go">0.5</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">my_scorer</span><span class="o">.</span><span class="n">cer</span>
+<span class="go">0.23076923076923078</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">my_scorer</span><span class="o">.</span><span class="n">lev_distance_char</span>
+<span class="go">6</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="o">...</span>
 </pre></div>
 </div>
 </div></blockquote>
-<p>Note catch individually hints, substitutions characters…</p>
+<p>Can truncate or pass in percentage score with parameters</p>
 <blockquote>
 <div><dl class="field-list simple">
 <dt class="field-odd">Example</dt>
 <dd class="field-odd"><p></p></dd>
 </dl>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="go">&gt;&gt;&gt;</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">kami.metrics.evaluation</span> <span class="k">as</span> <span class="nn">kamiscorer</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">my_scorer</span> <span class="o">=</span> <span class="n">kamiscorer</span><span class="o">.</span><span class="n">Scorer</span><span class="p">(</span><span class="s2">&quot;Les treize ans de Maxime ?&quot;</span><span class="p">,</span> <span class="s2">&quot;Les tesise aS de MAxime ?&quot;</span><span class="p">,</span> <span class="n">truncate_score</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">my_scorer</span><span class="o">.</span><span class="n">cer</span>
+<span class="go">0.23</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">my_scorer</span> <span class="o">=</span> <span class="n">kamiscorer</span><span class="o">.</span><span class="n">Scorer</span><span class="p">(</span><span class="s2">&quot;Les treize ans de Maxime ?&quot;</span><span class="p">,</span> <span class="s2">&quot;Les tesise aS de MAxime ?&quot;</span><span class="p">,</span> <span class="n">show_percent</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">my_scorer</span><span class="o">.</span><span class="n">wer</span>
+<span class="go">50.0</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>Note catch keeped, substituted, deleted or inserted characters</p>
+<blockquote>
+<div><dl class="field-list simple">
+<dt class="field-odd">Example</dt>
+<dd class="field-odd"><p></p></dd>
+</dl>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">kami.metrics.evaluation</span> <span class="k">as</span> <span class="nn">kamiscorer</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">my_scorer</span><span class="o">.</span><span class="n">hits</span>
+<span class="go">20</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">my_scorer</span><span class="o">.</span><span class="n">substs</span>
+<span class="go">5</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">my_scorer</span><span class="o">.</span><span class="n">deletions</span>
+<span class="go">1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">my_scorer</span><span class="o">.</span><span class="n">insertions</span>
+<span class="go">0</span>
 </pre></div>
 </div>
 </div></blockquote>
@@ -282,19 +314,31 @@ to compute CER.</p>
 <dt class="field-odd">Example</dt>
 <dd class="field-odd"><p></p></dd>
 </dl>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="go">&gt;&gt;&gt;</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">my_scorer</span> <span class="o">=</span> <span class="n">kamiscorer</span><span class="o">.</span><span class="n">Scorer</span><span class="p">(</span><span class="s2">&quot;Les treize ans de Maxime ?&quot;</span><span class="p">,</span> <span class="s2">&quot;Les tesise aS de MAxime ?&quot;</span><span class="p">,</span> <span class="n">truncate_score</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">my_scorer</span><span class="o">.</span><span class="n">board</span>
+<span class="go">{&#39;levensthein_distance_char&#39;: 6,</span>
+<span class="go">&#39;levensthein_distance_words&#39;: 3,</span>
+<span class="go">&#39;hamming_distance&#39;: &#39;Ø&#39;,</span>
+<span class="go">&#39;wer&#39;: 0.5,</span>
+<span class="go">&#39;cer&#39;: 0.23,</span>
+<span class="go">&#39;wacc&#39;: 0.5,</span>
+<span class="go">&#39;mer&#39;: 0.23,</span>
+<span class="go">&#39;cil&#39;: 0.38,</span>
+<span class="go">&#39;cip&#39;: 0.61,</span>
+<span class="go">&#39;hits&#39;: 20,</span>
+<span class="go">&#39;substitutions&#39;: 5, &#39;deletions&#39;: 1, &#39;insertions&#39;: 0}</span>
 </pre></div>
 </div>
+</div></blockquote>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Can truncate and percentage score with parameters.
-See the documentation <a class="reference internal" href="#kami.metrics.evaluation.Scorer" title="kami.metrics.evaluation.Scorer"><code class="xref py py-class docutils literal notranslate"><span class="pre">kami.metrics.evaluation.Scorer()</span></code></a> documentation.</p>
+<p>Can modulate the severity of the scores by going through a
+normalization of the character sequences with class <code class="xref py py-class docutils literal notranslate"><span class="pre">kami.preprocessing.evaluation.Composer()</span></code></p>
 </div>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
 <p><a class="reference internal" href="#kami.metrics.evaluation.Scorer" title="kami.metrics.evaluation.Scorer"><code class="xref py py-class docutils literal notranslate"><span class="pre">kami.metrics.evaluation.Scorer()</span></code></a> and <code class="xref py py-class docutils literal notranslate"><span class="pre">kami.pipeline.Core()</span></code></p>
 </div>
-</div></blockquote>
 </div>
 </div>
 <dl class="py class">
@@ -328,7 +372,7 @@ See the documentation <a class="reference internal" href="#kami.metrics.evaluati
 <li><p><strong>wer</strong> – Word error rate.</p></li>
 <li><p><strong>cer</strong> – Character error rate.</p></li>
 <li><p><strong>wacc</strong> – Word accuracy.</p></li>
-<li><p><strong>hints</strong> – Total number of Hints between reference and prediction.</p></li>
+<li><p><strong>hits</strong> – Total number of Hits between reference and prediction.</p></li>
 <li><p><strong>substs</strong> – Total number of Substitutions between reference and prediction.</p></li>
 <li><p><strong>deletions</strong> – Total number of Deletions between reference and prediction.</p></li>
 <li><p><strong>insertions</strong> – Total number of Insertions between reference and prediction.</p></li>

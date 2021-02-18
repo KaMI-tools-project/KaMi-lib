@@ -79,7 +79,6 @@
 
                                 In kami, It is calculated as S + D + I / H + S + D + I
 
-
     Access to different metrics with :py:class:`kami.metrics.evaluation.Scorer()`
     -----------------------------------------------------------------------------
 
@@ -87,25 +86,66 @@
 
         :Example:
 
-        >>>
+        >>> import kami.metrics.evaluation as kamiscorer
+        >>> my_scorer = kamiscorer.Scorer("Les treize ans de Maxime ?", "Les tesise aS de MAxime ?")
+        >>> my_scorer.wer
+        0.5
+        >>> my_scorer.cer
+        0.23076923076923078
+        >>> my_scorer.lev_distance_char
+        6
+        >>> ...
 
-    Note catch individually hints, substitutions characters...
+    Can truncate or pass in percentage score with parameters
 
         :Example:
 
-        >>>
+        >>> import kami.metrics.evaluation as kamiscorer
+        >>> my_scorer = kamiscorer.Scorer("Les treize ans de Maxime ?", "Les tesise aS de MAxime ?", truncate_score=True)
+        >>> my_scorer.cer
+        0.23
+        >>> my_scorer = kamiscorer.Scorer("Les treize ans de Maxime ?", "Les tesise aS de MAxime ?", show_percent=True)
+        >>> my_scorer.wer
+        50.0
 
-    You can retrieve all the metrics in dictionnary with .. py:attribute:: `.board` attribute
+    Can catch number of keeped, substituted, deleted or inserted characters individually
 
         :Example:
 
-        >>>
+        >>> import kami.metrics.evaluation as kamiscorer
+        >>> my_scorer.hits
+        20
+        >>> my_scorer.substs
+        5
+        >>> my_scorer.deletions
+        1
+        >>> my_scorer.insertions
+        0
 
+    Finally, can retrieve all the metrics in dictionnary with `.board` attribute
 
-        .. note:: Can truncate and percentage score with parameters.
-                 See the documentation :py:class:`kami.metrics.evaluation.Scorer()` documentation.
+        :Example:
 
-        .. seealso:: :py:class:`kami.metrics.evaluation.Scorer()` and :py:class:`kami.pipeline.Core()`
+        >>> my_scorer = kamiscorer.Scorer("Les treize ans de Maxime ?", "Les tesise aS de MAxime ?", truncate_score=True)
+        >>> my_scorer.board
+        {'levensthein_distance_char': 6,
+        'levensthein_distance_words': 3,
+        'hamming_distance': 'Ø',
+        'wer': 0.5,
+        'cer': 0.23,
+        'wacc': 0.5,
+        'mer': 0.23,
+        'cil': 0.38,
+        'cip': 0.61,
+        'hits': 20,
+        'substitutions': 5,
+        'deletions': 1,
+        'insertions': 0}
+
+    .. note:: Can modulate the severity of the scores by going through a
+              normalization of the character sequences with class :py:class:`kami.preprocessing.evaluation.Composer()`
+
+    .. seealso:: :py:class:`kami.metrics.evaluation.Scorer()` and :py:class:`kami.pipeline.Core()`
 
 
 """
@@ -167,8 +207,8 @@ class Scorer:
     :type cer: float
     :cvar wacc: Word accuracy.
     :type wacc: float
-    :cvar hints: Total number of Hints between reference and prediction.
-    :type hints: int
+    :cvar hits: Total number of Hits between reference and prediction.
+    :type hits: int
     :cvar substs: Total number of Substitutions between reference and prediction.
     :type substs: int
     :cvar deletions: Total number of Deletions between reference and prediction.
@@ -250,8 +290,8 @@ class Scorer:
     def _cip(self):
         """Computes the character information preserved (CIP)."""
         if self.prediction:
-            cip = (float(self.hints)
-                   / self.length_char_reference) * (float(self.hints) /
+            cip = (float(self.hits)
+                   / self.length_char_reference) * (float(self.hits) /
                                                     len(self.prediction))
             if self.opt_percent:
                 cip = _get_percent(cip)
@@ -264,9 +304,9 @@ class Scorer:
     def _cil(self):
         """Computes the character information lost (CIL)."""
         if self.prediction:
-            cil = (1 - (float(self.hints)
+            cil = (1 - (float(self.hits)
                         / self.length_char_reference)
-                   * (float(self.hints) /
+                   * (float(self.hits) /
                       len(self.prediction)))
         else:
             cil = 0
@@ -286,7 +326,7 @@ class Scorer:
             + self.deletions
             + self.insertions) \
             / float(
-            self.hints
+            self.hits
             + self.substs
             + self.deletions
             + self.insertions
@@ -345,7 +385,7 @@ class Scorer:
         self.wer = self._wer()
         self.cer = self._cer()
         self.wacc = self._wacc()
-        self.hints, self.substs, self.deletions, self.insertions = self._get_operation_counts()
+        self.hits, self.substs, self.deletions, self.insertions = self._get_operation_counts()
         self.cip = self._cip()
         self.cil = self._cil()
         self.mer = self._mer()
@@ -360,7 +400,7 @@ class Scorer:
             "mer": self.mer,
             "cil": self.cil,
             "cip": self.cip,
-            "hits": self.hints,
+            "hits": self.hits,
             "substitutions": self.substs,
             "deletions": self.deletions,
             "insertions": self.insertions,

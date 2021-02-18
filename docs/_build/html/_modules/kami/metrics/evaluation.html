@@ -240,7 +240,6 @@
 
 <span class="sd">                                In kami, It is calculated as S + D + I / H + S + D + I</span>
 
-
 <span class="sd">    Access to different metrics with :py:class:`kami.metrics.evaluation.Scorer()`</span>
 <span class="sd">    -----------------------------------------------------------------------------</span>
 
@@ -248,25 +247,64 @@
 
 <span class="sd">        :Example:</span>
 
-<span class="sd">        &gt;&gt;&gt;</span>
+<span class="sd">        &gt;&gt;&gt; import kami.metrics.evaluation as kamiscorer</span>
+<span class="sd">        &gt;&gt;&gt; my_scorer = kamiscorer.Scorer(&quot;Les treize ans de Maxime ?&quot;, &quot;Les tesise aS de MAxime ?&quot;)</span>
+<span class="sd">        &gt;&gt;&gt; my_scorer.wer</span>
+<span class="sd">        0.5</span>
+<span class="sd">        &gt;&gt;&gt; my_scorer.cer</span>
+<span class="sd">        0.23076923076923078</span>
+<span class="sd">        &gt;&gt;&gt; my_scorer.lev_distance_char</span>
+<span class="sd">        6</span>
+<span class="sd">        &gt;&gt;&gt; ...</span>
 
-<span class="sd">    Note catch individually hints, substitutions characters...</span>
+<span class="sd">    Can truncate or pass in percentage score with parameters</span>
 
 <span class="sd">        :Example:</span>
 
-<span class="sd">        &gt;&gt;&gt;</span>
+<span class="sd">        &gt;&gt;&gt; import kami.metrics.evaluation as kamiscorer</span>
+<span class="sd">        &gt;&gt;&gt; my_scorer = kamiscorer.Scorer(&quot;Les treize ans de Maxime ?&quot;, &quot;Les tesise aS de MAxime ?&quot;, truncate_score=True)</span>
+<span class="sd">        &gt;&gt;&gt; my_scorer.cer</span>
+<span class="sd">        0.23</span>
+<span class="sd">        &gt;&gt;&gt; my_scorer = kamiscorer.Scorer(&quot;Les treize ans de Maxime ?&quot;, &quot;Les tesise aS de MAxime ?&quot;, show_percent=True)</span>
+<span class="sd">        &gt;&gt;&gt; my_scorer.wer</span>
+<span class="sd">        50.0</span>
+
+<span class="sd">    Note catch keeped, substituted, deleted or inserted characters</span>
+
+<span class="sd">        :Example:</span>
+
+<span class="sd">        &gt;&gt;&gt; import kami.metrics.evaluation as kamiscorer</span>
+<span class="sd">        &gt;&gt;&gt; my_scorer.hits</span>
+<span class="sd">        20</span>
+<span class="sd">        &gt;&gt;&gt; my_scorer.substs</span>
+<span class="sd">        5</span>
+<span class="sd">        &gt;&gt;&gt; my_scorer.deletions</span>
+<span class="sd">        1</span>
+<span class="sd">        &gt;&gt;&gt; my_scorer.insertions</span>
+<span class="sd">        0</span>
 
 <span class="sd">    You can retrieve all the metrics in dictionnary with .. py:attribute:: `.board` attribute</span>
 
 <span class="sd">        :Example:</span>
 
-<span class="sd">        &gt;&gt;&gt;</span>
+<span class="sd">        &gt;&gt;&gt; my_scorer = kamiscorer.Scorer(&quot;Les treize ans de Maxime ?&quot;, &quot;Les tesise aS de MAxime ?&quot;, truncate_score=True)</span>
+<span class="sd">        &gt;&gt;&gt; my_scorer.board</span>
+<span class="sd">        {&#39;levensthein_distance_char&#39;: 6,</span>
+<span class="sd">        &#39;levensthein_distance_words&#39;: 3,</span>
+<span class="sd">        &#39;hamming_distance&#39;: &#39;Ø&#39;,</span>
+<span class="sd">        &#39;wer&#39;: 0.5,</span>
+<span class="sd">        &#39;cer&#39;: 0.23,</span>
+<span class="sd">        &#39;wacc&#39;: 0.5,</span>
+<span class="sd">        &#39;mer&#39;: 0.23,</span>
+<span class="sd">        &#39;cil&#39;: 0.38,</span>
+<span class="sd">        &#39;cip&#39;: 0.61,</span>
+<span class="sd">        &#39;hits&#39;: 20,</span>
+<span class="sd">        &#39;substitutions&#39;: 5, &#39;deletions&#39;: 1, &#39;insertions&#39;: 0}</span>
 
+<span class="sd">    .. note:: Can modulate the severity of the scores by going through a</span>
+<span class="sd">              normalization of the character sequences with class :py:class:`kami.preprocessing.evaluation.Composer()`</span>
 
-<span class="sd">        .. note:: Can truncate and percentage score with parameters.</span>
-<span class="sd">                 See the documentation :py:class:`kami.metrics.evaluation.Scorer()` documentation.</span>
-
-<span class="sd">        .. seealso:: :py:class:`kami.metrics.evaluation.Scorer()` and :py:class:`kami.pipeline.Core()`</span>
+<span class="sd">    .. seealso:: :py:class:`kami.metrics.evaluation.Scorer()` and :py:class:`kami.pipeline.Core()`</span>
 
 
 <span class="sd">&quot;&quot;&quot;</span>
@@ -328,8 +366,8 @@
 <span class="sd">    :type cer: float</span>
 <span class="sd">    :cvar wacc: Word accuracy.</span>
 <span class="sd">    :type wacc: float</span>
-<span class="sd">    :cvar hints: Total number of Hints between reference and prediction.</span>
-<span class="sd">    :type hints: int</span>
+<span class="sd">    :cvar hits: Total number of Hits between reference and prediction.</span>
+<span class="sd">    :type hits: int</span>
 <span class="sd">    :cvar substs: Total number of Substitutions between reference and prediction.</span>
 <span class="sd">    :type substs: int</span>
 <span class="sd">    :cvar deletions: Total number of Deletions between reference and prediction.</span>
@@ -411,8 +449,8 @@
     <span class="k">def</span> <span class="nf">_cip</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Computes the character information preserved (CIP).&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">prediction</span><span class="p">:</span>
-            <span class="n">cip</span> <span class="o">=</span> <span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hints</span><span class="p">)</span>
-                   <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">length_char_reference</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hints</span><span class="p">)</span> <span class="o">/</span>
+            <span class="n">cip</span> <span class="o">=</span> <span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hits</span><span class="p">)</span>
+                   <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">length_char_reference</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hits</span><span class="p">)</span> <span class="o">/</span>
                                                     <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">prediction</span><span class="p">))</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">opt_percent</span><span class="p">:</span>
                 <span class="n">cip</span> <span class="o">=</span> <span class="n">_get_percent</span><span class="p">(</span><span class="n">cip</span><span class="p">)</span>
@@ -425,9 +463,9 @@
     <span class="k">def</span> <span class="nf">_cil</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Computes the character information lost (CIL).&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">prediction</span><span class="p">:</span>
-            <span class="n">cil</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hints</span><span class="p">)</span>
+            <span class="n">cil</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hits</span><span class="p">)</span>
                         <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">length_char_reference</span><span class="p">)</span>
-                   <span class="o">*</span> <span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hints</span><span class="p">)</span> <span class="o">/</span>
+                   <span class="o">*</span> <span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hits</span><span class="p">)</span> <span class="o">/</span>
                       <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">prediction</span><span class="p">)))</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">cil</span> <span class="o">=</span> <span class="mi">0</span>
@@ -447,7 +485,7 @@
             <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">deletions</span>
             <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">insertions</span><span class="p">)</span> \
             <span class="o">/</span> <span class="nb">float</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">hints</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">hits</span>
             <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">substs</span>
             <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">deletions</span>
             <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">insertions</span>
@@ -506,7 +544,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">wer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_wer</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cer</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">wacc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_wacc</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">hints</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">substs</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">deletions</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">insertions</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_operation_counts</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hits</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">substs</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">deletions</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">insertions</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_operation_counts</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cip</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cip</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cil</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cil</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">mer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mer</span><span class="p">()</span>
@@ -521,7 +559,7 @@
             <span class="s2">&quot;mer&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">mer</span><span class="p">,</span>
             <span class="s2">&quot;cil&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">cil</span><span class="p">,</span>
             <span class="s2">&quot;cip&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">cip</span><span class="p">,</span>
-            <span class="s2">&quot;hits&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">hints</span><span class="p">,</span>
+            <span class="s2">&quot;hits&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">hits</span><span class="p">,</span>
             <span class="s2">&quot;substitutions&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">substs</span><span class="p">,</span>
             <span class="s2">&quot;deletions&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">deletions</span><span class="p">,</span>
             <span class="s2">&quot;insertions&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">insertions</span><span class="p">,</span>
