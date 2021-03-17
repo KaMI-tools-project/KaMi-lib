@@ -164,7 +164,7 @@ __all__ = [
 
 
 
-class Scorer:
+class Scorer():
     """Global class to compute classic HTR/OCR metrics.
 
     :param reference: Reference string or text (ground truth).
@@ -366,18 +366,20 @@ class Scorer:
                  prediction,
                  show_percent=False,
                  truncate_score=False,
+                 transformation=[],
                  round_digits='.01'):
         # Options
         self.opt_percent = show_percent
         self.opt_truncate = truncate_score
         self.round_digits = round_digits
         # Strings to compare
-        self.reference = reference
-        if prediction == "No hypothesis string to perform":
-            _report_log("It seems you used Composer with only one reference; cannot perform metrics on one string",
-                            "E")
+        if len(transformation) != 0:
+            self.reference = transformation[0]
+            self.prediction = transformation[1]
         else:
+            self.reference = reference
             self.prediction = prediction
+
         try:
             # Length set of sentences
             self.length_char_reference = len(reference)

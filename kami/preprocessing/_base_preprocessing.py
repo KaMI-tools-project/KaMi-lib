@@ -17,7 +17,16 @@ lowercase = lambda sequence: " ".join([token.lower()
                                        for token
                                        in sequence.split()])
 
-# <-- Remove punctuation from predefined list of symbols drom string -->
+# <-- Pass string in uppercase -->
+uppercase = lambda sequence: " ".join([token.upper()
+                                       for token
+                                       in sequence.split()])
+
+
+# <-- remove starting and finish spaces in sequence -->
+stripper = lambda sequence: sequence.strip()
+
+# <-- Remove punctuation from predefined list of symbols from string -->
 tokens_nonpunct = lambda sequence, table: " ".join([token.translate(table)
                                                     for token
                                                     in sequence.split()])
@@ -34,6 +43,16 @@ tokens_non_words = lambda sequence: " ".join([token
                                               in sequence.split()
                                               if token != ''])
 
+# <-- Remove specific words -->
+tokens_remove = lambda sequence, list_words_remove : " ".join([token
+                                                               for token
+                                                               in sequence.split()
+                                                               if token not in list_words_remove])
+
+# <-- Substitute regex patterns in sequence -->
+regex_subts = lambda sequence, subts: " ".join([re.sub(key, value, sequence)
+                                                for key, value
+                                                in subts.items()])
 
 def _stop_words_process(sentence: str,
                         stops_predefined: list,
@@ -80,89 +99,4 @@ def _stop_words_process(sentence: str,
                          in sentence.split()
                          if token.lower()
                          not in lang_stopwords])
-    return sequence
-
-
-
-@_timing
-def _cleanner(sequence: str,
-              functions_clean: list = None,
-              keep_punct: list = None,
-              append_stop_words: list = None,
-              keep_stop_words: list = None,
-              _type_sequence: str = None) -> str:
-    """Returns a sequence with applied text preprocessing transformations.
-
-    the transformations was defined by user in parameters
-    of :py:class:`Composer()`.
-
-    .. note::
-        - Text preprocessing steps schema is :
-        *lowercase -> remove punctuation -> remove digits ->
-        remove non words -> remove stops words*
-
-        - This function return also an global execution time.
-
-    .. seealso::
-        Lambda collection functions in same module.
-
-    :param sequence:
-    :type sequence:
-    :param type_sequence:
-    :type type_sequence:
-    :param functions_clean:
-    :type functions_clean:
-    :param keep_punct:
-    :type keep_punct:
-    :param append_stop_words:
-    :type append_stop_words:
-    :param keep_stop_words:
-    :type keep_stop_words:
-    :return:
-    :rtype:
-    """
-
-    _report_log(f'Init text preprocessing on {_type_sequence} sequence...')
-
-    # Parse options in lower for user
-    options = [opt.lower() for opt in functions_clean]
-    if "lowercase" in options:
-        sequence = lowercase(sequence)
-        _report_log(f'+ Lowercase applied on {_type_sequence} sequence.', 'V')
-    if "remove_punctuation" in options:
-        # Default punct : !"#$%&'()*+,-./:;<=>?@[\]^_`{|}~
-        punctuation = string.punctuation
-        if keep_punct == None:
-            # Make a table that translates all punctuation to an empty value (`None`)
-            table = str.maketrans('', '', punctuation)
-        else:
-            new_punctuation = " ".join([symbol for symbol in punctuation if symbol not in keep_punct])
-            table = str.maketrans('', '', new_punctuation)
-        sequence = tokens_nonpunct(sequence, table)
-        _report_log(f'+ Remove punctuation applied on {_type_sequence} sequence.', 'V')
-    if "remove_digits" in options:
-        sequence = tokens_nondigits(sequence)
-        _report_log(f'+ Remove digits applied on {_type_sequence} sequence.', 'V')
-    if "non_words_remove" in options:
-        sequence = tokens_non_words(sequence)
-        _report_log(f'+ Non words remove applied on {_type_sequence} sequence.', 'V')
-    if "remove_fr_stops_words" in options:
-        try:
-            _report_log("...load french stops words base from spaCy...")
-            from spacy.lang.fr.stop_words import STOP_WORDS as fr_stop
-        except:
-            _report_log("Cannot load french stops words from spaCy.", "E")
-        sequence = _stop_words_process(sequence, fr_stop, append_stop_words, keep_stop_words)
-        _report_log(f'+ French stops words filter applied on {_type_sequence} sequence.', 'V')
-    if "remove_en_stops_words" in options:
-        try:
-            _report_log("...load english stops words base from spaCy...")
-            from spacy.lang.en.stop_words import STOP_WORDS as en_stop
-        except:
-            _report_log("Cannot load english stops words from spaCy.", "E")
-        sequence = _stop_words_process(sequence, en_stop, append_stop_words, keep_stop_words)
-        _report_log(f'+ English stops words filter applied on {_type_sequence} sequence.', 'V')
-
-    _report_log(f'All text preprocessing filters were applied on {_type_sequence} sequence.', "S")
-
     return sequence

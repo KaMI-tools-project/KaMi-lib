@@ -74,7 +74,7 @@ class PagexmlParser():
                             # 'selfcript_detection': True
                         })
                     except ValueError:
-                        report_log(f"Invalid polygon in {self.filename}", "W")
+                        _report_log(f"Invalid polygon in {self.filename}", "W")
                 else:
                     box = [
                         int(line.get("HPOS")),
@@ -101,8 +101,8 @@ class PagexmlParser():
                 # we should control the schema too
                 return standard
             else:
-                report_log(f"Counted '{standard}' {len(found_standard)} time(s) ", "V")
-        report_log("Unsupported XML format", "E")
+                _report_log(f"Counted '{standard}' {len(found_standard)} time(s) ", "V")
+        _report_log("Unsupported XML format", "E")
         return False
 
     def parse_content(self) -> object:
