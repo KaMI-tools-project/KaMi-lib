@@ -11,7 +11,7 @@
     This module can be necessary to apply a few preprocessing steps on ground truth and
     hypothesis texts.
 
-    The transformation are accessible via differents types of methods : ...
+    The transformation are accessible via different types of methods : ...
 
     TODO add Composer doc + doc of each preprocess methods here
 
@@ -32,6 +32,7 @@ from kami.preprocessing._base_preprocessing import (
     stripper,
     regex_subts,
     _stop_words_process)
+
 
 __all__ = [
     "AbstractTransform",
@@ -77,7 +78,6 @@ class Composer(object):
     def __call__(self, text):
         for transform in self.transforms:
                 text = transform(text)
-
         return text
 
 
@@ -101,6 +101,7 @@ class SentencesToListOfWords(SentencesToTokens):
             words.extend(self.process_string(sentence))
         return words
 
+
 # Deletetions methods
 
 class RemovePunctuation(AbstractTransform):
@@ -112,7 +113,8 @@ class RemovePunctuation(AbstractTransform):
         if len(self.keep_punctuation) == 0:
             table = str.maketrans('', '', default_punctuation)
         else:
-            new_punctuation = " ".join([symbol for symbol in default_punctuation if symbol not in self.keep_punctuation])
+            new_punctuation = " ".join(
+                [symbol for symbol in default_punctuation if symbol not in self.keep_punctuation])
             table = str.maketrans('', '', new_punctuation)
         _report_log(f'+ Remove punctuation applied on sequence.', 'V')
         return tokens_nonpunct(sequence, table)
@@ -199,12 +201,12 @@ class Strip(AbstractTransform):
     def __str__(self):
         return "strip_method"
 
+
 # Substitute methods
 
-
 class SubRegex(AbstractTransform):
-    def __init__(self, subsitutions: Mapping[str,str]):
-        self.substitutions = subsitutions
+    def __init__(self, substitutions: Mapping[str, str]):
+        self.substitutions = substitutions
 
     def process_string(self, sequence: str):
         _report_log(f'+ Substitutions regex performed on sequence.', 'V')
@@ -217,8 +219,8 @@ class SubRegex(AbstractTransform):
 class SubWords(AbstractTransform):
     pass  # TODO if necessary
 
-# Modifiers methods
 
+# Modifiers methods
 
 class ToLowerCase(AbstractTransform):
     def process_string(self, sequence: str):

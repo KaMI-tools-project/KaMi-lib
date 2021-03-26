@@ -9,26 +9,22 @@ from bs4 import BeautifulSoup
 from ..kamutils._utils import _report_log
 
 
-XML_STANDARD = ["PcGts", "alto"] #, "TEI"]
+XML_STANDARD = ["PcGts", "alto"]  # , "TEI"]
 
 
 # inspiration from
 # https://gitlab.inria.fr/scripta/escriptorium/-/blob/master/app/apps/imports/parsers.py
 class PagexmlParser():
-    """
-
-    """
-
     def get_lines(self) -> list:
         """Get TextLine elements in XML Tree"""
-        # works wether with ALTO or PAGE
+        # works whether with ALTO or PAGE
         return [line for line in self.content.find_all("TextLine")]
 
-    def clean_coords(self, coordTag) -> list:
+    def clean_coords(self, coord_tag) -> list:
         """Clean coordinates"""
         return [
             list(map(lambda x: 0 if float(x) < 0 else float(x), pt.split(",")))
-            for pt in coordTag.get("points").split(" ")
+            for pt in coord_tag.get("points").split(" ")
         ]
 
     def get_bounds(self) -> list:
@@ -51,12 +47,13 @@ class PagexmlParser():
                 bounds.append({
                     'lines': [{'baseline': baseline,
                                'boundary': mask,
-                               'text_direction': 'horizontal-lr',  # text direction can be different
-                               'script': 'default'}],  # self.document.main_script.name
+                               'text_direction': 'horizontal-lr',  # text direction can be different # TODO
+                               'script': 'default'}],  # self.document.main_script.name # TODO
                     'type': 'baselines',
-                    # 'selfcript_detection': True
+                    # 'self.script_detection': True # TODO
                 })
 
+        #  TODO create a AltoxmlParser class?
         elif self.standard == "alto":  # TODO test and debug this scenario
             for line in lines:
                 polygon = line.find("Shape/Polygon")
@@ -64,14 +61,14 @@ class PagexmlParser():
                     try:
                         coords = tuple(map(float, polygon.get("POINTS").split(" ")))
                         mask = tuple(zip(coords[::2], coords[1::2]))
-                        baseline = line.get("BASELINE") # maybe more line.find(True, "BASELINE")["attrs"]["BASELINE"]
+                        baseline = line.get("BASELINE")  # maybe more line.find(True, "BASELINE")["attrs"]["BASELINE"]
                         bounds.append({
                             'lines': [{'baseline': baseline,  # not sure this will work...
                                        'boundary': mask,
                                        'text_direction': 'horizontal-lr',  # text direction can be different
                                        'script': 'default'}],  # self.document.main_script.name
                             'type': 'baselines',
-                            # 'selfcript_detection': True
+                            # 'self.script_detection': True
                         })
                     except ValueError:
                         _report_log(f"Invalid polygon in {self.filename}", "W")
@@ -82,14 +79,14 @@ class PagexmlParser():
                         int(line.get("HPOS")) + int(line.get("WIDTH")),
                         int(line.get("VPOS")) + int(line.get("HEIGHT")),
                     ]
-                    # https://gitlab.inria.fr/scripta/escriptorium/-/blob/master/app/apps/core/models.py#L693
+                    #  https://gitlab.inria.fr/scripta/escriptorium/-/blob/master/app/apps/core/models.py#L693
                     bounds.append({
                         'boxes': [box],
                         'text_direction': 'horizontal-lr',  # text direction can be different
                         'type': 'baselines',
                         # 'script_detection': True
                     })
-                # que fait-on de mask et de box ?
+                #  what do we do with mask and box?
             pass
         return bounds
 
@@ -98,7 +95,7 @@ class PagexmlParser():
         for standard in XML_STANDARD:
             found_standard = self.content.find_all(standard)
             if len(found_standard) == 1:  # TODO improve
-                # we should control the schema too
+                #  we should control the schema declaration too
                 return standard
             else:
                 _report_log(f"Counted '{standard}' {len(found_standard)} time(s) ", "V")
@@ -131,11 +128,7 @@ class PagexmlParser():
         self.bounds = self.get_bounds()  # todo
 
 
-
 class TxtParser():
-    """
-
-    """
     def extract_plain_text(self) -> str:
         """Open a TXT file and load its content"""
         with open(self.filename, "r", encoding="utf8") as fh:
