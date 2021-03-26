@@ -160,7 +160,7 @@ class SpacyEngineFrStopsWords(AbstractTransform):
         try:
             _report_log("...load French stops words base from spaCy...")
             from spacy.lang.fr.stop_words import STOP_WORDS as fr_stop
-        except:
+        except Exception as e:
             _report_log("Cannot load French stops words from spaCy.", "E")
 
         sequence = _stop_words_process(sequence, fr_stop, self.add_stops_words, self.keep_stops_words)
@@ -180,7 +180,7 @@ class SpacyEngineEnStopsWords(AbstractTransform):
         try:
             _report_log("...load English stops words base from spaCy...")
             from spacy.lang.en.stop_words import STOP_WORDS as en_stop
-        except:
+        except Exception as e:
             _report_log("Cannot load English stops words from spaCy.", "E")
 
         sequence = _stop_words_process(sequence, en_stop, self.add_stops_words, self.keep_stops_words)
