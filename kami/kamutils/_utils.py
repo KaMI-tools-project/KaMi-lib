@@ -10,10 +10,12 @@ import time
 from functools import wraps
 import termcolor
 
+
 __all__ = [
     "_report_log",
     "_timing"
 ]
+
 
 def _report_log(message: str, type_log: str ="I") -> None:
     """Returns report log

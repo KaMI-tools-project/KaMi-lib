@@ -158,10 +158,10 @@ from ._base_metrics import (_truncate_score,
                             _get_percent)
 from kami.kamutils._utils import _report_log
 
+
 __all__ = [
     "Scorer",
 ]
-
 
 
 class Scorer():
@@ -229,19 +229,15 @@ class Scorer():
     :returns: OCR/HTR metrics in attributes of :py:class:`kami.metrics.evaluation.Scorer()`
     """
 
-
     # Collection of distance metrics #
 
     def _levensthein_distance(self):
         """Compute Levensthein distance from C extension module Python-Levensthein."""
-        # Computes levensthein on words level
+        # Compute levensthein at word level
         lev_distance_words = Levenshtein.distance(*_hot_encode(
-            [self.reference.split(), self.prediction.split()]
-        )
-                                                  )
-        # Computes levensthein on char level
+            [self.reference.split(), self.prediction.split()]))
+        # Compute levensthein at char level
         lev_distance_char = Levenshtein.distance(self.reference, self.prediction)
-
         return lev_distance_words, lev_distance_char
 
     def _hamming_distance(self):
@@ -254,47 +250,36 @@ class Scorer():
 
     # Collection of HTR/OCR metrics #
     def _wer(self):
-        """Computes the word error rate (WER)."""
-        wer = (self.lev_distance_words / self.length_words_reference)
-
+        """Compute word error rate (WER)."""
+        wer = (self.lev_distance_words/self.length_words_reference)
         if self.opt_percent:
             wer = _get_percent(wer)
-
         if self.opt_truncate:
             wer = _truncate_score(wer, self.round_digits)
-
         return wer
 
     def _cer(self):
-        """Computes the character error rate (CER)."""
-        cer = (self.lev_distance_char / self.length_char_reference)
-
+        """Compute character error rate (CER)."""
+        cer = (self.lev_distance_char/self.length_char_reference)
         if self.opt_percent:
             cer = _get_percent(cer)
-
         if self.opt_truncate:
             cer = _truncate_score(cer, self.round_digits)
-
         return cer
 
     def _wacc(self):
-        """Computes the word accuracy (Wacc)."""
-        wacc = (1 - (self.lev_distance_words / self.length_words_reference))
-
+        """Compute word accuracy (Wacc)."""
+        wacc = (1 - (self.lev_distance_words/self.length_words_reference))
         if self.opt_percent:
             wacc = _get_percent(wacc)
-
         if self.opt_truncate:
             wacc = _truncate_score(wacc, self.round_digits)
-
         return wacc
 
     def _cip(self):
-        """Computes the character information preserved (CIP)."""
+        """Compute character information preserved (CIP)."""
         if self.prediction:
-            cip = (float(self.hits)
-                   / self.length_char_reference) * (float(self.hits) /
-                                                    len(self.prediction))
+            cip = (float(self.hits)/self.length_char_reference)*(float(self.hits)/len(self.prediction))
             if self.opt_percent:
                 cip = _get_percent(cip)
             if self.opt_truncate:
@@ -304,25 +289,19 @@ class Scorer():
         return cip
 
     def _cil(self):
-        """Computes the character information lost (CIL)."""
+        """Compute character information lost (CIL)."""
         if self.prediction:
-            cil = (1 - (float(self.hits)
-                        / self.length_char_reference)
-                   * (float(self.hits) /
-                      len(self.prediction)))
+            cil = (1 - (float(self.hits)/self.length_char_reference)*(float(self.hits)/len(self.prediction)))
         else:
             cil = 0
-
         if self.opt_percent:
             cil = _get_percent(cil)
-
         if self.opt_truncate:
             cil = _truncate_score(cil, self.round_digits)
-
         return cil
 
     def _mer(self):
-        """Computes the match error rate (MER)."""
+        """Compute match error rate (MER)."""
         mer = float(
             self.substs
             + self.deletions
@@ -331,28 +310,23 @@ class Scorer():
             self.hits
             + self.substs
             + self.deletions
-            + self.insertions
-        )
+            + self.insertions)
 
         if self.opt_percent:
             mer = _get_percent(mer)
-
         if self.opt_truncate:
             mer = _truncate_score(mer, self.round_digits)
-
         return mer
 
     def _get_operation_counts(self):
         """Find sequence of edit operations transforming one string to another.
         Based on editops function from C extension module python-Levenshtein."""
-
         result_editops = Levenshtein.editops(self.reference, self.prediction)
 
         substitutions = sum(1 if operations[0] == "replace" else 0 for operations in result_editops)
         deletions = sum(1 if operations[0] == "delete" else 0 for operations in result_editops)
         insertions = sum(1 if operations[0] == "insert" else 0 for operations in result_editops)
         hits = self.length_char_reference - (substitutions + deletions)
-
         return hits, \
                substitutions, \
                deletions, \
