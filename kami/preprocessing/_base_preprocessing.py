@@ -4,11 +4,12 @@
 """
 # Authors : Lucas Terriel <lucas.terriel@inria.fr>
 # Licence : MIT
-import string
+
+#import string
 import re
 
-from kami.kamutils._utils import (_report_log,
-                                  _timing)
+#from kami.kamutils._utils import (_report_log,_timing)
+
 
 ## Lambda collection functions ##
 
@@ -53,6 +54,7 @@ tokens_remove = lambda sequence, list_words_remove : " ".join([token
 regex_subts = lambda sequence, subts: " ".join([re.sub(key, value, sequence)
                                                 for key, value
                                                 in subts.items()])
+
 
 def _stop_words_process(sentence: str,
                         stops_predefined: list,

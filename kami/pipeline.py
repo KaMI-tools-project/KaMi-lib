@@ -1,5 +1,6 @@
 from collections import namedtuple
-from kami.preprocessing.transformation import Composer
+#from kami.preprocessing.transformation import Composer
+
 
 class Core():
     def __init__(self, image, ground_truth_file, segmentation_model, transcription_model):

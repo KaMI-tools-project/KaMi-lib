@@ -7,6 +7,7 @@
 
 import decimal
 
+
 __all__ = [
     "_WordRegister",
     "_hot_encode",
@@ -71,8 +72,7 @@ def _truncate_score(score: float, round_digits: str) -> float:
     result_truncate = float(
         decimal.Decimal(score).quantize(
             decimal.Decimal(round_digits),
-            rounding=decimal.ROUND_DOWN)
-    )
+            rounding=decimal.ROUND_DOWN))
     return result_truncate
 
 
