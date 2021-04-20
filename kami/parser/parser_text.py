@@ -25,7 +25,7 @@ class TextParser:
         """Open a TXT file and load its content"""
         if self.file_name:
             with open(self.file_name, "r", encoding="utf8") as fh:
-                content = fh.read()
+                content = fh.read().replace("\n", "")
         self.text = content
 
     def __init__(self, source):

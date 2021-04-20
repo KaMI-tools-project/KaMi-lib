@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from kami.kami import Kami
-
+import pprint
 
 #############################
 # Entry Point : code client #
@@ -18,18 +18,25 @@ def client_code() -> None:
     Kami subsystems.
 
     """
-    my_sentences = ["Ceci est une phrase correcte, sans problème", "CETTE phrase comporte des incertiREdutes"]
-    k = Kami(my_sentences, truncate=True)
-
-
 
 
     textfile_gt = "./datatest/GT_1.txt"
-    image = "./datatest/Voyage_au_centre_de_la_[...]Verne_Jules_btv1b8600259v_16.jpeg"
-    model = "./datatest/on_hold/KB-app_model_JulesVerne1_best.mlmodel"
 
-    k = Kami(textfile_gt, image=image, model=model)
-    print(k.scores.board)
+    page_file = "./datatest/22_c266f_default_PAGE.xml"
+    image = "./datatest/Voyage_au_centre_de_la_[...]Verne_Jules_btv1b8600259v_16.jpeg"
+    image_page = "./datatest/22_c266f_default_PAGE.jpg"
+    model = "./datatest/on_hold/KB-app_model_JulesVerne1_best.mlmodel"
+    model_page = "./datatest/models/model_tapuscrit_n2_(1).mlmodel"
+
+    k = Kami(textfile_gt, image=image, model=model, verbosity=True, truncate=True, round_digits='.001')
+    reference = k.reference
+    prediction = k.prediction
+
+    print(reference)
+    print("--------------------")
+    print(prediction)
+
+    pprint.pprint(k.scores.board, sort_dicts=False)
 
 
 

@@ -115,7 +115,7 @@ class PageParser:
                 mask = []
             self.bounds.append({
                 'lines': [{'baseline': baseline,
-                           'boundary': mask,
+                           'boxes': mask,
                            'text_direction': 'horizontal-lr',  # TODO text direction can be different
                            'script': 'default'}],  # self.document.main_script.name
                 'type': 'baselines',
