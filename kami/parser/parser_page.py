@@ -102,6 +102,10 @@ class PageParser:
         self.transcriptions = []
         self.pairs = []
 
+        #TODO add controls on these variables
+        TEXT_DIRECTION = 'horizontal-lr'
+        SCRIPT = 'default'
+
         for line in self._get_lines():
             try:
                 baseline = _clean_coords(line.find("Baseline"))
@@ -115,9 +119,9 @@ class PageParser:
                 mask = []
             self.bounds.append({
                 'lines': [{'baseline': baseline,
-                           'boxes': mask,
-                           'text_direction': 'horizontal-lr',  # TODO text direction can be different
-                           'script': 'default'}],  # self.document.main_script.name
+                           'boundary': mask,
+                           'text_direction': TEXT_DIRECTION,
+                           'script': SCRIPT}],  # self.document.main_script.name
                 'type': 'baselines',
             })
 
