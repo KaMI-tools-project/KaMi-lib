@@ -52,7 +52,7 @@ class Prediction:
         # create binarized image-segmented image pairs in order to create text recognition
 
         prediction = _predict_transcription(image=image_bin,
-                                            segments=image_segmented,
+                                            bound=image_segmented,
                                             model_loaded=self.model,
                                             verbosity=self.verbosity)
         if self.verbosity:
@@ -87,16 +87,15 @@ class Prediction:
         if self.verbosity:
             _report_log(f"{'#' * 10} HTR/OCR Pipeline initialize for XML file : {self.filename} ... {'#' * 10}", "I")
 
-
         canvas = ""
-
         for bound in self.reference.bounds:
             prediction = _predict_transcription(image=self.image,
-                                                segments=bound,
+                                                bound=bound,
                                                 model_loaded=self.model,
                                                 verbosity=self.verbosity)
 
-        canvas += "".join([t.prediction for t in list(prediction)]) + "\n"
+        canvas += "".join(prediction) + "\n"
+
         # run the model and get a prediction -> https://github.com/mittagessen/kraken/blob/master/kraken/rpred.py#L353
         # return a list of transcription (can we have the same type of objects as
         # get_transcriptions_txt()
