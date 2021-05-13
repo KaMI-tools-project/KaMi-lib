@@ -45,20 +45,23 @@ def _segment_image(image_loaded: object, verbosity: bool) -> list:
     return segments_image
 
 
-def _predict_transcription(image: object, segments, model_loaded: object, verbosity: bool) -> list:
-    """Perform transcription on a series of images given a series of segments"""
+def _predict_transcription(image: object, bound, model_loaded: object, verbosity: bool) -> str:
+    """Perform transcription on an images given a segment"""
 
     # created the text prediction (kraken.rpred.mm_rpred object)
-    output_rpred = rpred.rpred(network=model_loaded,
+    # see https://github.com/mittagessen/kraken/issues/213
+    generator = rpred.rpred(network=model_loaded,
                                im=image,
-                               bounds=segments,
+                               bounds=bound,
                                pad=16,
                                bidi_reordering=True)
-    if verbosity:
-        _report_log(f"{'#' * 10} Text recognition procceded  {'#' * 10}", "S")
+    nxt_gen = next(generator)
+    text = nxt_gen.prediction
 
     if verbosity:
-        _report_log(output_rpred, "V")
-    return output_rpred
+        _report_log(f"{'#' * 10} Text recognition procceded  {'#' * 10}", "S")
+    if verbosity:
+        _report_log(generator, "V")
+    return text
 
 
