@@ -3,6 +3,7 @@
 
 from kami.kami import Kami
 import pprint
+from kami.preprocessing.transformation import Composer, RemovePunctuation, ToLowerCase
 
 #############################
 # Entry Point : code client #
@@ -24,11 +25,11 @@ def client_code() -> None:
 
     page_file = "./datatest/22_c266f_default_PAGE.xml"
     image = "./datatest/Voyage_au_centre_de_la_[...]Verne_Jules_btv1b8600259v_16.jpeg"
-    image_page = "./datatest/22_c266f_default_PAGE.jpg"
+    image_page = "./datatest/22_c266f_default_PAGE.jpeg"
     model = "./datatest/on_hold/KB-app_model_JulesVerne1_best.mlmodel"
     model_page = "./datatest/models/model_tapuscrit_n2_(1).mlmodel"
 
-    k = Kami(textfile_gt, image=image, model=model, verbosity=True, truncate=True, round_digits='.001')
+    k = Kami(textfile_gt, image=image, model=model, verbosity=True, apply_transforms="PD", percent=True, truncate=True, round_digits='.001')
     reference = k.reference
     prediction = k.prediction
 
@@ -37,6 +38,8 @@ def client_code() -> None:
     print(prediction)
 
     pprint.pprint(k.scores.board, sort_dicts=False)
+
+    print(k.scores.wer)
 
 
 

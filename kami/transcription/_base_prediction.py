@@ -45,7 +45,7 @@ def _segment_image(image_loaded: object, verbosity: bool) -> list:
     return segments_image
 
 
-def _predict_transcription(image: object, bound, model_loaded: object, verbosity: bool) -> str:
+def _predict_transcription(image: object, bound, model_loaded: object, verbosity: bool, code: str) -> str:
     """Perform transcription on an images given a segment"""
 
     # created the text prediction (kraken.rpred.mm_rpred object)
@@ -55,13 +55,15 @@ def _predict_transcription(image: object, bound, model_loaded: object, verbosity
                                bounds=bound,
                                pad=16,
                                bidi_reordering=True)
-    nxt_gen = next(generator)
-    text = nxt_gen.prediction
-
-    if verbosity:
-        _report_log(f"{'#' * 10} Text recognition procceded  {'#' * 10}", "S")
-    if verbosity:
-        _report_log(generator, "V")
-    return text
+    if code == "page":
+        nxt_gen = next(generator)
+        text = nxt_gen.prediction
 
 
+        if verbosity:
+            _report_log(f"{'#' * 10} Text recognition procceded  {'#' * 10}", "S")
+        if verbosity:
+            _report_log(generator, "V")
+        return text
+    if code == "txt":
+        return generator

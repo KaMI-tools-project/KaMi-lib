@@ -88,7 +88,7 @@ class RemovePunctuation(AbstractTransform):
                 [symbol for symbol in default_punctuation if symbol not in self.keep_punctuation])
             table = str.maketrans('', '', new_punctuation)
 
-        sequence = " ".join([token.translate(table) for token in sequence.split()])
+        sequence = sequence.translate(table)
 
         return sequence
 

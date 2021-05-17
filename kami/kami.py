@@ -5,6 +5,7 @@
 """Client interface calls several sub-system of Kami-lib
 """
 import os.path
+import sys
 from typing import Union
 
 from kami.parser import parser_text, parser_page
@@ -15,7 +16,7 @@ from kami.metrics.evaluation import Scorer
 
 class Kami:
     """
-    This is a Facade class provides a simple interface to the complex logic of one or
+    A Facade class provides a simple interface to the complex logic of one or
     several subsystems in Kami. This hide a complexity of Kami subsystems.
     """
 
@@ -78,13 +79,14 @@ class Kami:
 
         # case with GT XML PAGE => create a HTR pipeline => compute scores
         elif isinstance(data, str) and data.endswith('xml'):
-            self.reference = parser_page.PageParser(data)
+            self.reference_parse = parser_page.PageParser(data)
+            self.reference = "\n".join(self.reference_parse.transcriptions)
             self.file_name = os.path.basename(data)
             self.model = _load_model(model, verbosity=self.verbosity)
             self.image = _load_image(image, verbosity=self.verbosity)
-            pipeline = Prediction(self.file_name, self.image, self.model, reference=self.reference, verbosity=self.verbosity)
+            pipeline = Prediction(self.file_name, self.image, self.model, reference=self.reference_parse, verbosity=self.verbosity)
             self.prediction = pipeline.get_transcription_xml()
-            self.scores = Scorer(self.reference.transcriptions,
+            self.scores = Scorer(self.reference,
                                  self.prediction,
                                  truncate_score=self.truncate,
                                  show_percent=self.percent,
@@ -144,14 +146,18 @@ class Kami:
     def _compute_all_transformations(self, types_transforms):
         """Compute scores for all transformations
         """
-        transform = Composer(types_transforms)(
+        transform_for_all = Composer(types_transforms)(
             [self.reference,
              self.prediction]
         )
-        scores_transform = Scorer(
-            transform[0],
-            transform[1],
-            truncate_score=self.truncate
+
+        scores_transform_all = Scorer(
+            transform_for_all[0],
+            transform_for_all[1],
+            truncate_score=self.truncate,
+            show_percent=self.percent,
+            round_digits=self.round_digits
         )
 
-        return scores_transform
+        return scores_transform_all
+

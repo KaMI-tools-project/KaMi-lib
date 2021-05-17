@@ -13,8 +13,6 @@ import Levenshtein
 from ._base_metrics import (_truncate_score,
                             _hot_encode,
                             _get_percent)
-from kami.kamutils._utils import _report_log
-
 
 __all__ = [
     "Scorer",
@@ -110,6 +108,15 @@ class Scorer:
         if self.opt_truncate:
             cer = _truncate_score(cer, self.round_digits)
         return cer
+
+    def _ser(self):
+        """Compute sentence error rate (SER)."""
+        ser = (self.lev_distance_char/self.length_char_reference)
+        if self.opt_percent:
+            ser = _get_percent(ser)
+        if self.opt_truncate:
+            ser = _truncate_score(ser, self.round_digits)
+        return ser
 
     def _wacc(self):
         """Compute word accuracy (Wacc)."""

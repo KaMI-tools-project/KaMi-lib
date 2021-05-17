@@ -174,5 +174,3 @@ class PageParser:
             else:
                 _report_log("Source is not a PAGE XML file", "E")
                 _report_log("PageParser can't proceed: verify your input. Created an empty object.", "W")
-
-

@@ -54,7 +54,8 @@ class Prediction:
         prediction = _predict_transcription(image=image_bin,
                                             bound=image_segmented,
                                             model_loaded=self.model,
-                                            verbosity=self.verbosity)
+                                            verbosity=self.verbosity,
+                                            code="txt")
         if self.verbosity:
             _report_log(f"{'#' * 10} Kraken object in string format converted  {'#' * 10}", "S")
         canvas = ""
@@ -62,7 +63,7 @@ class Prediction:
             for line in prediction:
                 # .prediciton is a kraken_ocr_record class attribute for recover the text in
                 # kraken.rpred.mm_rpred object
-                canvas += f"{unicodedata.normalize('NFC', line.prediction)}"
+                canvas += f"{unicodedata.normalize('NFC', line.prediction)}" + "\n"
         except Exception as exception:
                 _report_log(f"Error : unable to transcribe - {prediction}", "E")
                 _report_log(f"type : {exception}")
@@ -92,9 +93,9 @@ class Prediction:
             prediction = _predict_transcription(image=self.image,
                                                 bound=bound,
                                                 model_loaded=self.model,
-                                                verbosity=self.verbosity)
+                                                verbosity=self.verbosity, code="page")
 
-        canvas += "".join(prediction) + "\n"
+            canvas += f"{unicodedata.normalize('NFC', prediction)}" + "\n"
 
         # run the model and get a prediction -> https://github.com/mittagessen/kraken/blob/master/kraken/rpred.py#L353
         # return a list of transcription (can we have the same type of objects as
