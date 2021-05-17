@@ -19,7 +19,7 @@ version de kraken
 
 ## Quickstart
 
-<img src="./docs/static/example-kami-lib.svg" alt="Kami code example" height="100" width ="100"/>
+<img src="./docs/static/example-kami-lib.svg" alt="Kami code example" height="1500" width ="800"/>
 
 ## Usage
 
