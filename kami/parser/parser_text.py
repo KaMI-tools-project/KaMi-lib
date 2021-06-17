@@ -14,7 +14,7 @@ import os
 from kami.kamutils._utils import (_report_log)
 
 
-class TextParser:
+class _TextParser:
     """A very simple Text Parser for KaMI.
 
     Attributes:
@@ -25,7 +25,8 @@ class TextParser:
         """Open a TXT file and load its content"""
         if self.file_name:
             with open(self.file_name, "r", encoding="utf8") as fh:
-                content = fh.read().replace("\n", "")
+                content = fh.read()
+                content = ''.join([line + "\n" for line in content.split('\n') if line.strip() != ''])
         self.text = content
 
     def __init__(self, source):

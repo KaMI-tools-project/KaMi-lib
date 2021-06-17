@@ -35,7 +35,7 @@ def _clean_coords(baseline_tag) -> list:
             for pt in baseline_tag.get("points").split(" ")]
 
 
-class PageParser:
+class _PageParser:
     """A PAGE XML Parser for KaMI.
 
     Attributes:
@@ -102,7 +102,8 @@ class PageParser:
         self.transcriptions = []
         self.pairs = []
 
-        #TODO add controls on these variables
+        # TODO(@Alix) : add controls on these variables
+
         TEXT_DIRECTION = 'horizontal-lr'
         SCRIPT = 'default'
 

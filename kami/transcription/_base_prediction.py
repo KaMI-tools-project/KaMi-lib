@@ -5,10 +5,10 @@
 """Common code for prediction process.
 """
 
-import sys
-
 from kami.kamutils._utils import _report_log
-from kraken import rpred, pageseg, binarization
+from kraken import (rpred,
+                    pageseg,
+                    binarization)
 
 def _binarize_image(image_loaded: object, verbosity: bool) -> object:
     """Binarize a series of images"""
@@ -20,7 +20,6 @@ def _binarize_image(image_loaded: object, verbosity: bool) -> object:
     except Exception as exception:
         _report_log(f"type : {exception}")
         _report_log(f"Error : unable to binarize - {image_loaded}", "E")
-        sys.exit('program exit')
 
     if verbosity:
         _report_log(im_bin, "V")
@@ -37,7 +36,6 @@ def _segment_image(image_loaded: object, verbosity: bool) -> list:
     except Exception as exception:
         _report_log(f"type : {exception}")
         _report_log(f"Error : unable to segment - {image_loaded}", "E")
-        sys.exit('program exit')
 
     if verbosity:
         _report_log(segments_image, "V")
@@ -55,15 +53,15 @@ def _predict_transcription(image: object, bound, model_loaded: object, verbosity
                                bounds=bound,
                                pad=16,
                                bidi_reordering=True)
-    if code == "page":
+    if code == "xml":
         nxt_gen = next(generator)
         text = nxt_gen.prediction
-
 
         if verbosity:
             _report_log(f"{'#' * 10} Text recognition procceded  {'#' * 10}", "S")
         if verbosity:
             _report_log(generator, "V")
         return text
+
     if code == "txt":
         return generator

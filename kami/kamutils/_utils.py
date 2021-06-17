@@ -6,6 +6,7 @@
 """
 
 import time
+from typing import Callable
 
 from functools import wraps
 import termcolor
@@ -17,7 +18,7 @@ __all__ = [
 ]
 
 
-def _report_log(message: str, type_log: str ="I") -> None:
+def _report_log(message: str, type_log: str = "I") -> None:
     """Returns report log
 
     letter code to specify type of report
@@ -50,7 +51,7 @@ def _report_log(message: str, type_log: str ="I") -> None:
         return print(message)
 
 
-def _timing(function):
+def _timing(function: Callable) -> Callable:
     """A simple decorator to compute execution time of any function
     """
     @wraps(function)
