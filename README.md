@@ -6,10 +6,9 @@
 <!--![KaMI lib logo](./docs/static/kramin_carmin_lib.png)-->
 
 <img src="./docs/static/kramin_carmin_lib.png" alt="KaMI lib logo" height="100" width ="100"/>
-Python package focused on HTR / OCR evaluation and based on the [Kraken](http://kraken.re/) transcription system
-to help you to choose the best models.
+Python package focused on HTR / OCR models evaluation and based on the [Kraken](http://kraken.re/) transcription system.
 
-## Installation
+## :electric_plug: Installation
 
 version - Python support
 version de kraken
@@ -17,20 +16,20 @@ version de kraken
 - Pipy
 - via dépo gitlab
 
-## Quickstart
+## :key: Quickstart
 
-<img src="./docs/static/example-kami-lib.svg" alt="Kami code example" height="100" width ="100"/>
+<img src="./docs/static/example-kami-lib.svg" alt="Kami code example" height="1500" width ="800"/>
 
-## Usage
+## :bulb: Usage
 
 - Ground truth formats (alto/txt) + model format
 - comparer deux séquences de caractères
 - options de preprocessing (codes lettres)
 - types de métriques (article de réf.)
 
-## History & Motivation
+## :sparkles: History & Motivation
 
-## How to cite 
+## :black_nib: How to cite 
 
 ```
 @misc{Kami-lib,
@@ -41,7 +40,7 @@ version de kraken
 }
 ```
 
-## License and contact
+## :octopus: License and contact
 
 Distributed under [MIT](./LICENSE) license. The dependencies used in the project are  also distributed under compatible 
 license.
