@@ -24,3 +24,4 @@ threadpoolctl
 toml
 wrapt
 Unidecode
+kraken==3.0.0.0b24
