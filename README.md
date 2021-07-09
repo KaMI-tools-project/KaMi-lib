@@ -15,7 +15,11 @@ Python package focused on HTR / OCR models evaluation and based on the [Kraken](
   <figcaption>Kami Amaterasu emerges from the Heavenly Rock Cave (Shunsai Toshimasa, 1887) - source : [Wikipédia](https://commons.wikimedia.org/wiki/File:Amaterasu_cave.JPG)</figcaption>
 </figure>
 
+:japanese_ogre:
+
 *In traditional Japan, and more specifically in the Shinto religion, there was a Kami who is a revered spirit or deity. It embodies all the elements of the world (nature, animals, creative forces) and, like all these elements, they can have both good and bad characteristics ... Be aware of the strengths and weaknesses inspired by nature it is borrowed the "way of the kamis". (source : [Wikipédia](https://fr.wikipedia.org/wiki/Kami_(divinit%C3%A9))).*
+
+:japanese_goblin:
 
 ## :electric_plug: Installation
 
