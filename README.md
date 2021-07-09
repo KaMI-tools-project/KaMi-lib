@@ -41,9 +41,10 @@ version de kraken
 
 ```
 @misc{Kami-lib,
+    author = "Lucas Terriel (Inria - ALMAnaCH) and Alix Chagué (Inria - ALMAnaCH)",
     title = {Kami-lib - Kraken model inspector},
     howpublished = {\url{https://gitlab.inria.fr/dh-projects/kami/kami-lib}},
-    publisher = {GitLab},
+    publisher = {GitLab-inria},
     year = {2020-2021}
 }
 ```
@@ -59,3 +60,4 @@ Mail authors and contact : Alix Chagué (alix.chague@inria.fr) and Lucas Terriel
 with contributions of [ALMAnaCH](http://almanach.inria.fr/index-en.html) at [Inria](https://www.inria.fr/en) Paris.
 
 
+[![forthebadge made-with-python](http://ForTheBadge.com/images/badges/made-with-python.svg)](https://www.python.org/)
