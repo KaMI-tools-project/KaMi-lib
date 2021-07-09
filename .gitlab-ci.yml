@@ -19,7 +19,7 @@ Job_unittest:
   image: python:3.8
 
   script:
-    - python -m unittest tests/*.py -v
+    - python3 -m unittest tests/*.py -v
   
 
 Job_coverage:
