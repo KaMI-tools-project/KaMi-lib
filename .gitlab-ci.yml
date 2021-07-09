@@ -11,16 +11,15 @@ Job_build:
     - python3 -V
     - pip3 --version
     - pip3 install -U pip setuptools wheel
-    - pip install -U spacy
     - pip3 install -r requirements_vm.txt
 
 
-Job_pytest:
+Job_unittest:
   stage: test
   image: python:3.8
 
   script:
-    - pytest tests/*.py
+    - python -m unittest tests/*.py -v
   
 
 Job_coverage:

@@ -5,6 +5,7 @@
 """Common code for prediction process.
 """
 
+
 from kami.kamutils._utils import _report_log
 from kraken import (rpred,
                     pageseg,

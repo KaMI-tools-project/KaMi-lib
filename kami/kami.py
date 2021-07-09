@@ -116,7 +116,7 @@ class Kami:
 
 
         else:
-            raise ValueError("Something is wrong. Check your data.")
+            raise ValueError("Something is wrong. Check your data (ground truth and/or prediction).")
 
         # Case with preprocessing and modulate .board dict of Scorer object
         if len(apply_transforms) > 0:

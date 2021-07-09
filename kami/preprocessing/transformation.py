@@ -69,9 +69,6 @@ class ToCompose:
 
 
 class _AbstractTransform(object):
-    """
-
-    """
     def __call__(self, sentences: Union[str, List[str]]):
         if isinstance(sentences, str):
             return self.process_string(sentences)
@@ -90,13 +87,9 @@ class _AbstractTransform(object):
 
 
 class _Composer(object):
-    """
-
-    """
     def __init__(self, transforms: List[_AbstractTransform]):
         self.transforms = transforms
 
-    @_timing
     def __call__(self, text):
         for transform in self.transforms:
                 text = transform(text)
@@ -199,11 +192,13 @@ class RemoveSpecificWords(_AbstractTransform):
     Attributes
     ----------
     See Parameters
+
     """
     def __init__(self, words_to_remove: List[str]):
         self.words_to_remove = words_to_remove
 
     def process_string(self, sequence: str):
+        # TODO(@Luca) : tokenization better eg. "Curée," to ["Curée", ","]
         sequence = " ".join([token for token in sequence.split() if token not in self.words_to_remove])
         return sequence
 
@@ -232,7 +227,7 @@ class SubRegex(_AbstractTransform):
     ----------
     See Parameters
     """
-    def __init__(self, substitutions: Mapping[str, str]):
+    def __init__(self, substitutions: dict):
         self.substitutions = substitutions
 
     def process_string(self, sequence: str):

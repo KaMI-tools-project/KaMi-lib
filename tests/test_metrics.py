@@ -1,21 +1,19 @@
-import pytest
 import unittest
 
-from kami.metrics.evaluation import Scorer as kamiScorer
+from kami.metrics.evaluation import Scorer
 
-"""Run python -m pytest tests in root dir"""
+"""python -m unittest tests/*.py -v"""
 
 class testMetrics(unittest.TestCase):
-    reference = "Six semaines plus tard, Claude peignait un matin dans un flot de soleil qui tombait par la baie vitrée de l’atelier."
-    prediction_same = "Six semaines plus tard, Claude peignait un matin dans un flot de soleil qui tombait par la baie vitrée de l’atelier."
-    prediction_change = "Six semaiNEs plus tard, lCCaude peignait un MA dans un flotille de soleil qui tombait baie vitrée de l’atelier."
-    prediction_empty = ""
-    my_scorer_1 = kamiScorer(reference, prediction_same, show_percent=True, truncate_score=True, round_digits='.001')
-    my_scorer_2 = kamiScorer(reference, prediction_change, show_percent=True, truncate_score=True, round_digits='.001')
-    my_scorer_3 = kamiScorer(reference, prediction_empty, show_percent=True, truncate_score=True, round_digits='.001')
+    def setUp(self) -> None:
+        self.reference = "Six semaines plus tard, Claude peignait un matin dans un flot de soleil qui tombait par la baie vitrée de l’atelier."
+        self.prediction = "Six semaiNEs plus tard, lCCaude peignait un MA dans un flotille de soleil qui tombait baie vitrée de l’atelier."
+        self.scorer_1 = Scorer(self.reference, self.reference, show_percent=True, truncate_score=True, round_digits='.001')
+        self.scorer_2 = Scorer(self.reference, self.prediction, show_percent=True, truncate_score=True, round_digits='.001')
+        self.scorer_3 = Scorer(self.reference, "", show_percent=True, truncate_score=True, round_digits='.001')
 
     def test_success_with_same_string(self):
-        assert self.my_scorer_1.board == {'levensthein_distance_char': 0,
+         self.assertEqual(self.scorer_1.board, {'levensthein_distance_char': 0,
                                      'levensthein_distance_words': 0,
                                      'hamming_distance': 0,
                                      'wer': 0.0,
@@ -27,10 +25,10 @@ class testMetrics(unittest.TestCase):
                                      'hits': 116,
                                      'substitutions': 0,
                                      'deletions': 0,
-                                     'insertions': 0}
+                                     'insertions': 0})
 
     def test_success_with_change_string(self):
-        assert self.my_scorer_2.board == {'levensthein_distance_char': 20,
+        self.assertEqual(self.scorer_2.board, {'levensthein_distance_char': 20,
                                           'levensthein_distance_words': 6,
                                           'hamming_distance': 'Ø',
                                           'wer': 28.571,
@@ -42,11 +40,11 @@ class testMetrics(unittest.TestCase):
                                           'hits': 101,
                                           'substitutions': 5,
                                           'deletions': 10,
-                                          'insertions': 5}
+                                          'insertions': 5})
 
 
     def test_success_with_empty_string(self):
-        assert self.my_scorer_3.board == {'levensthein_distance_char': 116,
+        self.assertEqual(self.scorer_3.board, {'levensthein_distance_char': 116,
                                           'levensthein_distance_words': 21,
                                           'hamming_distance': 'Ø',
                                           'wer': 100.0,
@@ -56,7 +54,11 @@ class testMetrics(unittest.TestCase):
                                           'hits': 0,
                                           'substitutions': 0,
                                           'deletions': 116,
-                                          'insertions': 0}
+                                          'insertions': 0})
 
 
-    # TODO(Luca) : test with no strings
+    def test_noStringsToCompute(self):
+        with self.assertRaises(TypeError):
+            Scorer()
+
+
