@@ -7,21 +7,6 @@
 <img src="./docs/static/kramin_carmin_lib.png" alt="KaMI lib logo" height="100" width ="100"/>
 Python package focused on HTR / OCR models evaluation and based on the [Kraken](http://kraken.re/) transcription system.
 
-## :japanese_castle: Once upon a time ... 
-
-<div>
-<figure style="float: left">
-  <img src="./docs/static/Amaterasu_cave.jpg" alt="Amaterasu emerges from the Heavenly Rock Cave (Shunsai Toshimasa, 1887) - src : Wikipedia" height="200" width ="400"/>
-  <figcaption>Kami Amaterasu emerges from the Heavenly Rock Cave (Shunsai Toshimasa, 1887) - source : [Wikipédia](https://commons.wikimedia.org/wiki/File:Amaterasu_cave.JPG)</figcaption>
-</figure>
-
-----
-
-
-*In traditional Japan, and more specifically in the Shinto religion, there was a Kami who is a revered spirit or deity. It embodies all the elements of the world (nature, animals, creative forces) and, like all these elements, they can have both good and bad characteristics ... Be aware of the strengths and weaknesses inspired by nature it is borrowed the "way of the kamis". (source : [Wikipédia](https://fr.wikipedia.org/wiki/Kami_(divinit%C3%A9))).*
-
-----
-
 ## :electric_plug: Installation
 
 ### Dependencies 
