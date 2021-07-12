@@ -69,7 +69,7 @@ $ python -m unittest tests/*.py -v
 
 <!-- You can launch binder to see notebook with tutorial too -->
 
-```Python
+```python
 
 # import package 
 import pprint
