@@ -41,7 +41,7 @@ Kami requires :
 $ git clone https://gitlab.inria.fr/dh-projects/kami/kami-lib.git
 ```
 
-2. Create a virtual environment (with your version of Python) :
+2. Create a virtual environment (with your Python version) :
 
 ```bash
 $ virtualenv -p python3.7 kami_venv
