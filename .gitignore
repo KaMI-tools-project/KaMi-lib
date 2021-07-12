@@ -3,9 +3,22 @@ env-kamilib/
 kami_venv_37/
 kami_venv_38/
 kami_venv_39/
+venv37test/
+venv38test/
 
 # Jetbrains (IDE)
 .idea/
 __pycache__
 .pytest_cache
 
+# Jupyter notebooks
+.ipynb_checkpoints/
+Tutoriel.ipynb
+
+# Package utils
+dist/
+build/
+kami/kamilib.egg-info/
+
+# others
+runpackage.txt

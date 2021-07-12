@@ -21,6 +21,7 @@ from kami.transcription._base_prediction_io import (_load_model,
 from kami.transcription.prediction import _Prediction
 from kami.metrics.evaluation import Scorer
 
+
 class Kami:
     """A Facade class provides a simple interface to the complex logic of one or
     several subsystems in Kami.
@@ -187,7 +188,7 @@ class Kami:
                 def count_lower(string):
                     total = sum(1 for c in string if c.islower())
                     return total
-                # Compute total of lowercase char pass in uppercase in referance after transform
+                # Compute total of lowercase char pass in uppercase in reference after transform
                 total_lower_reference = count_lower(self.reference)
                 total_lower_prediction = count_lower(self.prediction)
                 new_score["Total_char_pass_in_uppercase_in_reference"] = total_lower_reference
@@ -197,7 +198,7 @@ class Kami:
                 def count_upper(string):
                     total = sum(1 for c in string if c.isupper())
                     return total
-                # Compute total of lowercase char pass in uppercase in referance after transform
+                # Compute total of lowercase char pass in uppercase in reference after transform
                 total_upper_reference = count_upper(self.reference)
                 total_upper_prediction = count_upper(self.prediction)
                 new_score["Total_char_pass_in_lowercase_in_reference"] = total_upper_reference
@@ -208,8 +209,6 @@ class Kami:
                 new_score["Length_prediction"] = len(self.prediction)
                 new_score["Length_reference_transformed"] = len(reference_transformed)
                 new_score["Length_prediction_transformed"] = len(prediction_transformed)
-
-
 
             # Add all scores to a final board
             self.scores.board = new_score
@@ -247,4 +246,3 @@ class Kami:
         )
 
         return scores_transform_all, transform_for_all
-

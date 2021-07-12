@@ -58,7 +58,7 @@ $ python -m unittest tests/*.py -v
 
 # import package 
 import pprint
-from kami.Kami import Kami
+from Kami import Kami
 
 # Select ground truth (raw text, sequences and XML PAGE also support), 
 # image (.jpeg only), 
@@ -152,6 +152,18 @@ pprint.pprint(k.scores.board)
                              'wer': 20.28}}
 
 ```
+
+## :wrench: improvements
+
+* Formats
+
+    -  integrate other ground truth formats as ALTO XML
+    -  integrate other HTR / OCR model formats
+    
+* Compute
+
+    - speed up computing
+    - integrate the evaluation of the segmentation of an image
 
 
 <!--

@@ -1,2 +1,5 @@
-# __version__
-__title__ = "Kami-lib"
+# -*- coding : utf-8 -*-
+
+__title__ = "kamilib"
+__version__ = "0.1.1"
+__licence__ = "MIT"

@@ -17,7 +17,7 @@ from typing import (Union,
                     TypeVar,
                     Optional)
 
-import unidecode
+# import unidecode
 
 from kami.kamutils._utils import _timing
 
