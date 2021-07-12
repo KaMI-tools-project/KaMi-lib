@@ -1,5 +1,7 @@
-[![pipeline status](https://gitlab.inria.fr/dh-projects/kami/kami-lib/badges/master/pipeline.svg)](https://gitlab.inria.fr/dh-projects/kami/kami-lib/-/commits/master) [![coverage report](https://gitlab.inria.fr/dh-projects/kami/kami-lib/badges/master/coverage.svg)](https://gitlab.inria.fr/dh-projects/kami/kami-lib/-/commits/master) [![GitLab license](https://img.shields.io/github/license/Naereen/StrapDown.js.svg)](https://gitlab.inria.fr/dh-projects/kami/Kami-lib/master/LICENSE)
-![PythonVersion](https://img.shields.io/badge/python-3.7%20%7C%203.8-blue)
+[![pipeline status](https://gitlab.inria.fr/dh-projects/kami/kami-lib/badges/master/pipeline.svg)](https://gitlab.inria.fr/dh-projects/kami/kami-lib/-/commits/master) [![coverage report](https://gitlab.inria.fr/dh-projects/kami/kami-lib/badges/master/coverage.svg)](https://gitlab.inria.fr/dh-projects/kami/kami-lib/-/commits/master) [![GitLab license](https://img.shields.io/github/license/Naereen/StrapDown.js.svg)](https://gitlab.inria.fr/dh-projects/kami/Kami-lib/master/LICENSE) 
+
+![Python Version](https://img.shields.io/badge/python-3.7%20%7C%203.8-blue) ![Gitlab version](https://img.shields.io/badge/Gitlab%20version-0.1.1-blue)
+
 # KaMI (Kraken Model Inspector)
 
 <!--![KaMI lib logo](./docs/static/kramin_carmin_lib.png)-->
