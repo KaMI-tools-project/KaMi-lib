@@ -161,12 +161,10 @@ class Kami:
                 # (initial reference and transformed reference / initial reference and transformed prediction)
                 # to compute the number of digits or punctuation remove
                 total_char_removed_reference \
-                    = (
-                        len(self.reference)
+                    = (len(self.reference)
                         - len(reference_transformed))
                 total_char_removed_prediction \
-                    = (
-                        len(self.prediction)
+                    = (len(self.prediction)
                         - len(prediction_transformed))
 
                 new_score["Total_char_removed_from_reference"] = total_char_removed_reference
@@ -207,7 +205,7 @@ class Kami:
 
             if "D" or "P" or "L" or "U" or "X" in apply_transforms:
                 new_score["Length_reference"] = len(self.reference)
-                new_score["Length_prediction"] = len(self.reference)
+                new_score["Length_prediction"] = len(self.prediction)
                 new_score["Length_reference_transformed"] = len(reference_transformed)
                 new_score["Length_prediction_transformed"] = len(prediction_transformed)
 

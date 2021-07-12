@@ -2,8 +2,6 @@ import unittest
 
 from kami.metrics.evaluation import Scorer
 
-"""python -m unittest tests/*.py -v"""
-
 class testMetrics(unittest.TestCase):
     def setUp(self) -> None:
         self.reference = "Six semaines plus tard, Claude peignait un matin dans un flot de soleil qui tombait par la baie vitrée de l’atelier."

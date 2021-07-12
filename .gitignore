@@ -1,8 +1,14 @@
-# Folders (virtual envs, IDE...)
+# Virtual envs
 env-kamilib/
+kami_venv_37/
+kami_venv_38/
+kami_venv_39/
+
+# Jetbrains (IDE)
 .idea/
 __pycache__
 .pytest_cache
 
-patron.py
-test.py
+# tests files
+./patron.py
+./test.py

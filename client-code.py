@@ -29,7 +29,7 @@ def client_code() -> None:
 
     """
 
-    textfile_gt1 = "./datatest/GT_1.txt"
+    file = "./datatest/GT_1.txt"
     textfile_gt2 = "./datatest/GT_2.txt"
 
     page_file = "./datatest/22_c266f_default_PAGE.xml"
@@ -43,7 +43,7 @@ def client_code() -> None:
 
 
 
-    """
+
 
     k = Kami([], verbosity=False, truncate=True, percent=True, round_digits='0.01')
     reference = k.reference
@@ -53,22 +53,6 @@ def client_code() -> None:
     print("--------------------")
     print(prediction)
 
-    pprint.pprint(k.scores.board)
-    """
-
-
-
-    k = Kami(textfile_gt1,
-             model=model,
-             image=image,
-             verbosity=False,
-             truncate=True,
-             percent=True,
-             round_digits='0.01')
-
-    print(k.reference)
-    print("----------")
-    print(k.prediction)
     pprint.pprint(k.scores.board)
 
 

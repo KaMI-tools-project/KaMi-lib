@@ -10,6 +10,7 @@
 
 import re
 import string
+import unicodedata
 from typing import (Union,
                     List,
                     Mapping,
@@ -155,8 +156,16 @@ class RemoveDiacritics(_AbstractTransform):
     User can directly access to this class or via :class: `ToCompose` class.
     """
     def process_string(self, sequence: str):
+        """
         sequence = unidecode.unidecode(sequence)
-        return sequence
+        sequence = re.sub(r'<<', '«', sequence)
+        sequence = re.sub(r'>>', "»", sequence)
+        sequence = re.sub(r'--', '—', sequence)
+        """
+        sequence = unicodedata.normalize('NFD', sequence)\
+           .encode('ascii', 'ignore')\
+           .decode("utf-8")
+        return str(sequence)
 
 
 class RemoveDigits(_AbstractTransform):
@@ -259,7 +268,10 @@ def count_diacritics(string):
     """A simple diacritics counter"""
     total_diacritics = []
     for char in string:
-        char_transform = unidecode.unidecode(char)
+        # char_transform = unidecode.unidecode(char)
+        char_transform = unicodedata.normalize('NFD', char)\
+           .encode('ascii', 'ignore')\
+           .decode("utf-8")
         if char != char_transform:
             total_diacritics.append(char)
 
