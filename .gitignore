@@ -9,6 +9,3 @@ kami_venv_39/
 __pycache__
 .pytest_cache
 
-# tests files
-./patron.py
-./test.py

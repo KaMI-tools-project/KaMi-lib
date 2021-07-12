@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 
-from kami.kami import Kami
+from kami.Kami import Kami
 from kami.preprocessing.transformation import (ToCompose,
                                                ToLowerCase,
                                                ToUpperCase,
@@ -45,7 +45,7 @@ def client_code() -> None:
 
 
 
-    k = Kami([], verbosity=False, truncate=True, percent=True, round_digits='0.01')
+    k = Kami([ground_truth, hypothesis], verbosity=False, truncate=True, percent=True, round_digits='0.01')
     reference = k.reference
     prediction = k.prediction
 

@@ -1,6 +1,6 @@
 import unittest
 
-from kami.kami import Kami
+from kami.Kami import Kami
 
 
 class testKamiClient(unittest.TestCase):

@@ -58,7 +58,7 @@ $ python -m unittest tests/*.py -v
 
 # import package 
 import pprint
-from kami.kami import Kami
+from kami.Kami import Kami
 
 # Select ground truth (raw text, sequences and XML PAGE also support), 
 # image (.jpeg only), 
@@ -69,21 +69,20 @@ model = "./datatest/on_hold/KB-app_model_JulesVerne1_best.mlmodel"
 
 # Create a kami object
 
-k = Kami(file, # Apply ground truth file here
-         model=model, # Apply HTR/OCR model here
-         image=image, # Apply image here
-         apply_transforms="XP", # Compute with some transformations as remove diacritics and punctuations
+k = Kami(file,  # Apply ground truth file here
+         model=model,  # Apply HTR/OCR model here
+         image=image,  # Apply image here
+         apply_transforms="XP",  # Compute with some transformations as remove diacritics and punctuations
          # (List transformations : D : digits / U : uppercase / L : lowercase / P : punctuation / X : diacritics [OPTIONAL])
-         verbosity=False, # Add some comments during process
-         truncate=True, # Truncate final scores
-         percent=True, # Indicate scores in percent
-         round_digits='0.01') # number of digits after floating point
-
+         verbosity=False,  # Add some comments during process
+         truncate=True,  # Truncate final scores
+         percent=True,  # Indicate scores in percent
+         round_digits='0.01')  # number of digits after floating point
 
 # Get the reference text
 print(k.reference)
 
-print(f"\n{'-'*20}\n")
+print(f"\n{'-' * 20}\n")
 
 # Get the prediction text
 print(k.prediction)
@@ -92,65 +91,65 @@ print(k.prediction)
 pprint.pprint(k.scores.board)
 
 >>> {'Length_prediction': 2507,
- 'Length_prediction_transformed': 2405,
- 'Length_reference': 2536,
- 'Length_reference_transformed': 2426,
- 'Total_char_removed_from_prediction': 102,
- 'Total_char_removed_from_reference': 110,
- 'Total_diacritics_removed_from_prediction': 84,
- 'Total_diacritics_removed_from_reference': 98,
- 'all_transforms': {'cer': 5.81,
-                    'cil': 8.38,
-                    'cip': 91.61,
-                    'deletions': 48,
-                    'hamming_distance': 'Ø',
-                    'hits': 2312,
-                    'insertions': 27,
-                    'levensthein_distance_char': 141,
-                    'levensthein_distance_words': 73,
-                    'mer': 5.74,
-                    'substitutions': 66,
-                    'wacc': 82.28,
-                    'wer': 17.71},
- 'default': {'cer': 6.62,
-             'cil': 9.55,
-             'cip': 90.44,
-             'deletions': 59,
-             'hamming_distance': 'Ø',
-             'hits': 2398,
-             'insertions': 30,
-             'levensthein_distance_char': 168,
-             'levensthein_distance_words': 90,
-             'mer': 6.54,
-             'substitutions': 79,
-             'wacc': 79.54,
-             'wer': 20.45},
- 'remove_diacritics': {'cer': 6.08,
-                       'cil': 8.78,
-                       'cip': 91.21,
-                       'deletions': 49,
-                       'hamming_distance': 'Ø',
-                       'hits': 2379,
-                       'insertions': 31,
-                       'levensthein_distance_char': 152,
-                       'levensthein_distance_words': 77,
-                       'mer': 6.0,
-                       'substitutions': 72,
-                       'wacc': 82.05,
-                       'wer': 17.94},
- 'remove_punctuation': {'cer': 6.37,
-                        'cil': 9.25,
-                        'cip': 90.74,
-                        'deletions': 57,
-                        'hamming_distance': 'Ø',
-                        'hits': 2330,
-                        'insertions': 25,
-                        'levensthein_distance_char': 157,
-                        'levensthein_distance_words': 86,
-                        'mer': 6.31,
-                        'substitutions': 75,
-                        'wacc': 79.71,
-                        'wer': 20.28}}
+      'Length_prediction_transformed': 2405,
+      'Length_reference': 2536,
+      'Length_reference_transformed': 2426,
+      'Total_char_removed_from_prediction': 102,
+      'Total_char_removed_from_reference': 110,
+      'Total_diacritics_removed_from_prediction': 84,
+      'Total_diacritics_removed_from_reference': 98,
+      'all_transforms': {'cer': 5.81,
+                         'cil': 8.38,
+                         'cip': 91.61,
+                         'deletions': 48,
+                         'hamming_distance': 'Ø',
+                         'hits': 2312,
+                         'insertions': 27,
+                         'levensthein_distance_char': 141,
+                         'levensthein_distance_words': 73,
+                         'mer': 5.74,
+                         'substitutions': 66,
+                         'wacc': 82.28,
+                         'wer': 17.71},
+      'default': {'cer': 6.62,
+                  'cil': 9.55,
+                  'cip': 90.44,
+                  'deletions': 59,
+                  'hamming_distance': 'Ø',
+                  'hits': 2398,
+                  'insertions': 30,
+                  'levensthein_distance_char': 168,
+                  'levensthein_distance_words': 90,
+                  'mer': 6.54,
+                  'substitutions': 79,
+                  'wacc': 79.54,
+                  'wer': 20.45},
+      'remove_diacritics': {'cer': 6.08,
+                            'cil': 8.78,
+                            'cip': 91.21,
+                            'deletions': 49,
+                            'hamming_distance': 'Ø',
+                            'hits': 2379,
+                            'insertions': 31,
+                            'levensthein_distance_char': 152,
+                            'levensthein_distance_words': 77,
+                            'mer': 6.0,
+                            'substitutions': 72,
+                            'wacc': 82.05,
+                            'wer': 17.94},
+      'remove_punctuation': {'cer': 6.37,
+                             'cil': 9.25,
+                             'cip': 90.74,
+                             'deletions': 57,
+                             'hamming_distance': 'Ø',
+                             'hits': 2330,
+                             'insertions': 25,
+                             'levensthein_distance_char': 157,
+                             'levensthein_distance_words': 86,
+                             'mer': 6.31,
+                             'substitutions': 75,
+                             'wacc': 79.71,
+                             'wer': 20.28}}
 
 ```
 
