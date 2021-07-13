@@ -179,6 +179,15 @@ pprint.pprint(k.scores.board)
 ## :sparkles: History & Motivation
 -->
 
+## :question: Do you have questions, bug report, features request or feedback ?
+
+#### Please use the issue templates :
+
+#### :beetle: Bug report : [here](https://gitlab.inria.fr/dh-projects/kami/kami-lib/-/issues/new?issuable_template=bug_report)
+#### :fireworks: Features request : [here](https://gitlab.inria.fr/dh-projects/kami/kami-lib/-/issues/new?issuable_template=feature_request)
+
+*if you are not in these cases, feel free to open an issue*
+
 ## :black_nib: How to cite 
 
 ```
