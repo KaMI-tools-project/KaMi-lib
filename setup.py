@@ -1,13 +1,16 @@
 # -*- coding : utf-8 -*-
 
+from os import path
 import setuptools
 import unittest
 
 import kami
 
+here = path.abspath(path.dirname(__file__))
+
 try:
-    with open("README.md", "r", encoding="utf-8") as fh:
-        long_description = fh.read()
+    with open(path.join(here, 'README.md'), encoding='utf-8') as f:
+        long_description = f.read()
 except:
     long_description = u"Python package focused on HTR / OCR models evaluation and based on the Kraken transcription system."
 

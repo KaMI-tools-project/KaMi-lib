@@ -159,13 +159,13 @@ pprint.pprint(k.scores.board)
 
 * Formats
 
-    -  integrate other ground truth formats as ALTO XML
-    -  integrate other HTR / OCR model formats
+    -  Integrate other ground truth formats as ALTO XML
+    -  Integrate other HTR / OCR model formats
     
 * Compute
 
-    - speed up computing
-    - integrate the evaluation of the segmentation of an image
+    - Speed up computing
+    - Integrate the evaluation of the segmentation of an image
 
 
 <!--
