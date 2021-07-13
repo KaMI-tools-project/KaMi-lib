@@ -20,6 +20,12 @@ Kami requires :
 User installation
 #################
 
+Use pip to install package:
+
+.. code-block:: bash
+
+    $ pip install kamilib
+
 Developer installation
 ######################
 
