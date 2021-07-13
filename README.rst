@@ -186,9 +186,9 @@ then
 
 *if you are not in these cases, feel free to open an issue*
 
-*************
+**************
 ✒️ How to cite
-*************
+**************
 
 .. code-block:: latex
 
@@ -200,9 +200,9 @@ then
         year = {2020-2021}
     }
 
-********************************
+************************
 🐙  License and contact
-********************************
+************************
 
 Distributed under `MIT <https://gitlab.inria.fr/dh-projects/kami/Kami-lib/master/LICENSE>`_ license. The dependencies used in the project are also distributed under compatible
 license.
@@ -212,6 +212,7 @@ Mail authors and contact : Alix Chagué (alix.chague@inria.fr) and Lucas Terriel
 *Kami* is developed and maintained by authors (since 2021, first version named Kraken-Benchmark in 2020)
 with contributions of `ALMAnaCH <http://almanach.inria.fr/index-en.html>`_ at `Inria <https://www.inria.fr/en>`_ Paris.
 
+|made-with-python|
 
 .. |Pipeline| image:: https://gitlab.inria.fr/dh-projects/kami/kami-lib/badges/master/pipeline.svg
     :target: https://gitlab.inria.fr/dh-projects/kami/kami-lib/commits/master
@@ -225,7 +226,7 @@ with contributions of `ALMAnaCH <http://almanach.inria.fr/index-en.html>`_ at `I
     :target: https://img.shields.io/badge/python-3.7%20%7C%203.8-blue
 .. |Gitlab-version| image:: https://img.shields.io/badge/Gitlab%20version-0.1.1-blue
     :target: https://img.shields.io/badge/Gitlab%20version-0.1.1-blue
-.. |Logo| image:: ./docs/static/kramin_carmin_lib.png
+.. |Logo| image:: https://gitlab.inria.fr/dh-projects/kami/kami-lib/-/raw/master/docs/static/kramin_carmin_lib.png
     :width: 100px
 .. |made-with-python| image:: http://ForTheBadge.com/images/badges/made-with-python.svg
     :target: https://www.python.org/
