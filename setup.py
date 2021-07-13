@@ -44,7 +44,7 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     url="https://gitlab.inria.fr/dh-projects/kami/kami-lib",
     project_urls={
-        "Bug Tracker": "https://gitlab.inria.fr/dh-projects/kami/kami-lib/-/issues",
+        "Bug Tracker": "https://gitlab.inria.fr/dh-projects/kami/kami-lib/-/issues/new?issuable_template=bug_report",
     },
     classifiers=CLASSIFIERS,
     keywords=["HTR", "OCR", "Evaluation framework", "metrics", "handwritten text recognition", "optical character recognition"],
