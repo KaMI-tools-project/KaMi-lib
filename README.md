@@ -20,6 +20,11 @@ Kami requires :
 
 ### User installation 
 
+Use pip to install package:
+
+`pip install kamilib`
+
+
 ### Developer installation 
 
 1. Create a local branch of the kami-lib project :
