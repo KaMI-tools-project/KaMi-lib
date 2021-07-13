@@ -1,6 +1,7 @@
 # -*- coding : utf-8 -*-
 
 from os import path
+import io
 import setuptools
 import unittest
 
@@ -9,7 +10,7 @@ import kami
 here = path.abspath(path.dirname(__file__))
 
 try:
-    with open(path.join(here, 'README.md'), encoding='utf-8') as f:
+    with io.open(path.join(here, 'README.rst'), mode='r', encoding='utf-8') as f:
         long_description = f.read()
 except:
     long_description = u"Python package focused on HTR / OCR models evaluation and based on the Kraken transcription system."
@@ -41,7 +42,7 @@ setuptools.setup(
     author_email="lucas.terriel@inria.fr, alix.chague@inria.fr",
     description="Python package focused on HTR / OCR models evaluation and based on the Kraken transcription system.",
     long_description=long_description,
-    long_description_content_type="text/markdown",
+    long_description_content_type="text/x-rst",
     url="https://gitlab.inria.fr/dh-projects/kami/kami-lib",
     project_urls={
         "Bug Tracker": "https://gitlab.inria.fr/dh-projects/kami/kami-lib/-/issues/new?issuable_template=bug_report",

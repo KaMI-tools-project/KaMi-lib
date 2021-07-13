@@ -3,14 +3,16 @@ KaMI (Kraken Model Inspector)
 
 |Pipeline| |coverage-report| |license| |python-versions| |Gitlab-version|
 
-|Logo| Python package focused on HTR / OCR models evaluation and based on the `Kraken <http://kraken.re/>`_ transcription system.
+|Logo|
 
-***************
+Python package focused on HTR / OCR models evaluation and based on the `Kraken <http://kraken.re/>`_ transcription system.
+
+
 🔌 Installation
-***************
+===============
 
 Dependencies
-############
+------------
 
 Kami requires :
 
@@ -18,7 +20,7 @@ Kami requires :
 * Kraken (==3.0.0.0b24)
 
 User installation
-#################
+-----------------
 
 Use pip to install package:
 
@@ -27,16 +29,16 @@ Use pip to install package:
     $ pip install kamilib
 
 Developer installation
-######################
+----------------------
 
-1. Create a local branch of the kami-lib project :
+* Create a local branch of the kami-lib project :
 
 .. code-block:: bash
 
     $ git clone https://gitlab.inria.fr/dh-projects/kami/kami-lib.git
 
 
-2. Create a virtual environment (with your Python version) :
+* Create a virtual environment :
 
 .. code-block:: bash
 
@@ -49,22 +51,22 @@ then
     $ source kami_venv/bin/activate
 
 
-3. Install dependencies with the requirements file
+* Install dependencies with the requirements file
 
 .. code-block:: bash
 
     $ pip install -r requirements.txt
 
 
-4. Run the tests
+* Run the tests
 
 .. code-block:: bash
 
     $ python -m unittest tests/*.py -v
 
-***************
+
 🔑 Quickstart
-***************
+==============
 
 ..
     _This: You can launch binder to see notebook with tutorial too
@@ -167,9 +169,9 @@ then
                                 'wacc': 79.71,
                                 'wer': 20.28}}
 
-***************
+
 🔧 Improvements
-***************
+===============
 
 * Formats
 
@@ -178,12 +180,12 @@ then
 
 * Compute
 
-    * Speed up computing
-    * Integrate the evaluation of the segmentation of an image
+    * Speed up
+    * Integrate the evaluation of the image segmentation
 
-****************************************************************************
+
 ❓ Do you have questions, bug report, features request or feedback ?
-****************************************************************************
+====================================================================
 
 * Please use the issue templates :
 
@@ -193,9 +195,9 @@ then
 
 *if you are not in these cases, feel free to open an issue*
 
-**************
+
 ✒️ How to cite
-**************
+==============
 
 .. code-block:: latex
 
@@ -207,9 +209,9 @@ then
         year = {2020-2021}
     }
 
-************************
+
 🐙  License and contact
-************************
+=======================
 
 Distributed under `MIT <https://gitlab.inria.fr/dh-projects/kami/Kami-lib/master/LICENSE>`_ license. The dependencies used in the project are also distributed under compatible
 license.

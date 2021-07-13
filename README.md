@@ -33,7 +33,7 @@ Use pip to install package:
 $ git clone https://gitlab.inria.fr/dh-projects/kami/kami-lib.git
 ```
 
-2. Create a virtual environment (with your Python version) :
+2. Create a virtual environment :
 
 ```bash
 $ virtualenv -p python3.7 kami_venv
@@ -170,8 +170,8 @@ pprint.pprint(k.scores.board)
     
 * Compute
 
-    - Speed up computing
-    - Integrate the evaluation of the segmentation of an image
+    - Speed up 
+    - Integrate the evaluation of the image segmentation
 
 
 <!--
