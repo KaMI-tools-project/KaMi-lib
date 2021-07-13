@@ -15,9 +15,8 @@ A clear and concise description of what you expected to happen.
 If applicable, add screenshots to help explain your problem.
 
 **Please complete the following information:**
- - Version and build ID: [see bottom of the browser screen]
+ - Version : [see bottom of the browser screen]
  - OS: [e.g. Windows, Linux, OS X]
- - Browser: [e.g. chrome, safari]
 
 **Additional context**
 Add any other context about the problem here.
