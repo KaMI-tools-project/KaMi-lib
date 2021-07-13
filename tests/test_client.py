@@ -10,11 +10,11 @@ class testKamiClient(unittest.TestCase):
         self.reference = "Six semaines plus tard, Claude peignait un matin dans un flot de soleil qui tombait par la baie vitrée de l’atelier."
         self.prediction = "Six semaiNEs plus tard, lCCaude peignait un MA dans un flotille de soleil qui tombait baie vitrée de l’atelier."
 
-        self.gt_text = "./datatest/GT_1.txt"
-        self.gt_page = "./datatest/22_c266f_default_PAGE.xml"
+        self.gt_text = "./datatest/text_jpeg/GT_1.txt"
+        self.gt_page = "./datatest/page_jpeg/22_c266f_default_PAGE.xml"
 
-        self.image_text = "./datatest/Voyage_au_centre_de_la_[...]Verne_Jules_btv1b8600259v_16.jpeg"
-        self.image_page = "./datatest/22_c266f_default_PAGE.jpeg"
+        self.image_text = "./datatest/text_jpeg/Voyage_au_centre_de_la_[...]Verne_Jules_btv1b8600259v_16.jpeg"
+        self.image_page = "./datatest/page_jpeg/22_c266f_default_PAGE.jpeg"
 
         self.model_text = "./datatest/on_hold/KB-app_model_JulesVerne1_best.mlmodel"
         self.model_page = "./datatest/models/model_tapuscrit_n2_(1).mlmodel"

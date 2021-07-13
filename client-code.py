@@ -29,12 +29,12 @@ def client_code() -> None:
 
     """
 
-    file = "./datatest/GT_1.txt"
+    file = "datatest/text_jpeg/GT_1.txt"
     textfile_gt2 = "./datatest/GT_2.txt"
 
-    page_file = "./datatest/22_c266f_default_PAGE.xml"
-    image = "./datatest/Voyage_au_centre_de_la_[...]Verne_Jules_btv1b8600259v_16.jpeg"
-    image_page = "./datatest/22_c266f_default_PAGE.jpeg"
+    page_file = "datatest/page_jpeg/22_c266f_default_PAGE.xml"
+    image = "./datatest/text_jpeg/Voyage_au_centre_de_la_[...]Verne_Jules_btv1b8600259v_16.jpeg"
+    image_page = "./datatest/page_jpeg/22_c266f_default_PAGE.jpeg"
     model = "./datatest/on_hold/KB-app_model_JulesVerne1_best.mlmodel"
     model_page = "./datatest/models/model_tapuscrit_n2_(1).mlmodel"
 

@@ -76,7 +76,7 @@ then
     from Kami import Kami
 
     # Select ground truth (raw text, sequences and XML PAGE also support),
-    # image (.jpeg only),
+    # image (.jpeg/.jpg only),
     # and  transcription model (.mlmodel only, you can use Kraken to create one).
     # Tips : Use files in datatest/ directory to test freely
     file = "./datatest/GT_1.txt"

@@ -68,10 +68,10 @@ import pprint
 from Kami import Kami
 
 # Select ground truth (raw text, sequences and XML PAGE also support), 
-# image (.jpeg only), 
+# image (.jpeg/.jpg only), 
 # and  transcription model (.mlmodel only, you can use Kraken to create one).
 # Tips : Use files in datatest/ directory to test freely
-file = "./datatest/GT_1.txt"
+file = "datatest/text_jpeg/GT_1.txt"
 image = "./datatest/Voyage_au_centre_de_la_[...]Verne_Jules_btv1b8600259v_16.jpeg"
 model = "./datatest/on_hold/KB-app_model_JulesVerne1_best.mlmodel"
 
@@ -98,7 +98,7 @@ print(k.prediction)
 # Get all scores 
 pprint.pprint(k.scores.board)
 
->>> {'Length_prediction': 2507,
+>> > {'Length_prediction': 2507,
       'Length_prediction_transformed': 2405,
       'Length_reference': 2536,
       'Length_reference_transformed': 2426,
