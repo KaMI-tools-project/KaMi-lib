@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # Authors : Lucas Terriel <lucas.terriel@inria.fr>
-# Contibutors : Thibault Clérice <thibault.clerice@chartes.psl.eu>
+# Contibutors : Thibault Clérice
 # Licence : MIT
 """Common code for all metrics.
 """

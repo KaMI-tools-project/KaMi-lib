@@ -46,7 +46,7 @@ $ source kami_venv/bin/activate
 $ pip install -r requirements.txt
 ```
 
-4. Run the tests to test your environment
+4. Run the tests 
 
 ```bash
 $ python -m unittest tests/*.py -v
@@ -155,7 +155,7 @@ pprint.pprint(k.scores.board)
 
 ```
 
-## :wrench: improvements
+## :wrench: Improvements
 
 * Formats
 
