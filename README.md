@@ -72,7 +72,7 @@ from Kami import Kami
 # and  transcription model (.mlmodel only, you can use Kraken to create one).
 # Tips : Use files in datatest/ directory to test freely
 file = "datatest/text_jpeg/GT_1.txt"
-image = "./datatest/Voyage_au_centre_de_la_[...]Verne_Jules_btv1b8600259v_16.jpeg"
+image = "./datatest/text_jpeg/Voyage_au_centre_de_la_[...]Verne_Jules_btv1b8600259v_16.jpeg"
 model = "./datatest/on_hold/KB-app_model_JulesVerne1_best.mlmodel"
 
 # Create a kami object
