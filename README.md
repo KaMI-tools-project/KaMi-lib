@@ -22,7 +22,7 @@ Kami requires :
 
 Use pip to install package:
 
-`pip install kamilib`
+`$ pip install kamilib`
 
 
 ### Developer installation 
