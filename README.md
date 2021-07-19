@@ -95,10 +95,22 @@ print(f"\n{'-' * 20}\n")
 # Get the prediction text
 print(k.prediction)
 
-# Get all scores 
+print(f"\n{'=' * 20}\n")
+
+# Get the reference modified with transforms
+print(k.reference_preprocess)
+
+print(f"\n{'*' * 20}\n")
+
+# Get the prediction modified with transforms
+print(k.prediction_preprocess)
+
+print(f"\n{'*' * 20}\n")
+
+# Get all scores
 pprint.pprint(k.scores.board)
 
->> > {'Length_prediction': 2507,
+{'Length_prediction': 2507,
       'Length_prediction_transformed': 2405,
       'Length_reference': 2536,
       'Length_reference_transformed': 2426,

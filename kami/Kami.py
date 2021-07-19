@@ -57,6 +57,10 @@ class Kami:
         self.verbosity = verbosity
         self.round_digits = round_digits
 
+        # Preprocess sentences output
+        self.reference_preprocess = ""
+        self.prediction_preprocess = ""
+
         if isinstance(data, list) and len(data) > 1:
             # case with two text files => compute score
             if data[0].endswith('txt') and data[1].endswith('txt'):
@@ -153,9 +157,10 @@ class Kami:
 
             # Count total char transformed with
             # transformations in reference and prediction :
+            # Add transformed sentences
+            self.reference_preprocess = sequences_all_transforms[0]
+            self.prediction_preprocess = sequences_all_transforms[1]
 
-            reference_transformed = sequences_all_transforms[0]
-            prediction_transformed = sequences_all_transforms[1]
 
             if "D" or "P" in apply_transforms:
                 # Compute the different lengths between string
@@ -163,10 +168,10 @@ class Kami:
                 # to compute the number of digits or punctuation remove
                 total_char_removed_reference \
                     = (len(self.reference)
-                        - len(reference_transformed))
+                        - len(self.reference_preprocess))
                 total_char_removed_prediction \
                     = (len(self.prediction)
-                        - len(prediction_transformed))
+                        - len(self.prediction_preprocess))
 
                 new_score["Total_char_removed_from_reference"] = total_char_removed_reference
                 new_score["Total_char_removed_from_prediction"] = total_char_removed_prediction
@@ -176,11 +181,11 @@ class Kami:
                 total_diacritics_reference \
                     = (
                         count_diacritics(self.reference)
-                        - count_diacritics(reference_transformed))
+                        - count_diacritics(self.reference_preprocess))
                 total_diacritics_prediction \
                     = (
                         count_diacritics(self.prediction)
-                        - count_diacritics(prediction_transformed))
+                        - count_diacritics(self.prediction_preprocess))
                 new_score["Total_diacritics_removed_from_reference"] = total_diacritics_reference
                 new_score["Total_diacritics_removed_from_prediction"] = total_diacritics_prediction
 
@@ -207,8 +212,8 @@ class Kami:
             if "D" or "P" or "L" or "U" or "X" in apply_transforms:
                 new_score["Length_reference"] = len(self.reference)
                 new_score["Length_prediction"] = len(self.prediction)
-                new_score["Length_reference_transformed"] = len(reference_transformed)
-                new_score["Length_prediction_transformed"] = len(prediction_transformed)
+                new_score["Length_reference_transformed"] = len(self.reference_preprocess)
+                new_score["Length_prediction_transformed"] = len(self.prediction_preprocess)
 
             # Add all scores to a final board
             self.scores.board = new_score

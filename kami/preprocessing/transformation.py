@@ -17,7 +17,7 @@ from typing import (Union,
                     TypeVar,
                     Optional)
 
-# import unidecode
+import unidecode
 
 from kami.kamutils._utils import _timing
 
@@ -156,15 +156,14 @@ class RemoveDiacritics(_AbstractTransform):
     User can directly access to this class or via :class: `ToCompose` class.
     """
     def process_string(self, sequence: str):
-        """
+
         sequence = unidecode.unidecode(sequence)
-        sequence = re.sub(r'<<', '«', sequence)
-        sequence = re.sub(r'>>', "»", sequence)
-        sequence = re.sub(r'--', '—', sequence)
-        """
-        sequence = unicodedata.normalize('NFD', sequence)\
-           .encode('ascii', 'ignore')\
-           .decode("utf-8")
+        sequence = re.sub(r'<{2,}', "", sequence)
+        sequence = re.sub(r'>{2,}', "", sequence)
+        sequence = re.sub(r'-{2,}', "", sequence)
+        #sequence = unicodedata.normalize('NFD', sequence)\
+           #.encode('ascii', 'ignore')\
+           #.decode("utf-8")
         return str(sequence)
 
 
@@ -268,10 +267,10 @@ def count_diacritics(string):
     """A simple diacritics counter"""
     total_diacritics = []
     for char in string:
-        # char_transform = unidecode.unidecode(char)
-        char_transform = unicodedata.normalize('NFD', char)\
-           .encode('ascii', 'ignore')\
-           .decode("utf-8")
+        char_transform = unidecode.unidecode(char)
+        #char_transform = unicodedata.normalize('NFD', char)\
+           #.encode('ascii', 'ignore')\
+           #.decode("utf-8")
         if char != char_transform:
             total_diacritics.append(char)
 

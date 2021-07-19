@@ -5,6 +5,7 @@ kami_venv_38/
 kami_venv_39/
 venv37test/
 venv38test/
+venv-test38/
 
 # Jetbrains (IDE)
 .idea/
