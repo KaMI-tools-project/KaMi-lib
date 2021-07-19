@@ -15,7 +15,8 @@ A clear and concise description of what you expected to happen.
 If applicable, add screenshots to help explain your problem.
 
 **Please complete the following information:**
- - Version : [see bottom of the browser screen]
+ - KaMI Version 
+ - Python Version 
  - OS: [e.g. Windows, Linux, OS X]
 
 **Additional context**
