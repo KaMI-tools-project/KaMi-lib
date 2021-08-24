@@ -1,11 +1,5 @@
 # Virtual envs
 env-kamilib/
-kami_venv_37/
-kami_venv_38/
-kami_venv_39/
-venv37test/
-venv38test/
-venv-test38/
 
 # Jetbrains (IDE)
 .idea/
@@ -19,7 +13,7 @@ Tutoriel.ipynb
 # Package utils
 dist/
 build/
-kami/kamilib.egg-info/
+kamilib.egg-info/
 
 # others
 runpackage.txt

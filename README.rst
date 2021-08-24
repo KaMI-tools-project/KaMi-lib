@@ -75,7 +75,7 @@ then
 
     # import package
     import pprint
-    from Kami import Kami
+    from kami.Kami import Kami
 
     # Select ground truth (raw text, sequences and XML PAGE also support),
     # image (.jpeg/.jpg only),

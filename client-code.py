@@ -51,9 +51,9 @@ def client_code() -> None:
 
     # Create a kami object
 
-    k = Kami(file,  # Apply ground truth file here
-             model=model,  # Apply HTR/OCR model here
-             image=image,  # Apply image here
+    k = Kami(page_file,  # Apply ground truth file here
+             model=model_page,  # Apply HTR/OCR model here
+             image=image_page,  # Apply image here
              apply_transforms="XP",  # Compute with some transformations as remove diacritics and punctuations
              # (List transformations : D : digits / U : uppercase / L : lowercase / P : punctuation / X : diacritics [OPTIONAL])
              verbosity=False,  # Add some comments during process

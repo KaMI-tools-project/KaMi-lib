@@ -69,7 +69,7 @@ class _PageParser:
         :return: Parsed XML tree
         :rtype: BeautifulSoup
         """
-        if isinstance(page, type(BeautifulSoup())):
+        if isinstance(page, type(BeautifulSoup(features='xml'))):
             self.page_content = page
         elif isinstance(page, str):
             if os.path.isfile(page) and not page.endswith('.xml'):
