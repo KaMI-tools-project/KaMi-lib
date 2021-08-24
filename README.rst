@@ -64,6 +64,13 @@ then
 
     $ python -m unittest tests/*.py -v
 
+🏃 Tutorial
+===========
+
+Access to a "end-to-end pipeline" example that use Kami (FR tutorial) :
+
+|colab|
+
 
 🔑 Quickstart
 ==============
@@ -249,6 +256,8 @@ with contributions of `ALMAnaCH <http://almanach.inria.fr/index-en.html>`_ at `I
     :target: https://img.shields.io/badge/Gitlab%20version-0.1.1-blue
 .. |Logo| image:: https://gitlab.inria.fr/dh-projects/kami/kami-lib/-/raw/master/docs/static/kramin_carmin_lib.png
     :width: 100px
+.. |colab| image:: https://colab.research.google.com/assets/colab-badge.svg
+    :target: https://colab.research.google.com/drive/1nk0hNtL9QTO5jczK0RPEv9zF3nP3DpOc#scrollTo=v6vRc3Qksy1b
 .. |made-with-python| image:: http://ForTheBadge.com/images/badges/made-with-python.svg
     :target: https://www.python.org/
 
