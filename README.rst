@@ -252,8 +252,8 @@ with contributions of `ALMAnaCH <http://almanach.inria.fr/index-en.html>`_ at `I
     :target: https://gitlab.inria.fr/dh-projects/kami/Kami-lib/master/LICENSE
 .. |python-versions| image:: https://img.shields.io/badge/python-3.7%20%7C%203.8-blue
     :target: https://img.shields.io/badge/python-3.7%20%7C%203.8-blue
-.. |Gitlab-version| image:: https://img.shields.io/badge/Gitlab%20version-0.1.1-blue
-    :target: https://img.shields.io/badge/Gitlab%20version-0.1.1-blue
+.. |Gitlab-version| image:: https://img.shields.io/badge/Gitlab%20version-0.1.1a-blue
+    :target: https://img.shields.io/badge/Gitlab%20version-0.1.1a-blue
 .. |Logo| image:: https://gitlab.inria.fr/dh-projects/kami/kami-lib/-/raw/master/docs/static/kramin_carmin_lib.png
     :width: 100px
 .. |colab| image:: https://colab.research.google.com/assets/colab-badge.svg
