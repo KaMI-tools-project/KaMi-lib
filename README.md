@@ -59,7 +59,7 @@ $ python -m unittest tests/*.py -v
 
 ## :runner: Tutorial
 
-Access to a "end-to-end pipeline" example that use Kami (FR tutorial) : [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1nk0hNtL9QTO5jczK0RPEv9zF3nP3DpOc#scrollTo=v6vRc3Qksy1b)
+Access to a "end-to-end pipeline" example that use Kami (FR tutorial) : [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1nk0hNtL9QTO5jczK0RPEv9zF3nP3DpOc?usp=sharing)
 
 ## :key: Quickstart
 
