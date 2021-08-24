@@ -1,7 +1,7 @@
 KaMI (Kraken Model Inspector)
 =============================
 
-|Pipeline| |coverage-report| |license| |python-versions| |Gitlab-version|
+|Pipeline| |coverage-report| |license| |python-versions| |Gitlab-version| |Versions|
 
 |Logo|
 
@@ -254,6 +254,8 @@ with contributions of `ALMAnaCH <http://almanach.inria.fr/index-en.html>`_ at `I
     :target: https://img.shields.io/badge/python-3.7%20%7C%203.8-blue
 .. |Gitlab-version| image:: https://img.shields.io/badge/Gitlab%20version-0.1.1a-blue
     :target: https://img.shields.io/badge/Gitlab%20version-0.1.1a-blue
+.. |Versions| image:: https://badge.fury.io/py/kamilib.svg
+    :target: https://badge.fury.io/py/kamilib
 .. |Logo| image:: https://gitlab.inria.fr/dh-projects/kami/kami-lib/-/raw/master/docs/static/kramin_carmin_lib.png
     :width: 100px
 .. |colab| image:: https://colab.research.google.com/assets/colab-badge.svg
