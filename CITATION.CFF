@@ -1,0 +1,13 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+authors:
+- family-names: "Terriel"
+  given-names: "Lucas"
+- family-names: "Chagué"
+  given-names: "Alix"
+  orcid: "https://orcid.org/0000-0002-0136-4434"
+title: "KaMI Lib"
+version: 0.1.1
+doi: 10.5281/zenodo.1234
+date-released: 2021-08-24
+url: "https://gitlab.inria.fr/dh-projects/kami/kami-lib/-/releases/0.1.1"
