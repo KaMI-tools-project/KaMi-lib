@@ -10,15 +10,11 @@ class testKamiClient(unittest.TestCase):
         self.reference = "Six semaines plus tard, Claude peignait un matin dans un flot de soleil qui tombait par la baie vitrée de l’atelier."
         self.prediction = "Six semaiNEs plus tard, lCCaude peignait un MA dans un flotille de soleil qui tombait baie vitrée de l’atelier."
 
-        self.gt_text = "./datatest/text_jpeg/GT_1.txt"
-        self.gt_page = "./datatest/page_jpeg/22_c266f_default_PAGE.xml"
+        self.gt_page = "../datatest/lectaurep_set/image_gt_page1/FRAN_0187_16402_L-0_page.xml"
+        self.image_page = "../datatest/lectaurep_set/image_gt_page1/FRAN_0187_16402_L-0.png"
+        self.model_page = "../datatest/lectaurep_set/models/mixte_mrs_15.mlmodel"
 
-        self.image_text = "./datatest/text_jpeg/Voyage_au_centre_de_la_[...]Verne_Jules_btv1b8600259v_16.jpeg"
-        self.image_page = "./datatest/page_jpeg/22_c266f_default_PAGE.jpeg"
-
-        self.model_text = "./datatest/on_hold/KB-app_model_JulesVerne1_best.mlmodel"
-        self.model_page = "./datatest/models/model_tapuscrit_n2_(1).mlmodel"
-
+    """
     def test_sentences(self):
         k1 = Kami([self.reference, self.prediction], verbosity=False, truncate=True, percent=True, round_digits='0.01')
         self.assertEqual(k1.scores.board, {'levensthein_distance_char': 20,
@@ -51,20 +47,4 @@ class testKamiClient(unittest.TestCase):
                                            'substitutions': 1,
                                            'wacc': 98.94,
                                            'wer': 1.05})
-
-    def test_text(self):
-        k3 = Kami(self.gt_text, model=self.model_text, image=self.image_text, verbosity=False, truncate=True, percent=True, round_digits='0.01')
-
-        self.assertEqual(k3.scores.board, {'cer': 6.62,
-                                           'cil': 9.55,
-                                           'cip': 90.44,
-                                           'deletions': 59,
-                                           'hamming_distance': 'Ø',
-                                           'hits': 2398,
-                                           'insertions': 30,
-                                           'levensthein_distance_char': 168,
-                                           'levensthein_distance_words': 90,
-                                           'mer': 6.54,
-                                           'substitutions': 79,
-                                           'wacc': 79.54,
-                                           'wer': 20.45})
+    """

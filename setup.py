@@ -33,7 +33,7 @@ setuptools.setup(
     author="Lucas Terriel, Alix Chagué",
     author_email="lucas.terriel@inria.fr, alix.chague@inria.fr",
     license=kami.__licence__,
-    description="Python package focused on HTR / OCR models evaluation and based on the Kraken transcription system.",
+    description=kami.__doc__,
     long_description=long_description,
     long_description_content_type="text/x-rst",
     url="https://gitlab.inria.fr/dh-projects/kami/kami-lib",
@@ -45,3 +45,5 @@ setuptools.setup(
     classifiers=CLASSIFIERS,
     keywords=["HTR", "OCR", "Evaluation framework", "metrics", "handwritten text recognition", "optical character recognition"],
 )
+
+# packages=setuptools.find_packages(exclude=('tests', 'env-kamilib')),

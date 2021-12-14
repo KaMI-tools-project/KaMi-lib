@@ -1,5 +1,6 @@
 # Virtual envs
 env-kamilib/
+kraken3.0.6py3.8/
 
 # Jetbrains (IDE)
 .idea/
@@ -17,3 +18,4 @@ kamilib.egg-info/
 
 # others
 runpackage.txt
+programKami.prof

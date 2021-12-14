@@ -97,7 +97,7 @@ class Scorer:
                  prediction: str,
                  show_percent: bool = False,
                  truncate_score: bool = False,
-                 round_digits: str = '.01'):
+                 round_digits: str = '.01') -> None:
 
         # Options
         self._opt_percent = show_percent

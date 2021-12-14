@@ -8,7 +8,7 @@ import os.path
 from typing import Union
 
 from kami.parser import (parser_text,
-                         parser_page)
+                         parser_xml)
 from kami.preprocessing.transformation import (RemoveDigits,
                                                ToLowerCase,
                                                ToUpperCase,
@@ -16,11 +16,11 @@ from kami.preprocessing.transformation import (RemoveDigits,
                                                RemoveDiacritics,
                                                _Composer,
                                                count_diacritics)
-from kami.transcription._base_prediction_io import (_load_model,
-                                                    _load_image)
-from kami.transcription.prediction import _Prediction
+from kami.transcription.prediction import _KrakenPrediction
 from kami.metrics.evaluation import Scorer
 
+import warnings
+warnings.filterwarnings("ignore")
 
 class Kami:
     """A Facade class provides a simple interface to the complex logic of one or
@@ -77,42 +77,17 @@ class Kami:
                                  show_percent=self.percent,
                                  round_digits=self.round_digits)
 
-        # case with GT RAW TEXT file => create a HTR pipeline => compute scores
-        elif isinstance(data, str) and data.endswith('txt'):
-            self.reference = parser_text._TextParser(data).text
-            self.file_name = os.path.basename(data)
-            self.model = _load_model(model,
-                                     verbosity=self.verbosity)
-            self.image = _load_image(image,
-                                     verbosity=self.verbosity)
-            pipeline = _Prediction(self.file_name,
-                                  self.image,
-                                  self.model,
-                                  code='txt',
-                                  verbosity=self.verbosity)
-            self.prediction = pipeline.get_transcription()
-            self.scores = Scorer(self.reference,
-                                 self.prediction,
-                                 truncate_score=self.truncate,
-                                 show_percent=self.percent,
-                                 round_digits=self.round_digits)
-
-        # case with GT XML PAGE => create a HTR pipeline => compute scores
+        # case with GT XML PAGE / XML ALTO => create a HTR pipeline => compute scores
         elif isinstance(data, str) and data.endswith('xml'):
-            self.reference_parse = parser_page._PageParser(data)
-            self.reference = "\n".join(self.reference_parse.transcriptions)
-            self.file_name = os.path.basename(data)
-            self.model = _load_model(model,
-                                     verbosity=self.verbosity)
-            self.image = _load_image(image,
-                                     verbosity=self.verbosity)
-            pipeline = _Prediction(self.file_name,
-                                  self.image,
-                                  self.model,
-                                  reference=self.reference_parse,
-                                  code='xml',
-                                  verbosity=self.verbosity)
-            self.prediction = pipeline.get_transcription()
+            self.reference_parse = parser_xml._XMLParser(data)
+            self.file_name = self.reference_parse.filename
+            self.reference = self.reference_parse.content
+            bounds = self.reference_parse.list_bounds
+            pipeline = _KrakenPrediction(image_path=image,
+                                         model_path=model,
+                                         seg_bounds=bounds,
+                                         verbosity=self.verbosity)
+            self.prediction = pipeline.pred_content
             self.scores = Scorer(self.reference,
                                  self.prediction,
                                  truncate_score=self.truncate,
