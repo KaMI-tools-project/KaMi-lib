@@ -5,8 +5,6 @@
     The ``Parser Text`` module parse Text
     =====================================
 
-    ...
-
 """
 
 import os
@@ -17,9 +15,12 @@ from kami.kamutils._utils import (_report_log)
 class _TextParser:
     """A very simple Text Parser for KaMI.
 
-    Attributes:
-        file_name   Source file name if there is one
-        text        Source text
+    Attributes
+    ----------
+        :ivar file_name: source text file.
+        :param file_name: str
+        :ivar text: text content from source file.
+        :param text: str
     """
     def _get_text(self) -> None:
         """Open a TXT file and load its content"""
@@ -42,8 +43,9 @@ class _TextParser:
             self._get_text()
         elif isinstance(source, str):
             if os.sep in source:
-                _report_log("Provided input is considered as plain text. If you intended it to be a handled "+
-                            "as a path, you may need to make sure it is correct.", "W")
+                pass
+                #_report_log("Provided input is considered as plain text. If you intended it to be a handled "+
+                #            "as a path, you may need to make sure it is correct.", "W")
             self.text = source
         else:
             _report_log("TextParser can't proceed. Verify your input: it must be a string. "+

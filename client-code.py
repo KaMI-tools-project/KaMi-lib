@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import pprint
+import time
 
 from kami.Kami import Kami
 from kami.preprocessing.transformation import (ToCompose,
@@ -11,8 +13,8 @@ from kami.preprocessing.transformation import (ToCompose,
                                                RemoveNonUsefulWords,
                                                RemoveSpecificWords,
                                                RemoveDigits)
-import pprint
-import re
+
+
 
 #############################
 # Entry Point : code client #
@@ -29,61 +31,159 @@ def client_code() -> None:
 
     """
 
-    file = "datatest/text_jpeg/GT_1.txt"
-    textfile_gt2 = "./datatest/GT_2.txt"
-
-    page_file = "datatest/page_jpeg/22_c266f_default_PAGE.xml"
-    image = "./datatest/text_jpeg/Voyage_au_centre_de_la_[...]Verne_Jules_btv1b8600259v_16.jpeg"
-    image_page = "./datatest/page_jpeg/22_c266f_default_PAGE.jpeg"
-    model = "./datatest/on_hold/KB-app_model_JulesVerne1_best.mlmodel"
-    model_page = "./datatest/models/model_tapuscrit_n2_(1).mlmodel"
-
+    # TEST DATA (change with your own data)
+    # Sentences 
     ground_truth = "Les 13 ans de Maxime ? étaient, Déjà terriblement, savants ! - La Curée, 1871. En avant, pour la lecture."
-    hypothesis = "Les 13 ans de Maxime ? étaient, Déjà terriblement, savants ! - La Curée, 1871. En avant, pour la lecture."
+    prediction = "Les 14a de Maxime ! étaient, djàteriblement, savants - La Curée, 1871. En avant? pour la leTTture."
+    # Text files
+    textfile_gt = "./datatest/lectaurep_set/image_gt_page1/FRAN_0187_16402_L-0_gt.txt"
+    textfile_pred = "./datatest/lectaurep_set/image_gt_page1/FRAN_0187_16402_L-0_prediction_finetuned.txt"
+    # XML
+    alto_gt = "./datatest/lectaurep_set/image_gt_page1/FRAN_0187_16402_L-0_alto.xml"
+    page_gt = "./datatest/medium_set/FRAN_0150_0002_L-medium_page.xml"
+    # Model
+    model_medium = "./datatest/medium_set/model_tapuscrit_n2_(1).mlmodel"
+    model_lectaurep = "./datatest/lectaurep_set/models/mixte_mrs_15.mlmodel"
+    image_medium = "./datatest/medium_set/FRAN_0150_0002_L-medium.jpg"
+    image_lectaurep = "./datatest/lectaurep_set/image_gt_page1/FRAN_0187_16402_L-0.png"
 
-    # Select ground truth (raw text, sequences and XML PAGE also support),
-    # image (.jpeg/.jpg only),
-    # and  transcription model (.mlmodel only, you can use Kraken to create one).
-    # Tips : Use files in datatest/ directory to test freely
-    file = "datatest/text_jpeg/GT_1.txt"
-    image = "./datatest/text_jpeg/Voyage_au_centre_de_la_[...]Verne_Jules_btv1b8600259v_16.jpeg"
-    model = "./datatest/on_hold/KB-app_model_JulesVerne1_best.mlmodel"
 
-    # Create a kami object
-
-    k = Kami(page_file,  # Apply ground truth file here
-             model=model_page,  # Apply HTR/OCR model here
-             image=image_page,  # Apply image here
+    # to Memory 
+    """
+    k = Kami(file,  # Apply ground truth file here
+             model=model,  # Apply HTR/OCR model here
+             image=image,  # Apply image here
              apply_transforms="XP",  # Compute with some transformations as remove diacritics and punctuations
              # (List transformations : D : digits / U : uppercase / L : lowercase / P : punctuation / X : diacritics [OPTIONAL])
              verbosity=False,  # Add some comments during process
              truncate=True,  # Truncate final scores
              percent=True,  # Indicate scores in percent
              round_digits='0.01')  # number of digits after floating point
+    """
+    current_all = time.time()
+    current = time.time()
+    # TEST CASES
+    # Part 1 : Agnostic OCR/HTR engines uses cases
+    # A : Compare two sequences of character
+    print("PART 1 - A \n")
+    k = Kami([ground_truth, prediction],
+             apply_transforms="", 
+             verbosity=False,  
+             truncate=True,  
+             percent=True,  
+             round_digits='0.01')  
+    print(k.scores.board)
+    print(f"\n * TOTAL Time P1A : {time.time() - current}")
+    print("="*10)
+    # B : Compare two text file
+    current = time.time()
+    print("PART 1 - B \n")
+    k = Kami([textfile_gt, textfile_pred],
+             apply_transforms="", 
+             verbosity=False,  
+             truncate=True,  
+             percent=True,  
+             round_digits='0.01')  
+    print(k.scores.board)
+    print(f"\n * TOTAL Time P1B : {time.time() - current}")
+    print("="*10)
+    # C : Compare two sequences of character (with preprocess/severity)
+    current = time.time()
+    print("PART 1 - C \n")
+    k = Kami([ground_truth, prediction],
+             apply_transforms="DUP", 
+             verbosity=False,  
+             truncate=True,  
+             percent=True,  
+             round_digits='0.01')  
+    print(k.scores.board)
+    print(f"\n * TOTAL Time P1C : {time.time() - current}")
+    print("="*10)
+    # D : Compare two text file (with preprocess/severity)
+    current = time.time()
+    print("PART 1 - D \n")
+    k = Kami([textfile_gt, textfile_pred],
+             apply_transforms="DUP", 
+             verbosity=False,  
+             truncate=True,  
+             percent=True,  
+             round_digits='0.01')  
+    print(k.scores.board)
+    print(f"\n * TOTAL Time P1D: {time.time() - current}")
+    print("="*10)
 
+    # Part 2 : Kraken uses cases
+    # A : Compare XML ALTO + model, image with kraken prediction  output
+    current = time.time()
+    print("PART 2 - A \n")
+    k = Kami(alto_gt,
+             model=model_lectaurep,
+             image=image_lectaurep,
+             apply_transforms="", 
+             verbosity=False,  
+             truncate=True,  
+             percent=True,  
+             round_digits='0.01')  
+    print(k.scores.board)
+    print(f"\n * TOTAL Time P2A: {time.time() - current}")
+    print("="*10)
+    # B : Compare XML PAGE + model, image with kraken prediction  output
+    current = time.time()
+    print("PART 2 - B \n")
+    k = Kami(page_gt,
+             model=model_medium,
+             image=image_medium,
+             apply_transforms="", 
+             verbosity=False,  
+             truncate=True,  
+             percent=True,  
+             round_digits='0.01')  
+    print(k.scores.board)
+    print(f"\n * TOTAL Time P2B: {time.time() - current}")
+    print("="*10)
+    # C : Compare XML ALTO + model, image with kraken prediction  output (with preprocess/severity)
+    current = time.time()
+    try:
+        print("PART 2 - C \n")
+        k = Kami(alto_gt,
+             model=model_lectaurep,
+             image=image_lectaurep,
+             apply_transforms="XLP", 
+             verbosity=False,  
+             truncate=True,  
+             percent=True,  
+             round_digits='0.01')  
+        print(k.scores.board)
+        print(f"\n * TOTAL Time P2C: {time.time() - current}")
+        print("="*10)
+    except:
+        print("no alto implementation here")
+    # D : Compare XML PAGE + model, image with kraken prediction  output (with preprocess/severity)
+    current = time.time()
+    print("PART 2 - D \n")
+    k = Kami(page_gt,
+             model=model_medium,
+             image=image_medium,
+             apply_transforms="XLP", 
+             verbosity=False,  
+             truncate=True,  
+             percent=True,  
+             round_digits='0.01')  
+    print(k.scores.board)
+    print(f"\n * TOTAL Time P2D: {time.time() - current}")
+    print("="*10)
 
-    # Get the reference text
-    print(k.reference)
+    # Part 3 : Error cases 
+    # A : Compare text file + model, image with kraken prediction output
+    # B : Forget model
+    # C : Forget image
+    # D : Forget alto, page
+    # E : Forget sentence to compare
+    # F : Forget a text file to compare
 
-    print(f"\n{'-' * 20}\n")
+    print(f"\n * TOTAL Time spent with client code : {time.time() - current_all}")
 
-    # Get the prediction text
-    print(k.prediction)
-
-    print(f"\n{'=' * 20}\n")
-
-    # Get the reference modified with transforms
-    print(k.reference_preprocess)
-
-    print(f"\n{'*' * 20}\n")
-
-    # Get the prediction modified with transforms
-    print(k.prediction_preprocess)
-
-    print(f"\n{'*' * 20}\n")
-
-    # Get all scores
-    pprint.pprint(k.scores.board)
+  
 
 
 
