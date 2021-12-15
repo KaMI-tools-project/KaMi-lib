@@ -19,14 +19,10 @@ import warnings
 warnings.filterwarnings("ignore")
 
 
-
-
-
 class _XMLParser:
     """A XML Parser for KaMI (ALTO/PAGE).
 
     """
-
     def __init__(self, xml_path : str) -> None:
         self.file_path = xml_path
         self.filename = basename(self.file_path) if isfile(self.file_path) else ""
@@ -122,12 +118,8 @@ if __name__ == "__main__":
     text="./datatest/lectaurep_set/image_gt_page1/FRAN_0187_16402_L-0_gt.txt"
     image = "./datatest/lectaurep_set/image_gt_page1/FRAN_0187_16402_L-0.png"
     model = "./datatest/lectaurep_set/models/mixte_mrs_15.mlmodel"
-    current = time.time()
-    kengine = _KrakenPrediction(image_path=image, model_path=model)
-    print(kengine.sentences)
-    print(f"Time spent for Prediction: {time.time() - current}")
-    #print(Kengine.pred_content)
-    #print(Kengine.pred_sentences)
+    from kami.metrics.evaluation_ import Scorer
+    print(Scorer(reference="bonjour", prediction="bye").board)
 
 
 

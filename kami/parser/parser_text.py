@@ -8,12 +8,19 @@
 """
 
 import os
-
 from kami.kamutils._utils import (_report_log)
 
+__all__ = [
+    "_TextParser"
+]
 
 class _TextParser:
     """A very simple Text Parser for KaMI.
+
+    Parameters
+    ----------
+        :param source:  path to source file or plain text
+        :type source: str
 
     Attributes
     ----------
@@ -31,11 +38,6 @@ class _TextParser:
         self.text = content
 
     def __init__(self, source):
-        """Initialize a TextParser from a path to text file or from a string.
-
-        :param source: path to source file or plain text
-        :type source: str
-        """
         self.file_name = None
         self.text = None
         if isinstance(source, str) and os.path.isfile(source):

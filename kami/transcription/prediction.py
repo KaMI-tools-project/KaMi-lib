@@ -13,7 +13,7 @@
 
 """
 
-from multiprocessing import Pool, cpu_count
+from multiprocessing import Pool
 import numpy as np
 np.seterr(divide='ignore', invalid='ignore')
 from PIL import Image
@@ -43,7 +43,7 @@ class _KrakenPrediction:
         :param verbosity: bool
 
     """
-    def __init__(self, image_path : str, model_path : str, seg_bounds : dict, verbosity: bool = False) -> None:
+    def __init__(self, image_path : str, model_path : str, seg_bounds : list, verbosity: bool = False) -> None:
         self.im = Image.open(image_path)
         self.model = models.load_any(model_path)
         self.bounds = seg_bounds
@@ -51,8 +51,9 @@ class _KrakenPrediction:
             if verbosity:
                 _report_log("Start with Kraken prediction...", type_log="I")
             # Create a pool worker for prediction job and accelerate prediction (relative)
-            with Pool(processes=3) as p:
+            with Pool(processes=2) as p:
                 self.pred_sentences = p.map(self._transcribe, self.bounds)
+            # if pool remove : self.pred_sentences = [self._transcribe(bound) for bound in self.bounds]
             if verbosity:
                 _report_log("Kraken prediction finished with success.", type_log="I")
         except Exception as e:
