@@ -42,6 +42,8 @@ class Kami:
         :param apply_transforms: Code to apply textual variations eg. "XPD" 
         (List transformations : D : remove digits / U : uppercase / L : lowercase / P : remove punctuation / X : remove diacritics). Defaults to "".
         :type: str
+        :param workers: Number of cpu workers use for inference. Defaults to 3.
+        :type workers: int
         :param text_direction: principal text direction for column ordering use by Kraken : 
         "horizontal-lr", "horizontal-rl", "vertical-lr", "vertical-rl". Defaults to "horizontal-lr".
         :type: str
@@ -72,6 +74,8 @@ class Kami:
         :type model: str
         :ivar apply_transforms: see also `Parameters` section for more details.
         :type apply_transforms: list
+        :ivar workers: see also `Parameters` section for more details.
+        :type workers: int
         :ivar text_direction: see also `Parameters` section for more details.
         :type text_direction: str
         :ivar script: see also `Parameters` section for more details.
@@ -104,6 +108,7 @@ class Kami:
                  image: str = "",
                  model: str = "",
                  apply_transforms: str = "",
+                 workers: int = 3,
                  text_direction : str = "horizontal-lr",
                  script= "default",
                  verbosity: bool = False,
@@ -123,7 +128,8 @@ class Kami:
         # Preprocessing options inputs
         self.apply_transforms = [code for line in apply_transforms.split() for code in line]
 
-        # Kraken Segmentation options inputs
+        # Kraken options inputs
+        self.workers = workers
         self.text_direction = text_direction
         self.script = script
 
@@ -166,12 +172,15 @@ class Kami:
 
         # case with GT XML PAGE / XML ALTO => create a HTR pipeline => compute scores
         elif isinstance(data, str) and data.endswith('xml'):
-            self.reference_parse = parser_xml._XMLParser(xml_path=data, text_direction=self.text_direction, script=self.script)
+            self.reference_parse = parser_xml._XMLParser(xml_path=data, 
+                                                         text_direction=self.text_direction, 
+                                                         script=self.script)
             self.file_name = self.reference_parse.filename
             self.reference = self.reference_parse.content
             bounds = self.reference_parse.list_bounds
             pipeline = _KrakenPrediction(image_path=image,
                                          model_path=model,
+                                         workers=self.workers,
                                          seg_bounds=bounds,
                                          verbosity=self.verbosity)
             self.prediction = pipeline.pred_content
