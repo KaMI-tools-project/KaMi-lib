@@ -54,7 +54,7 @@ class _KrakenPrediction:
         try:
             if verbosity:
                 _report_log("Start with Kraken prediction...", type_log="I")
-            # Create a pool process executor for turbo-charge (heavy cpu task) Kraken transcription model inference function (repred)
+            # Create a pool process executor for turbo-charge (heavy cpu task) Kraken transcription model inference function (repred.rpred)
             with Pool(processes=workers) as p:
                 self.pred_sentences = p.map(self._transcribe, self.bounds)
             # if pool remove : self.pred_sentences = [self._transcribe(bound) for bound in self.bounds]
