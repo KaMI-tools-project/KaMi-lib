@@ -273,13 +273,11 @@ Depending on the character code used :
 
 ### 4. Metrics options
 
-KaMI provides the possibility to weight differently the operations between the character strings (as insertions, substitutions or deletions. By default this operations have a cost of 1. You can change with the parameters :
+KaMI provides the possibility to weight differently the operations between the character strings (as insertions, substitutions or deletions. By default this operations have a weight of 1. You can change this weigthts with the parameters in the `Kami()` class :
 
 - `insertion_cost`
 - `substitution_cost`
 - `deletion_cost` 
-
-in the `Kami()` class. 
 
 **Keep in mind that these weights are the basis for Levensthein distance computations and performance metrics like WER and CER, which can greatly influence final scores.**
 
