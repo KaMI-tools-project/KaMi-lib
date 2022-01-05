@@ -397,14 +397,14 @@ WER_{Hunt} = \frac{S + 0.5I + 0.5D}{N_{word}}
 
 In fact, this more demanding metric shows the importance of customizing the weighting of operations between strings depending on the system and type of data used in an HTR / OCR project. In Kami, it is possible to modify the costs assigned to operations.
 
-### Exeprimental Metrics (from ASR)
+### Exeprimental Metrics (metrics borrowed from Speech Recognition - ASR)
 
 
-- Match Error Rate: metric borrowed from Speech Recognition
+- **Match Error Rate**
 
-- Char. Information Lost: metric borrowed from Speech Recognition
+- **Character Information Lost**
 
-- Char. Information Preserve: metric borrowed from Speech Recognition
+- **Character Information Preserve**
 
 
 ## :question: Do you have questions, bug report, features request or feedback ?
