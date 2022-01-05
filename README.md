@@ -1,4 +1,5 @@
 ![Python Version](https://img.shields.io/badge/python-3.7%20%7C%203.8-blue)
+
 [![Version](https://badge.fury.io/py/kamilib.svg)](https://badge.fury.io/py/kamilib)
 [![pipeline status](https://gitlab.inria.fr/dh-projects/kami/kami-lib/badges/master/pipeline.svg)](https://gitlab.inria.fr/dh-projects/kami/kami-lib/-/pipelines) [![coverage report](https://gitlab.inria.fr/dh-projects/kami/kami-lib/badges/master/coverage.svg)](https://gitlab.inria.fr/dh-projects/kami/kami-lib/-/commits/master) [![GitLab license](https://img.shields.io/github/license/Naereen/StrapDown.js.svg)](https://gitlab.inria.fr/dh-projects/kami/Kami-lib/master/LICENSE) 
 
@@ -6,8 +7,12 @@
 
 <!--![KaMI lib logo](./docs/static/kramin_carmin_lib.png)-->
 
+
 <img src="./docs/static/kramin_carmin_lib.png" alt="KaMI lib logo" height="100" width ="100"/>
+
+
 Python package focused on HTR / OCR models evaluation system agnostic and originally based on the [Kraken](http://kraken.re/) transcription system.
+
 
 ## :electric_plug: Installation
 
@@ -15,8 +20,8 @@ Python package focused on HTR / OCR models evaluation system agnostic and origin
 
 Kami requires : 
 
-* Python (<=3.8)
-* Kraken (==3.0.6)
+* `Python <=3.8`
+* `Kraken ==3.0.6`
 
 ### User installation 
 
@@ -65,7 +70,7 @@ Access to a "end-to-end pipeline" example that use Kamilib (FR tutorial) : [![Op
 
 KaMI can be used for different use cases via the unique class `Kami()`.
 
-To start importing the kami-lib package as follows :
+To start, importing the kami-lib package as follows :
 
 ```python
 from kami.Kami import Kami
@@ -76,14 +81,14 @@ The following sections describe two use cases : the first to compare the output 
 ----- 
 ### Summary
 
-1. Compare two transcriptions (without the Kraken prediction)
+1. Compare reference and prediction (without the Kraken engine) 
 2. Evaluate the prediction of a model generated with the Kraken engine
 3. Modulate scores with textual preprocessing
 4. Metrics options
 5. Others
 ----
 
-### 1. Compare two transcriptions (without the Kraken prediction)
+### 1. Compare reference and prediction (without the Kraken engine)
 
 Kami allows you to compare two strings or two text files (path), to perform this task:
 
@@ -105,7 +110,7 @@ To retrieve the results as dict (`.board` attribute):
 ```python
 print(k.scores.board)
 ``` 
-which returns a dictionary containing your metrics (for more details on metrics see section ...):
+which returns a dictionary containing your metrics (see also Focus on metrics section further):
 
 ```python
 {'levensthein_distance_char': 14, 'levensthein_distance_words': 8, 'hamming_distance': 'Ø', 'wer': 0.4, 'cer': 0.13333333333333333, 'wacc': 0.6, 'wer_hunt': 0.325, 'mer': 0.1320754716981132, 'cil': 0.17745383867832842, 'cip': 0.8225461613216716, 'hits': 92, 'substitutions': 5, 'deletions': 8, 'insertions': 1}
@@ -150,7 +155,7 @@ which returns a dictionary containing your metrics (for more details on metrics 
 
 Depending on the size of the ground truth file, the prediction process may take more or less time.
 
-You can specify the number of cpu workers for inference (default 3) with the `workers` parameter and the `text direction` for the output organization (with "horizontal-lr", "horizontal-rl", "vertical-lr ", "vertical-rl" by default Kami uses "horizontal-lr") by Kraken engine as following :
+You can specify the number of CPU workers for inference (default 3) with the `workers` parameter and the `text direction` for the output organization (with "horizontal-lr", "horizontal-rl", "vertical-lr ", "vertical-rl" by default Kami uses "horizontal-lr") by Kraken engine as following :
 
 ```python
 k = Kami(alto_gt,
@@ -178,14 +183,14 @@ The `apply_transforms` parameter receives a character code corresponding to the 
 
 You can combine these options as follows : 
 
-```Python
+```python
 k = Kami(
     [ground_truth, prediction],
     apply_transforms="XP" # Combine here : remove diacritics + remove punctuation  
     )  
 ```
 
-This results in a dictionary of more complex scores (use `pprint` module to create a human readable dict.), as follows:
+This results in a dictionary of more complex scores (use built-in `pprint` module to create a human readable dict.), as follows:
 
 ```python
 import pprint
@@ -328,15 +333,17 @@ For debugging you can pass the `verbosity` (defaults to `False`) parameter in th
 
 - **Levensthein Distance (Char.)**: Levenshtein distance (sum of operations between character strings) at character level.
 
-$$ 
-total\,subtitions_{char} + total\,deletions_{char} + total\,insertions_{char} $$
+```math
+total\,subtitions_{char} + total\,deletions_{char} + total\,insertions_{char}
+```
 
 - **Levensthein Distance (Words)**: Levenshtein distance (sum of operations between character strings) at word level.
 
-$$ 
-total\,subtitions_{word} + total\,deletions_{word} + total\,insertions_{word} $$
+```math
+total\,subtitions_{word} + total\,deletions_{word} + total\,insertions_{word}
+```
 
-- **Hamming Distance**: A score if the strings' lengths match but their content is different; Ø if the strings' lengths don't match.
+- **Hamming Distance**: A score if the strings' lengths match but their content is different; $`Ø`$ if the strings' lengths don't match.
 
 
 ### Transcription performance (HTR/OCR)
@@ -345,38 +352,50 @@ The performance metrics are calculated from the distances from Levensthein menti
 
 - **WER**: Word Error Rate, proportion of words bearing at least one recognition error.
 
-$$ 
-\frac{total\,subtitions_{word} + total\,deletions_{word} + total\,insertions_{word}}{N_{word}} $$
+```math
+\frac{total\,subtitions_{word} + total\,deletions_{word} + total\,insertions_{word}}{N_{word}}
+```
 
-where $N_{word}$ is a total of words in reference string.
+where $`N_{word}`$ is a total of words in reference string.
 
 corresponding to 
 
-$$
+```math 
 \frac{Levensthein\,distance_{word}}{N_{word}}
-$$
+```
 
-It is generally between $ [0, 1.0] $, the closer it is to $0$ the better the recognition. On the other hand, it is not bounded: a bad recognition can lead to a $ WER> 1.0 $.
+It is generally between $`[0, 1.0]`$, the closer it is to $`0`$ the better the recognition. On the other hand, it is not bounded: a bad recognition can lead to a $`WER> 1.0`$.
 
 
-- CER: Character Error Rate, proportion of characters erroneously transcribed. generally more accurate than WER.
+- **CER**: Character Error Rate, proportion of characters erroneously transcribed. generally more accurate than WER.
 
-$$ 
-\frac{total\,subtitions_{char} + total\,deletions_{char} + total\,insertions_{char}}{N_{char}} $$
+```math 
+\frac{total\,subtitions_{char} + total\,deletions_{char} + total\,insertions_{char}}{N_{char}}
+```
 
-where $N_{char}$ is a total of characters in reference string.
+where $`N_{char}`$ is a total of characters in reference string.
 
 corresponding to 
 
-$$
+```math 
 \frac{Levensthein\,distance_{char}}{N_{char}}
-$$
+```
 
-It is generally between $ [0, 1.0] $, the closer it is to $0$ the better the recognition. On the other hand, it is not bounded: a bad recognition can lead to a $ CER> 1.0 $.
+It is generally between $`[0, 1.0]`$, the closer it is to $`0`$ the better the recognition. On the other hand, it is not bounded: a bad recognition can lead to a $`CER> 1.0`$.
 
-- Wacc: Word Accuracy, proportion of words bearing no recognition error.
+- **Wacc**: Word Accuracy, proportion of words bearing no recognition error.
 
+```math 
+1- WER 
+```
 
+- **WER Hunt** : reproduce the Word Error Rate experiement by Hunt (1990). Same principle as WER computation with a weighting of $`O.5`$ on insertions and deletions. 
+
+```math 
+WER_{Hunt} = \frac{S + 0.5I + 0.5D}{N_{word}} 
+```
+
+In fact, this more demanding metric shows the importance of customizing the weighting of operations between strings depending on the system and type of data used in an HTR / OCR project. In Kami, it is possible to modify the costs assigned to operations.
 
 ### Exeprimental Metrics (from ASR)
 
@@ -386,7 +405,6 @@ It is generally between $ [0, 1.0] $, the closer it is to $0$ the better the rec
 - Char. Information Lost: metric borrowed from Speech Recognition
 
 - Char. Information Preserve: metric borrowed from Speech Recognition
-
 
 
 ## :question: Do you have questions, bug report, features request or feedback ?
