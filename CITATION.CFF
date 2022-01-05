@@ -3,6 +3,7 @@ message: "If you use this software, please cite it as below."
 authors:
 - family-names: "Terriel"
   given-names: "Lucas"
+  orcid: "https://orcid.org/0000-0002-9189-258X"
 - family-names: "Chagué"
   given-names: "Alix"
   orcid: "https://orcid.org/0000-0002-0136-4434"
