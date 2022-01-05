@@ -10,7 +10,6 @@
 
 import re
 import string
-import unicodedata
 from typing import (Union,
                     List,
                     Mapping,
@@ -114,7 +113,7 @@ class _SentencesToTokens(_AbstractTransform):
 
 
 #
-# Modifiers
+# Transformations
 #
 
 

@@ -1,11 +1,11 @@
-KaMI (Kraken Model Inspector)
+KaMI-lib (Kraken Model Inspector)
 =============================
 
-|Pipeline| |coverage-report| |license| |python-versions| |Gitlab-version| |Versions|
+|python-versions| |Versions| |Pipeline| |coverage-report| |license|
 
 |Logo|
 
-Python package focused on HTR / OCR models evaluation and based on the `Kraken <http://kraken.re/>`_ transcription system.
+Python package focused on HTR / OCR models evaluation system agnostic and originally based on the `Kraken <http://kraken.re/>`_ transcription system.
 
 
 🔌 Installation
@@ -17,7 +17,7 @@ Dependencies
 Kami requires :
 
 * Python (<=3.8)
-* Kraken (==3.0.0.0b24)
+* Kraken (==3.0.6)
 
 User installation
 -----------------
@@ -67,7 +67,7 @@ then
 🏃 Tutorial
 ===========
 
-Access to a "end-to-end pipeline" example that use Kami (FR tutorial) :
+Access to a "end-to-end pipeline" example that use Kamilib (FR tutorial) :
 
 |colab|
 
@@ -188,21 +188,6 @@ Access to a "end-to-end pipeline" example that use Kami (FR tutorial) :
                                 'wacc': 79.71,
                                 'wer': 20.28}}
 
-
-🔧 Improvements
-===============
-
-* Formats
-
-    *  Integrate other ground truth formats as ALTO XML
-    *  Integrate other HTR / OCR model formats
-
-* Compute
-
-    * Speed up
-    * Integrate the evaluation of the image segmentation
-
-
 ❓ Do you have questions, bug report, features request or feedback ?
 ====================================================================
 
@@ -225,7 +210,7 @@ Access to a "end-to-end pipeline" example that use Kami (FR tutorial) :
         title = {Kami-lib - Kraken model inspector},
         howpublished = {\url{https://gitlab.inria.fr/dh-projects/kami/kami-lib}},
         publisher = {GitLab-inria},
-        year = {2020-2021}
+        year = {2021}
     }
 
 
@@ -237,7 +222,7 @@ license.
 
 Mail authors and contact : Alix Chagué (alix.chague@inria.fr) and Lucas Terriel (lucas.terriel@inria.fr)
 
-*Kami* is developed and maintained by authors (since 2021, first version named Kraken-Benchmark in 2020)
+*Kami* is developed and maintained by authors (2021-2022, first version named Kraken-Benchmark in 2020)
 with contributions of `ALMAnaCH <http://almanach.inria.fr/index-en.html>`_ at `Inria <https://www.inria.fr/en>`_ Paris.
 
 |made-with-python|
@@ -252,8 +237,6 @@ with contributions of `ALMAnaCH <http://almanach.inria.fr/index-en.html>`_ at `I
     :target: https://gitlab.inria.fr/dh-projects/kami/Kami-lib/master/LICENSE
 .. |python-versions| image:: https://img.shields.io/badge/python-3.7%20%7C%203.8-blue
     :target: https://img.shields.io/badge/python-3.7%20%7C%203.8-blue
-.. |Gitlab-version| image:: https://img.shields.io/badge/Gitlab%20version-0.1.1a-blue
-    :target: https://img.shields.io/badge/Gitlab%20version-0.1.1a-blue
 .. |Versions| image:: https://badge.fury.io/py/kamilib.svg
     :target: https://badge.fury.io/py/kamilib
 .. |Logo| image:: https://gitlab.inria.fr/dh-projects/kami/kami-lib/-/raw/master/docs/static/kramin_carmin_lib.png

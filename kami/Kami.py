@@ -4,7 +4,6 @@
 # Licence : MIT
 """Client interface calls several sub-system of Kami-lib
 """
-import os.path
 from typing import Union
 
 from kami.parser import (parser_text,
@@ -27,7 +26,7 @@ class Kami:
     several subsystems in Kami.
 
     This hide a complexity of Kami subsystems as :
-    * Preprocessing
+    * Preprocessing (optionnal)
     * Prediction (if Kraken is use)
     * Metrics
 

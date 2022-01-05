@@ -66,13 +66,9 @@ def client_code() -> None:
     # Part 1 : Agnostic OCR/HTR engines uses cases
     # A : Compare two sequences of character
     print("PART 1 - A \n")
-    k = Kami([ground_truth, prediction],
-             apply_transforms="", 
-             verbosity=False,  
-             truncate=True,  
-             percent=True,  
-             round_digits='0.01')  
+    k = Kami([ground_truth, prediction])  
     print(k.scores.board)
+    print(k.scores.wer)
     print(f"\n * TOTAL Time P1A : {time.time() - current}")
     print("="*10)
     # B : Compare two text file
@@ -118,12 +114,7 @@ def client_code() -> None:
     print("PART 2 - A \n")
     k = Kami(alto_gt,
              model=model_lectaurep,
-             image=image_lectaurep,
-             apply_transforms="", 
-             verbosity=False,  
-             truncate=True,  
-             percent=True,  
-             round_digits='0.01')  
+             image=image_lectaurep)  
     print(k.scores.board)
     print(f"\n * TOTAL Time P2A: {time.time() - current}")
     print("="*10)
