@@ -351,7 +351,7 @@ The performance metrics are calculated from the distances from Levensthein menti
 - **WER**: Word Error Rate, proportion of words bearing at least one recognition error.
 
 ```math
-\frac{total\,subtitions_{word} + total\,deletions_{word} + total\,insertions_{word}}{N_{word}}
+WER = \frac{total\,subtitions_{word} + total\,deletions_{word} + total\,insertions_{word}}{N_{word}}
 ```
 
 where $`N_{word}`$ is a total of words in reference string.
@@ -359,7 +359,7 @@ where $`N_{word}`$ is a total of words in reference string.
 corresponding to 
 
 ```math 
-\frac{Levensthein\,distance_{word}}{N_{word}}
+WER = \frac{Levensthein\,distance_{word}}{N_{word}}
 ```
 
 It is generally between $`[0, 1.0]`$, the closer it is to $`0`$ the better the recognition. On the other hand, it is not bounded: a bad recognition can lead to a $`WER> 1.0`$.
@@ -368,7 +368,7 @@ It is generally between $`[0, 1.0]`$, the closer it is to $`0`$ the better the r
 - **CER**: Character Error Rate, proportion of characters erroneously transcribed. generally more accurate than WER.
 
 ```math 
-\frac{total\,subtitions_{char} + total\,deletions_{char} + total\,insertions_{char}}{N_{char}}
+CER = \frac{total\,subtitions_{char} + total\,deletions_{char} + total\,insertions_{char}}{N_{char}}
 ```
 
 where $`N_{char}`$ is a total of characters in reference string.
@@ -376,7 +376,7 @@ where $`N_{char}`$ is a total of characters in reference string.
 corresponding to 
 
 ```math 
-\frac{Levensthein\,distance_{char}}{N_{char}}
+CER = \frac{Levensthein\,distance_{char}}{N_{char}}
 ```
 
 It is generally between $`[0, 1.0]`$, the closer it is to $`0`$ the better the recognition. On the other hand, it is not bounded: a bad recognition can lead to a $`CER> 1.0`$.
@@ -384,7 +384,7 @@ It is generally between $`[0, 1.0]`$, the closer it is to $`0`$ the better the r
 - **Wacc**: Word Accuracy, proportion of words bearing no recognition error.
 
 ```math 
-1- WER 
+Wacc = 1- WER 
 ```
 
 - **WER Hunt** : reproduce the Word Error Rate experiement by Hunt (1990). Same principle as WER computation with a weighting of $`O.5`$ on insertions and deletions. 
