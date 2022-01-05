@@ -13,7 +13,8 @@
 
 """
 
-from multiprocessing import Pool, cpu_count
+from multiprocessing import Pool
+import concurrent.futures
 import numpy as np
 np.seterr(divide='ignore', invalid='ignore')
 from PIL import Image
@@ -27,32 +28,41 @@ from kami.kamutils._utils import (_report_log)
 class _KrakenPrediction:
     """A OCR/HTR engine based on Kraken to create predictions from text recognizer model.
 
+
     Attributes
     ----------
-        :ivar im: image open as PIL object.
-        :param im: An PIL image object
-        :ivar model: load valid ocropus model and instanciate from the RNN configuration.
-        :param model: A kraken.lib.models.TorchSeqRecognizer object
-        :ivar bounds: boundaries extract from ALTO or PAGE file.
-        :param bounds: list
-        :ivar pred_sentences: list of sentences predicted.
-        :param pred_sentences: list
-        :ivar pred_content: all prediction ; one sentence per line.
-        :param pred_content: str
-        :ivar verbosity: details during prediction process. Defaults to False.
-        :param verbosity: bool
-
+        :ivar im: Image open as PIL object.
+        :type im: PIL image object
+        :ivar model: Load valid ocropus model and instanciate from the RNN configuration.
+        :type model: A kraken.lib.models.TorchSeqRecognizer object
+        :ivar bounds: Boundaries extract from ALTO or PAGE file.
+        :type bounds: list
+        :ivar pred_sentences: List of sentences predicted.
+        :type pred_sentences: list
+        :ivar pred_content: All prediction ; one sentence per line.
+        :type pred_content: str
+        :ivar verbosity: Details during prediction process. Defaults to False.
+        :type verbosity: bool
+        :ivar workers: Number of cpu workers use for inference. Defaults to 3.
+        :type workers: int
     """
-    def __init__(self, image_path : str, model_path : str, seg_bounds : dict, verbosity: bool = False) -> None:
+    def __init__(self, 
+                    image_path : str, 
+                    model_path : str, 
+                    seg_bounds : list, 
+                    verbosity: bool = False, 
+                    workers: int = 3) -> None:
         self.im = Image.open(image_path)
         self.model = models.load_any(model_path)
         self.bounds = seg_bounds
+        self.pred_sentences = []
         try:
             if verbosity:
                 _report_log("Start with Kraken prediction...", type_log="I")
-            # Create a pool worker for prediction job and accelerate prediction (relative)
-            with Pool(processes=3) as p:
+            # Create a pool process executor for turbo-charge (heavy cpu task) Kraken transcription model inference function (repred.rpred)
+            with Pool(processes=workers) as p:
                 self.pred_sentences = p.map(self._transcribe, self.bounds)
+            # if pool remove : self.pred_sentences = [self._transcribe(bound) for bound in self.bounds]
             if verbosity:
                 _report_log("Kraken prediction finished with success.", type_log="I")
         except Exception as e:

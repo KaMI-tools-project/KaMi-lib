@@ -13,9 +13,13 @@ Tutoriel.ipynb
 
 # Package utils
 dist/
-build/
 kamilib.egg-info/
+
+# built Cython
+setup_cpp_evaluation.py
 
 # others
 runpackage.txt
 programKami.prof
+test_transcribe.py
+build/

@@ -24,4 +24,7 @@ threadpoolctl
 toml
 wrapt
 Unidecode
-kraken==3.0.0.0b24
+kraken==3.0.6
+cython
+torch==1.9.0
+torchvision==0.10.0

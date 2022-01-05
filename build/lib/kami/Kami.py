@@ -8,7 +8,7 @@ import os.path
 from typing import Union
 
 from kami.parser import (parser_text,
-                         parser_xml)
+                         parser_page)
 from kami.preprocessing.transformation import (RemoveDigits,
                                                ToLowerCase,
                                                ToUpperCase,
@@ -16,11 +16,11 @@ from kami.preprocessing.transformation import (RemoveDigits,
                                                RemoveDiacritics,
                                                _Composer,
                                                count_diacritics)
-from kami.transcription.prediction import _KrakenPrediction
+from kami.transcription._base_prediction_io import (_load_model,
+                                                    _load_image)
+from kami.transcription.prediction import _Prediction
 from kami.metrics.evaluation import Scorer
 
-import warnings
-warnings.filterwarnings("ignore")
 
 class Kami:
     """A Facade class provides a simple interface to the complex logic of one or
@@ -28,128 +28,38 @@ class Kami:
 
     This hide a complexity of Kami subsystems as :
     * Preprocessing
-    * Prediction (if Kraken is use)
+    * Prediction
     * Metrics
-
-    Parameters
-    ----------
-        :param data: Data to evaluate as two strings or two text file in list eg. ["./gt.txt", "./pred.txt"]; or a path to single ALTO or PAGE XML.
-        :type data: Union[str,list]
-        :param image: Path to image use to prediction if Kraken is use.
-        :type image: str
-        :param model: Path to transcription model use by Kraken.
-        :type model: str
-        :param apply_transforms: Code to apply textual variations eg. "XPD" 
-        (List transformations : D : remove digits / U : uppercase / L : lowercase / P : remove punctuation / X : remove diacritics). Defaults to "".
-        :type: str
-        :param workers: Number of cpu workers use for inference. Defaults to 3.
-        :type workers: int
-        :param text_direction: principal text direction for column ordering use by Kraken : 
-        "horizontal-lr", "horizontal-rl", "vertical-lr", "vertical-rl". Defaults to "horizontal-lr".
-        :type: str
-        :param script: script use by Kraken. Defaults to "default". 
-        :type script: str
-        :param verbosity: Display logs message during execution. Defaults to False. 
-        :type verbosity: bool
-        :param insertion_cost: predefined a weight for insertions errors. Defaults to 1.0.
-        :type insertion_cost: float
-        :param substitution_cost: predefined a weight for substitutions errors. Defaults to 1.0.
-        :type substitution_cost: float
-        :param deletion_cost: predefined a weight for deletions errors. Defaults to 1.0. 
-        :type deletion_cost: float
-        :param truncate: Option to truncate result. Defaults to "False". 
-        :type truncate: str
-        :param percent: `True` if the user want to show result in percent else `False`. Defaults to False.
-        :type percent: bool
-        :param round_digits: Set the number of digits after floating point in string form. Defaults to to '.01'.
-        :type round_digits: str
-
-    Attributes
-    ----------
-        :ivar reference: ground truth text.
-        :type reference: str
-        :ivar prediction: prediction by htr/ocr model.
-        :type prediction: str
-        :ivar model: path to the transcription model.
-        :type model: str
-        :ivar apply_transforms: see also `Parameters` section for more details.
-        :type apply_transforms: list
-        :ivar workers: see also `Parameters` section for more details.
-        :type workers: int
-        :ivar text_direction: see also `Parameters` section for more details.
-        :type text_direction: str
-        :ivar script: see also `Parameters` section for more details.
-        :type script: str
-        :ivar verbosity: see also `Parameters` section for more details.
-        :type verbosity: bool
-        :ivar insertion_weigtht: see also `Parameters` section for more details.
-        :type insertion_weigtht: float
-        :ivar substitution_weigtht: see also `Parameters` section for more details.
-        :type substitution_weigtht: float
-        :ivar deletion_weight: see also `Parameters` section for more details.
-        :type deletion_weight: float
-        :ivar truncate: see also `Parameters` section for more details.
-        :type truncate: bool
-        :ivar percent: see also `Parameters` section for more details.
-        :type percent: bool
-        :ivar round_digits: see also `Parameters` section for more details.
-        :type round_digits: str
-        :ivar reference_preprocess: ground truth with text preprocessing applied
-        :type reference_preprocess: str
-        :ivar prediction_preprocess: prediction with text preprocessing applied
-        :type prediction_preprocess: str
-        :ivar scores: KaMI Scorer object that contains all metrics.
-        :type scores: KaMI Scorer object 
-
     """
 
     def __init__(self,
                  data: Union[str, list],
-                 image: str = "",
-                 model: str = "",
-                 apply_transforms: str = "",
-                 workers: int = 3,
-                 text_direction : str = "horizontal-lr",
-                 script= "default",
-                 verbosity: bool = False,
-                 insertion_cost: float = 1.0,
-                 substitution_cost: float = 1.0,
-                 deletion_cost: float = 1.0,
-                 truncate: bool = False,
-                 percent: bool = False,
-                 round_digits: str = '.01'
+                 image="",
+                 model="",
+                 apply_transforms="",
+                 verbosity=False,
+                 truncate=False,
+                 percent=False,
+                 round_digits='.01'
                  ) -> None:
+        # Inputs
 
-        # Data inputs
         self.reference = None
         self.prediction = None
         self.model = None
-
-        # Preprocessing options inputs
+        self.scores = None
         self.apply_transforms = [code for line in apply_transforms.split() for code in line]
 
-        # Kraken options inputs
-        self.workers = workers
-        self.text_direction = text_direction
-        self.script = script
+        # Options
 
-        # Debug options
-        self.verbosity = verbosity
-
-        # Options for score weighting
-        self.insertion_weigtht=insertion_cost
-        self.substitution_weigtht=substitution_cost
-        self.deletion_weight=deletion_cost
-
-        # Display options for scores output
         self.truncate = truncate
         self.percent = percent
+        self.verbosity = verbosity
         self.round_digits = round_digits
 
-        # Output
+        # Preprocess sentences output
         self.reference_preprocess = ""
         self.prediction_preprocess = ""
-        self.scores = None
 
         if isinstance(data, list) and len(data) > 1:
             # case with two text files => compute score
@@ -163,32 +73,48 @@ class Kami:
 
             self.scores = Scorer(self.reference,
                                  self.prediction,
-                                 insertion_cost=self.insertion_weigtht,
-                                 deletion_cost=self.deletion_weight,
-                                 substitution_cost=self.substitution_weigtht,
                                  truncate_score=self.truncate,
                                  show_percent=self.percent,
                                  round_digits=self.round_digits)
 
-        # case with GT XML PAGE / XML ALTO => create a HTR pipeline => compute scores
-        elif isinstance(data, str) and data.endswith('xml'):
-            self.reference_parse = parser_xml._XMLParser(xml_path=data, 
-                                                         text_direction=self.text_direction, 
-                                                         script=self.script)
-            self.file_name = self.reference_parse.filename
-            self.reference = self.reference_parse.content
-            bounds = self.reference_parse.list_bounds
-            pipeline = _KrakenPrediction(image_path=image,
-                                         model_path=model,
-                                         workers=self.workers,
-                                         seg_bounds=bounds,
-                                         verbosity=self.verbosity)
-            self.prediction = pipeline.pred_content
+        # case with GT RAW TEXT file => create a HTR pipeline => compute scores
+        elif isinstance(data, str) and data.endswith('txt'):
+            self.reference = parser_text._TextParser(data).text
+            self.file_name = os.path.basename(data)
+            self.model = _load_model(model,
+                                     verbosity=self.verbosity)
+            self.image = _load_image(image,
+                                     verbosity=self.verbosity)
+            pipeline = _Prediction(self.file_name,
+                                  self.image,
+                                  self.model,
+                                  code='txt',
+                                  verbosity=self.verbosity)
+            self.prediction = pipeline.get_transcription()
             self.scores = Scorer(self.reference,
                                  self.prediction,
-                                 insertion_cost=self.insertion_weigtht,
-                                 deletion_cost=self.deletion_weight,
-                                 substitution_cost=self.substitution_weigtht,
+                                 truncate_score=self.truncate,
+                                 show_percent=self.percent,
+                                 round_digits=self.round_digits)
+
+        # case with GT XML PAGE => create a HTR pipeline => compute scores
+        elif isinstance(data, str) and data.endswith('xml'):
+            self.reference_parse = parser_page._PageParser(data)
+            self.reference = "\n".join(self.reference_parse.transcriptions)
+            self.file_name = os.path.basename(data)
+            self.model = _load_model(model,
+                                     verbosity=self.verbosity)
+            self.image = _load_image(image,
+                                     verbosity=self.verbosity)
+            pipeline = _Prediction(self.file_name,
+                                  self.image,
+                                  self.model,
+                                  reference=self.reference_parse,
+                                  code='xml',
+                                  verbosity=self.verbosity)
+            self.prediction = pipeline.get_transcription()
+            self.scores = Scorer(self.reference,
+                                 self.prediction,
                                  truncate_score=self.truncate,
                                  show_percent=self.percent,
                                  round_digits=self.round_digits)
