@@ -206,7 +206,7 @@ class RemoveSpecificWords(_AbstractTransform):
         self.words_to_remove = words_to_remove
 
     def process_string(self, sequence: str):
-        # TODO(@Luca) : tokenization better eg. "Curée," to ["Curée", ","]
+        # TODO(@Luca) : look better tokenization eg. "Curée," to ["Curée", ","]
         sequence = " ".join([token for token in sequence.split() if token not in self.words_to_remove])
         return sequence
 

@@ -46,7 +46,12 @@ class _KrakenPrediction:
         :ivar workers: Number of cpu workers use for inference. Defaults to 3.
         :type workers: int
     """
-    def __init__(self, image_path : str, model_path : str, seg_bounds : list, verbosity: bool = False, workers: int = 3) -> None:
+    def __init__(self, 
+                    image_path : str, 
+                    model_path : str, 
+                    seg_bounds : list, 
+                    verbosity: bool = False, 
+                    workers: int = 3) -> None:
         self.im = Image.open(image_path)
         self.model = models.load_any(model_path)
         self.bounds = seg_bounds
