@@ -433,6 +433,8 @@ license.
 
 Mail authors and contact : Alix Chagué (alix.chague@inria.fr) and Lucas Terriel (lucas.terriel@inria.fr) 
 
+Special thanks : Hugo Scheithauer (hugo.scheithauer@inria.fr)
+
 *Kami* is developed and maintained by authors (2021-2022, first version named Kraken-Benchmark in 2020) 
 with contributions of [ALMAnaCH](http://almanach.inria.fr/index-en.html) at [Inria](https://www.inria.fr/en) Paris.
 
