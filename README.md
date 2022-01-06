@@ -11,17 +11,26 @@
 <img src="./docs/static/kramin_carmin_lib.png" alt="KaMI lib logo" height="100" width ="100"/>
 
 
-Python package focused on HTR / OCR models evaluation system agnostic and originally based on the [Kraken](http://kraken.re/) transcription system.
+KaMI-lib is an HTR and OCR system agnostic Python package for evaluating transcription models. 
+
+It was originally based on the [Kraken](http://kraken.re/) transcription engine.
 
 
 ## :electric_plug: Installation
 
-### Dependencies 
+### Dependencies
 
-Kami requires : 
+Dependencies are indicated in the `requirements.txt` text file. 
 
-* `Python <=3.8`
-* `Kraken ==3.0.6`
+KaMI uses **Python 3.8** or older stable releases. It also requires:
+
+* kraken==3.0.6
+* python-Levenshtein==0.12.2
+* termcolor==1.1.0
+* torch==1.9.0
+* torchvision==0.10.0
+* Unidecode==1.3.2
+* cython
 
 ### User installation 
 
@@ -32,13 +41,13 @@ Use pip to install package:
 
 ### Developer installation 
 
-1. Create a local branch of the kami-lib project :
+1. Create a local branch of the kami-lib project
 
 ```bash
 $ git clone https://gitlab.inria.fr/dh-projects/kami/kami-lib.git
 ```
 
-2. Create a virtual environment :
+2. Create a virtual environment
 
 ```bash
 $ virtualenv -p python3.7 kami_venv
@@ -64,33 +73,37 @@ $ python -m unittest tests/*.py -v
 
 ## :runner: Tutorial
 
-Access to a "end-to-end pipeline" example that use Kamilib (FR tutorial) : [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1nk0hNtL9QTO5jczK0RPEv9zF3nP3DpOc?usp=sharing)
+An "end-to-end pipeline" example that uses Kamilib (written in French) is available at: [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1nk0hNtL9QTO5jczK0RPEv9zF3nP3DpOc?usp=sharing)
 
 ## :key: Quickstart
 
-KaMI can be used for different use cases via the unique class `Kami()`.
+KaMI can be used for different use cases with the class `Kami()`.
 
-To start, importing the kami-lib package as follows :
+First, import the kami-lib package:
 
 ```python
 from kami.Kami import Kami
 ```
 
-The following sections describe two use cases : the first to compare the output of any automatic transcription system, and the second using the prediction of the Kraken model.
+The following sections describe two use cases: 
+
+* How to compare outputs from any automatic transcription system,
+* How to use KaMI with a transcription prediction produced with a Kraken model.
 
 ----- 
 ### Summary
 
-1. Compare reference and prediction (without the Kraken engine) 
+1. Compare a reference and a prediction, independently from the Kraken engine
 2. Evaluate the prediction of a model generated with the Kraken engine
-3. Modulate scores with textual preprocessing
+3. Use text preprocessing to get different scores
 4. Metrics options
 5. Others
+
 ----
 
-### 1. Compare reference and prediction (without the Kraken engine)
+### 1. Compare a reference and a prediction, independently from the Kraken engine
 
-Kami allows you to compare two strings or two text files (path), to perform this task:
+KaMI allows you to compare two strings or two text files by accessing them with their path. 
 
 ```python
 # Define your string to compare.
@@ -105,7 +118,7 @@ prediction_string = "Les 14a de Maxime ! étaient, djàteriblement, savants - La
 # Create a Kami() object and simply insert your data (string or raw text files)
 k = Kami([reference_string, prediction_string]) 
 ```
-To retrieve the results as dict (`.board` attribute):
+You can retrieve the results as dict with the `.board` attribute:
 
 ```python
 print(k.scores.board)
@@ -124,9 +137,9 @@ print(k.scores.wer)
 
 ### 2. Evaluate the prediction of a model generated with the Kraken engine
 
-The `Kami()` object uses the ground truth (**XML ALTO or XML PAGE format only, no text format**), the transcription model and the image to generate an evaluation of the prediction by the Kraken engine.
+The `Kami()` object uses a ground truth (**XML ALTO or XML PAGE format only, no text format**), a transcription model and an image to evaluate prediction made by the Kraken engine.
 
-Here is a simple example, to use the Kraken engine with an ALTO XML ground truth :
+Here is a simple example demonstrating how to use this method with a ground truth in ALTO XML:
 
 ```python
 # Define ground truth path (XML ALTO here)
@@ -155,7 +168,7 @@ which returns a dictionary containing your metrics (for more details on metrics 
 
 Depending on the size of the ground truth file, the prediction process may take more or less time.
 
-You can specify the number of CPU workers for inference (default 3) with the `workers` parameter and the `text direction` for the output organization (with "horizontal-lr", "horizontal-rl", "vertical-lr ", "vertical-rl" by default Kami uses "horizontal-lr") by Kraken engine as following :
+Kraken parameters can be modified. You can specify the number of CPU workers for inference (default 3) with the `workers` parameter and you can set the principal text direction with the `text_direction` parameter ("horizontal-lr", "horizontal-rl", "vertical-lr ", "vertical-rl". By default Kami uses "horizontal-lr".).
 
 ```python
 k = Kami(alto_gt,
@@ -165,11 +178,13 @@ k = Kami(alto_gt,
          text_direction="horizontal-lr")  
 ```
 
-### 3. Modulate scores with textual preprocessing
+### 3. Use text preprocessing to get different scores
 
-KaMI-lib provides the possibility to apply textual transformations (on the reference and the prediction) to allow a better understanding of the errors of the transcription model and to modulate the output HTR/OCR scores. By default none is applied.
+KaMI-lib provides the possibility to apply textual transformations on the ground truth and the prediction before evaluating them. By doing so, scores can change according to the performance of the model used. This functionality allows a better made by the transdription model. For example, if removing all diacritics improves the scores, it probably means that the model is not good enough at transcribing them. 
 
-This is possible through the `apply_transforms` parameter from `Kami()` class.
+By default no preprocessing is applied.
+
+To preprocess the ground truth and the prediction, you can use `apply_transforms` parameter from `Kami()` class.
 
 The `apply_transforms` parameter receives a character code corresponding to the transformations to be performed : 
 
@@ -181,7 +196,7 @@ The `apply_transforms` parameter receives a character code corresponding to the 
 |   P	|   remove punctuation (default list : !"#$%&'()*+, -./:;<=>?@[\]^_`{\|}~) |
 |   X	|   remove diacritics	|
 
-You can combine these options as follows : 
+You can combine these options as follows: 
 
 ```python
 k = Kami(
@@ -190,7 +205,7 @@ k = Kami(
     )  
 ```
 
-This results in a dictionary of more complex scores (use built-in `pprint` module to create a human readable dict.), as follows:
+It results in a dictionary of more complex scores (use built-in `pprint` module to create a human readable dict.), as follows:
 
 ```python
 import pprint
@@ -263,17 +278,17 @@ pprint.pprint(k.scores.board)
 
 ```
 
-- The **'default'** key indicates the scores without any transformations ; 
-- The **'all_transforms'** key indicates the scores with all transformations applied (here remove diacritics + remove punctuation) ;
+- The **'default'** key indicates the scores without any transformations; 
+- The **'all_transforms'** key indicates the scores with all transformations applied (here remove diacritics + remove punctuation).
 
-Depending on the character code used :
+If you have used text preprocessing, for example:
 
-- The **'remove_punctuation'** key indicates the scores with only remove punctuation applied  ;
-- The **'remove_diacritics'** key indicates the scores with only remove diacritics applied  ;
+- The **'remove_punctuation'** key indicates the scores with removed punctuations only;
+- The **'remove_diacritics'** key indicates the scores with removed diacritics only.
 
 ### 4. Metrics options
 
-KaMI provides the possibility to weight differently the operations between the character strings (as insertions, substitutions or deletions. By default this operations have a weight of 1. You can change this weigthts with the parameters in the `Kami()` class :
+KaMI provides the possibility to weight differently the operations made between the ground truth and the prediction (as insertions, substitutions or deletions). By default this operations have a weight of 1. You can change these weigthts with the parameters in the `Kami()` class:
 
 - `insertion_cost`
 - `substitution_cost`
@@ -281,7 +296,7 @@ KaMI provides the possibility to weight differently the operations between the c
 
 **Keep in mind that these weights are the basis for Levensthein distance computations and performance metrics like WER and CER, which can greatly influence final scores.**
 
-Example :
+Example:
 
 ```python
 k = Kami(
@@ -292,13 +307,13 @@ k = Kami(
     )  
 ```
 
-`Kami()` class also provides score display settings :
+`Kami()` class also provides score display settings:
 
 - `truncate` (bool) : Option to truncate result. Defaults to `False`. 
-- `percent` (bool) : `True` if the user want to show result in percent else `False`. Defaults to `False`. 
+- `percent` (bool) : `True` if the user wants to show result in percent, else `False`. Defaults to `False`. 
 - `round_digits` (str) : Set the number of digits after floating point in string form. Defaults to to '.01'
 
-Example :
+Example:
 
 ```python
 k = Kami([ground_truth, prediction],
@@ -317,13 +332,13 @@ For debugging you can pass the `verbosity` (defaults to `False`) parameter in th
 
 ### Operations between strings 
 
-- **Hits**: number of characters identical between the reference and the prediction.
+- **Hits**: number of identical characters between the reference and the prediction.
 
 - **Substitutions**: number of substitutions (a character replaced by another) necessary to make the prediction match the reference.
 
 - **Deletions**: number of deletions (a character is removed) necessary to make the prediction match the reference.
 
-- **Insertions**: number of insertions (a character is added) necessary to make the prediction match the reference
+- **Insertions**: number of insertions (a character is added) necessary to make the prediction match the reference.
 
 *for each of these operations, except hits, a cost of 1 is assigned by default.*
 
@@ -346,7 +361,7 @@ total\,subtitions_{word} + total\,deletions_{word} + total\,insertions_{word}
 
 ### Transcription performance (HTR/OCR)
 
-The performance metrics are calculated from the distances from Levensthein mentioned above.
+The performance metrics are calculated with the Levenshtein distances mentioned above.
 
 - **WER**: Word Error Rate, proportion of words bearing at least one recognition error.
 
@@ -362,10 +377,10 @@ corresponding to
 WER = \frac{Levensthein\,distance_{word}}{N_{word}}
 ```
 
-It is generally between $`[0, 1.0]`$, the closer it is to $`0`$ the better the recognition. On the other hand, it is not bounded: a bad recognition can lead to a $`WER> 1.0`$.
+It is generally between $`[0, 1.0]`$, the closer it is to $`0`$ the better the recognition. However, a bad recognition can lead to a $`WER> 1.0`$.
 
 
-- **CER**: Character Error Rate, proportion of characters erroneously transcribed. generally more accurate than WER.
+- **CER**: Character Error Rate, proportion of characters erroneously transcribed. Generally more accurate than WER.
 
 ```math 
 CER = \frac{total\,subtitions_{char} + total\,deletions_{char} + total\,insertions_{char}}{N_{char}}
@@ -379,7 +394,7 @@ corresponding to
 CER = \frac{Levensthein\,distance_{char}}{N_{char}}
 ```
 
-It is generally between $`[0, 1.0]`$, the closer it is to $`0`$ the better the recognition. On the other hand, it is not bounded: a bad recognition can lead to a $`CER> 1.0`$.
+It is generally between $`[0, 1.0]`$, the closer it is to $`0`$ the better the recognition. However, a bad recognition can lead to a $`CER> 1.0`$.
 
 - **Wacc**: Word Accuracy, proportion of words bearing no recognition error.
 
@@ -387,13 +402,13 @@ It is generally between $`[0, 1.0]`$, the closer it is to $`0`$ the better the r
 Wacc = 1- WER 
 ```
 
-- **WER Hunt** : reproduce the Word Error Rate experiement by Hunt (1990). Same principle as WER computation with a weighting of $`O.5`$ on insertions and deletions. 
+- **WER Hunt** : reproduce the Word Error Rate experiment by Hunt (1990). Same principle as WER computation with a weighting of $`O.5`$ on insertions and deletions. 
 
 ```math 
 WER_{Hunt} = \frac{S + 0.5I + 0.5D}{N_{word}} 
 ```
 
-In fact, this more demanding metric shows the importance of customizing the weighting of operations between strings depending on the system and type of data used in an HTR / OCR project. In Kami, it is possible to modify the weigthts assigned to operations.
+This metric shows the importance of customizing the weighting of operations made between strings as it depends heavily on the system and type of data used in an HTR/OCR project. In KaMI, it is possible to modify the weigthts assigned to operations.
 
 ### Exeprimental Metrics (metrics borrowed from Speech Recognition - ASR)
 
@@ -405,14 +420,14 @@ In fact, this more demanding metric shows the importance of customizing the weig
 - **Character Information Preserve**
 
 
-## :question: Do you have questions, bug report, features request or feedback ?
+## :question: Do you have questions, bug report, features request or feedback?
 
-#### Please use the issue templates :
+#### Please use the issue templates:
 
-#### :beetle: Bug report : [here](https://gitlab.inria.fr/dh-projects/kami/kami-lib/-/issues/new?issuable_template=bug_report)
-#### :fireworks: Features request : [here](https://gitlab.inria.fr/dh-projects/kami/kami-lib/-/issues/new?issuable_template=feature_request)
+#### :beetle: Bug report: [here](https://gitlab.inria.fr/dh-projects/kami/kami-lib/-/issues/new?issuable_template=bug_report)
+#### :fireworks: Features request: [here](https://gitlab.inria.fr/dh-projects/kami/kami-lib/-/issues/new?issuable_template=feature_request)
 
-*if you are not in these cases, feel free to open an issue*
+*if aforementioned cases does not apply, feel free to open an issue.*
 
 ## :black_nib: How to cite 
 
@@ -428,14 +443,14 @@ In fact, this more demanding metric shows the importance of customizing the weig
 
 ## :octopus: License and contact
 
-Distributed under [MIT](./LICENSE) license. The dependencies used in the project are  also distributed under compatible 
+Distributed under [MIT](./LICENSE) license. The dependencies used in the project are also distributed under compatible 
 license.
 
-Mail authors and contact : Alix Chagué (alix.chague@inria.fr) and Lucas Terriel (lucas.terriel@inria.fr) 
+Mail authors and contact: Alix Chagué (alix.chague@inria.fr) and Lucas Terriel (lucas.terriel@inria.fr) 
 
-Special thanks : Hugo Scheithauer (hugo.scheithauer@inria.fr)
+Special thanks: Hugo Scheithauer (hugo.scheithauer@inria.fr)
 
-*Kami* is developed and maintained by authors (2021-2022, first version named Kraken-Benchmark in 2020) 
+*KaMI* is developed and maintained by authors (2021-2022, first version named Kraken-Benchmark in 2020) 
 with contributions of [ALMAnaCH](http://almanach.inria.fr/index-en.html) at [Inria](https://www.inria.fr/en) Paris.
 
 
