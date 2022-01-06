@@ -11,7 +11,7 @@
 <img src="./docs/static/kramin_carmin_lib.png" alt="KaMI lib logo" height="100" width ="100"/>
 
 
-KaMI-lib is an HTR and OCR system agnostic Python package for evaluating transcription models. 
+KaMI-lib is an HTR and OCR engine agnostic Python package for evaluating transcription models. 
 
 It was originally based on the [Kraken](http://kraken.re/) transcription engine.
 
