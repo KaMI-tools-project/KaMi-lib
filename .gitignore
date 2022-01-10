@@ -1,11 +1,15 @@
 # Virtual envs
 env-kamilib/
 kraken3.0.6py3.8/
+Kamivenvtest38/
 
 # Jetbrains (IDE)
 .idea/
 __pycache__
 .pytest_cache
+
+# Vscode
+.vscode/
 
 # Jupyter notebooks
 .ipynb_checkpoints/
@@ -13,6 +17,7 @@ Tutoriel.ipynb
 
 # Package utils
 dist/
+build/
 kamilib.egg-info/
 
 # built Cython
@@ -22,4 +27,3 @@ setup_cpp_evaluation.py
 runpackage.txt
 programKami.prof
 test_transcribe.py
-build/

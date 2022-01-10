@@ -12,7 +12,7 @@ try:
     with io.open(path.join(here, 'README.rst'), encoding='utf-8') as f:
         long_description = f.read()
 except:
-    long_description = u"Python package focused on HTR / OCR models evaluation and based on the Kraken transcription system."
+    long_description = u"HTR / OCR models evaluation agnostic Python package, originally based on the Kraken transcription system."
 
 
 with open("requirements.txt", encoding="utf-8") as f:

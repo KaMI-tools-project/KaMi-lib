@@ -14,7 +14,6 @@
 """
 
 from multiprocessing import Pool
-import concurrent.futures
 import numpy as np
 np.seterr(divide='ignore', invalid='ignore')
 from PIL import Image
