@@ -18,7 +18,7 @@ HTR / OCR models evaluation agnostic Python package, originally based on the [Kr
 
 ### Dependencies 
 
-Kami requires : 
+Kami requires (see also `requirements.txt`) : 
 
 * `Python <=3.8`
 * `Kraken ==3.0.6`
@@ -379,8 +379,6 @@ WER = \frac{Levensthein\,distance_{word}}{N_{word}}
 
 It is generally between $`[0, 1.0]`$, the closer it is to $`0`$ the better the recognition. However, a bad recognition can lead to a $`WER> 1.0`$.
 
-
-
 - **CER**: Character Error Rate, proportion of characters erroneously transcribed. Generally more accurate than WER.
 
 ```math 
@@ -413,7 +411,7 @@ WER_{Hunt} = \frac{S + 0.5I + 0.5D}{N_{word}}
 This metric shows the importance of customizing the weighting of operations made between strings as it depends heavily on the system and type of data used in an HTR/OCR project. In KaMI-lib, it is possible to modify the weigthts assigned to operations.
 
 
-### Exeprimental Metrics (metrics borrowed from Speech Recognition - ASR)
+### Experimental Metrics (metrics borrowed from Speech Recognition - ASR)
 
 
 - **Match Error Rate**

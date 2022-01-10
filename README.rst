@@ -432,7 +432,7 @@ mentioned above.
    This metric shows the importance of customizing the weighting of operations made between strings as it depends heavily on the system 
    and type of data used in an HTR/OCR project. In KaMI-lib, it is possible to modify the weigthts assigned to operations.
 
-Exeprimental Metrics (metrics borrowed from Speech Recognition - ASR)
+Experimental Metrics (metrics borrowed from Speech Recognition - ASR)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 -  **Match Error Rate**
