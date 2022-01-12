@@ -347,13 +347,13 @@ For debugging you can pass the `verbosity` (defaults to `False`) parameter in th
 - **Levensthein Distance (Char.)**: Levenshtein distance (sum of operations between character strings) at character level.
 
 ```math
-total\,subtitions_{char} + total\,deletions_{char} + total\,insertions_{char}
+total\,substitutions_{char} + total\,deletions_{char} + total\,insertions_{char}
 ```
 
 - **Levensthein Distance (Words)**: Levenshtein distance (sum of operations between character strings) at word level.
 
 ```math
-total\,subtitions_{word} + total\,deletions_{word} + total\,insertions_{word}
+total\,substitutions_{word} + total\,deletions_{word} + total\,insertions_{word}
 ```
 
 - **Hamming Distance**: A score if the strings' lengths match but their content is different; $`Ø`$ if the strings' lengths don't match.
@@ -366,7 +366,7 @@ The performance metrics are calculated with the Levenshtein distances mentioned 
 - **WER**: Word Error Rate, proportion of words bearing at least one recognition error.
 
 ```math
-WER = \frac{total\,subtitions_{word} + total\,deletions_{word} + total\,insertions_{word}}{N_{word}}
+WER = \frac{total\,substitutions_{word} + total\,deletions_{word} + total\,insertions_{word}}{N_{word}}
 ```
 
 where $`N_{word}`$ is a total of words in reference string.
@@ -382,7 +382,7 @@ It is generally between $`[0, 1.0]`$, the closer it is to $`0`$ the better the r
 - **CER**: Character Error Rate, proportion of characters erroneously transcribed. Generally more accurate than WER.
 
 ```math 
-CER = \frac{total\,subtitions_{char} + total\,deletions_{char} + total\,insertions_{char}}{N_{char}}
+CER = \frac{total\,substitutions_{char} + total\,deletions_{char} + total\,insertions_{char}}{N_{char}}
 ```
 
 where $`N_{char}`$ is a total of characters in reference string.
