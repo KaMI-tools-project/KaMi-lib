@@ -1,5 +1,6 @@
 ![Python Version](https://img.shields.io/badge/python-3.7%20%7C%203.8-blue)
 
+
 [![Version](https://badge.fury.io/py/kamilib.svg)](https://badge.fury.io/py/kamilib)
 [![pipeline status](https://gitlab.inria.fr/dh-projects/kami/kami-lib/badges/master/pipeline.svg)](https://gitlab.inria.fr/dh-projects/kami/kami-lib/-/pipelines) [![coverage report](https://gitlab.inria.fr/dh-projects/kami/kami-lib/badges/master/coverage.svg)](https://gitlab.inria.fr/dh-projects/kami/kami-lib/-/commits/master) [![GitLab license](https://img.shields.io/github/license/Naereen/StrapDown.js.svg)](https://gitlab.inria.fr/dh-projects/kami/Kami-lib/master/LICENSE) 
 
@@ -16,7 +17,7 @@ HTR / OCR models evaluation agnostic Python package, originally based on the [Kr
 
 ## :electric_plug: Installation
 
-### Dependencies 
+### Dependencies
 
 Kami requires (see also `requirements.txt`) : 
 
@@ -30,14 +31,14 @@ Kami requires (see also `requirements.txt`) :
 * `cython`
 
 
-### User installation 
+### User installation
 
 Use pip to install package:
 
 `$ pip install kamilib`
 
 
-### Developer installation 
+### Developer installation
 
 1. Create a local branch of the kami-lib project
 
@@ -330,7 +331,7 @@ For debugging you can pass the `verbosity` (defaults to `False`) parameter in th
 
 ## :dart: Focus on metrics
 
-### Operations between strings 
+### Operations between strings
 
 - **Hits**: number of identical characters between the reference and the prediction.
 
@@ -430,7 +431,7 @@ This metric shows the importance of customizing the weighting of operations made
 
 *if aforementioned cases does not apply, feel free to open an issue.*
 
-## :black_nib: How to cite 
+## :black_nib: How to cite
 
 ```
 @misc{Kami-lib,
