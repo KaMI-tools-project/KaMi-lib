@@ -9,16 +9,16 @@ here = path.abspath(path.dirname(__file__))
 
 kamilib_version = subprocess.run(['git', 'describe', '--tags'], stdout=subprocess.PIPE).stdout.decode("utf-8").strip()
 
-"""
+
 try:
     with io.open(path.join(here, 'README.rst'), encoding='utf-8') as f:
         long_description = f.read()
 except:
     long_description = u"HTR / OCR models evaluation agnostic Python package, originally based on the Kraken transcription system."
-"""
 
-with open("README.md", "r") as fh:
-    long_description = fh.read()
+
+#with open("README.md", "r") as fh:
+#    long_description = fh.read()
 
 with open("requirements.txt", encoding="utf-8") as f:
     install_requires = f.read().splitlines()
@@ -44,7 +44,7 @@ setuptools.setup(
     license="MIT",
     description="HTR / OCR models evaluation agnostic Python package, originally based on the Kraken transcription system.",
     long_description=long_description,
-    long_description_content_type="text/markdown",
+    long_description_content_type="text/x-rst",
     url="https://github.com/KaMI-tools-project/KaMi-lib",
     packages=setuptools.find_packages(exclude=['tests']),
     install_requires=[

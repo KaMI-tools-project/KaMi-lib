@@ -407,7 +407,7 @@ This metric shows the importance of customizing the weighting of operations made
     author = "Lucas Terriel (Inria - ALMAnaCH) and Alix Chagué (Inria - ALMAnaCH)",
     title = {Kami-lib - Kraken model inspector},
     howpublished = {\url{https://github.com/KaMI-tools-project/KaMi-lib.git}},
-    year = {2021}
+    year = {2021-2022}
 }
 ```
 
