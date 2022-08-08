@@ -26,7 +26,7 @@ class testMetrics(unittest.TestCase):
                                      'deletions': 0,
                                      'insertions': 0,
                                      'Length_reference':len(self.reference),
-                                     'Length_prediction':len(self.prediction)})
+                                     'Length_prediction':len(self.reference)})
 
     def test_success_with_change_string(self):
         self.assertEqual(self.scorer_2.board, {'levensthein_distance_char': 20,
@@ -63,7 +63,7 @@ class testMetrics(unittest.TestCase):
                                           'deletions': 116,
                                           'insertions': 0,
                                      'Length_reference':len(self.reference),
-                                     'Length_prediction':len(self.prediction)})
+                                     'Length_prediction':0})
 
 
     def test_noStringsToCompute(self):
