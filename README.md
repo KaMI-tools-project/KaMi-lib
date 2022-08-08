@@ -1,34 +1,18 @@
-![Python Version](https://img.shields.io/badge/python-3.7%20%7C%203.8-blue)
+<img src="docs/static/kamilib_logo.png" width="200" align="right">
 
+KaMI-lib (Kraken Model Inspector)
+=====
+
+![Python Version](https://img.shields.io/badge/Python-%3E%3D%203.7-%2313aab7)
+
+[![KaMI-lib Tests](https://github.com/KaMI-tools-project/KaMi-lib/actions/workflows/tests.yml/badge.svg)](https://github.com/KaMI-tools-project/KaMi-lib/actions/workflows/tests.yml)
 [![Version](https://badge.fury.io/py/kamilib.svg)](https://badge.fury.io/py/kamilib)
-[![pipeline status](https://gitlab.inria.fr/dh-projects/kami/kami-lib/badges/master/pipeline.svg)](https://gitlab.inria.fr/dh-projects/kami/kami-lib/-/pipelines) [![coverage report](https://gitlab.inria.fr/dh-projects/kami/kami-lib/badges/master/coverage.svg)](https://gitlab.inria.fr/dh-projects/kami/kami-lib/-/commits/master) [![GitLab license](https://img.shields.io/github/license/Naereen/StrapDown.js.svg)](https://gitlab.inria.fr/dh-projects/kami/Kami-lib/master/LICENSE) 
-
-# KaMI-lib (Kraken Model Inspector)
-
-<!--![KaMI lib logo](./docs/static/kramin_carmin_lib.png)-->
-
-
-<img src="docs/static/kamilib_logo.png" alt="KaMI lib logo" height="100" width ="100"/>
-
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 HTR / OCR models evaluation agnostic Python package, originally based on the [Kraken](http://kraken.re/) transcription system.
 
 
 ## :electric_plug: Installation
-
-### Dependencies
-
-Kami requires (see also `requirements.txt`) : 
-
-* `Python <=3.8`
-* `Kraken ==3.0.6`
-* `python-Levenshtein==0.12.2`
-* `termcolor==1.1.0`
-* `torch==1.9.0`
-* `torchvision==0.10.0`
-* `Unidecode==1.3.2`
-* `cython`
-
 
 ### User installation
 
@@ -347,16 +331,14 @@ For debugging you can pass the `verbosity` (defaults to `False`) parameter in th
 - **Levensthein Distance (Char.)**: Levenshtein distance (sum of operations between character strings) at character level.
 
 
-$$total\,substitutions_{char} + total\,deletions_{char} + total\,insertions_{char}$$
+$$total \ substitutions_{char} + total\ deletions_{char} + total\ insertions_{char}$$
 
 
 - **Levensthein Distance (Words)**: Levenshtein distance (sum of operations between character strings) at word level.
 
-```math
-total\,substitutions_{word} + total\,deletions_{word} + total\,insertions_{word}
-```
+$$total\ substitutions_{word} + total\ deletions_{word} + total\ insertions_{word}$$
 
-- **Hamming Distance**: A score if the strings' lengths match but their content is different; $`Ø`$ if the strings' lengths don't match.
+- **Hamming Distance**: A score if the strings' lengths match but their content is different; `Ø` if the strings' lengths don't match.
 
 
 ### Transcription performance (HTR/OCR)
@@ -365,48 +347,35 @@ The performance metrics are calculated with the Levenshtein distances mentioned 
 
 - **WER**: Word Error Rate, proportion of words bearing at least one recognition error.
 
-```math
-WER = \frac{total\,substitutions_{word} + total\,deletions_{word} + total\,insertions_{word}}{N_{word}}
-```
+$$WER = \frac{total\ substitutions_{word} + total\ deletions_{word} + total\ insertions_{word}}{N_{word}}$$
 
-where $`N_{word}`$ is a total of words in reference string.
+where $N_{word}$ is a total of words in reference string.
 
 corresponding to 
 
-```math 
-WER = \frac{Levensthein\,distance_{word}}{N_{word}}
-```
+$$WER = \frac{Levensthein\ distance_{word}}{N_{word}}$$
 
-It is generally between $`[0, 1.0]`$, the closer it is to $`0`$ the better the recognition. However, a bad recognition can lead to a $`WER> 1.0`$.
+It is generally between $[0, 1.0]$, the closer it is to $0$ the better the recognition. However, a bad recognition can lead to a $WER> 1.0$.
 
 - **CER**: Character Error Rate, proportion of characters erroneously transcribed. Generally more accurate than WER.
 
-```math 
-CER = \frac{total\,substitutions_{char} + total\,deletions_{char} + total\,insertions_{char}}{N_{char}}
-```
+$$CER = \frac{total\ substitutions_{char} + total\ deletions_{char} + total\ insertions_{char}}{N_{char}}$$
 
-where $`N_{char}`$ is a total of characters in reference string.
+where $N_{char}$ is a total of characters in reference string.
 
 corresponding to 
 
-```math 
-CER = \frac{Levensthein\,distance_{char}}{N_{char}}
-```
+$$CER = \frac{Levensthein\ distance_{char}}{N_{char}}$$
 
-It is generally between $`[0, 1.0]`$, the closer it is to $`0`$ the better the recognition. However, a bad recognition can lead to a $`CER> 1.0`$.
-
+It is generally between $[0, 1.0]$, the closer it is to $0$ the better the recognition. However, a bad recognition can lead to a $CER> 1.0$.
 
 - **Wacc**: Word Accuracy, proportion of words bearing no recognition error.
 
-```math 
-Wacc = 1- WER 
-```
+$$Wacc = 1- WER$$
 
-- **WER Hunt** : reproduce the Word Error Rate experiment by Hunt (1990). Same principle as WER computation with a weighting of $`O.5`$ on insertions and deletions. 
+- **WER Hunt** : reproduce the Word Error Rate experiment by Hunt (1990). Same principle as WER computation with a weighting of $0.5$ on insertions and deletions. 
 
-```math 
-WER_{Hunt} = \frac{S + 0.5I + 0.5D}{N_{word}} 
-```
+$$WER_{Hunt} = \frac{S + 0.5I + 0.5D}{N_{word}}$$
 
 This metric shows the importance of customizing the weighting of operations made between strings as it depends heavily on the system and type of data used in an HTR/OCR project. In KaMI-lib, it is possible to modify the weigthts assigned to operations.
 
