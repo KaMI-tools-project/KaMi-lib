@@ -43,10 +43,9 @@ setuptools.setup(
     author_email="lucas.terriel@inria.fr, alix.chague@inria.fr",
     license="MIT",
     description="HTR / OCR models evaluation agnostic Python package, originally based on the Kraken transcription system.",
-    long_description=long_description,
-    long_description_content_type="text/x-rst",
+    long_description="HTR / OCR models evaluation agnostic Python package, originally based on the Kraken transcription system.",
     url="https://github.com/KaMI-tools-project/KaMi-lib",
-    packages=setuptools.find_packages(exclude=['tests']),
+    packages=setuptools.find_packages(),
     install_requires=[
                         "termcolor==1.1.0",
                         "kraken==3.0.6",
@@ -56,5 +55,5 @@ setuptools.setup(
     ],
     python_requires='>=3.7',
     classifiers=CLASSIFIERS,
-    keywords=["HTR", "OCR", "Evaluation framework", "metrics", "handwritten text recognition", "optical character recognition"],
+    keywords=["HTR", "OCR", "Evaluation framework", "metrics", "handwritten text recognition", "optical character recognition"]
 )
