@@ -329,13 +329,13 @@ For debugging you can pass the `verbosity` (defaults to `False`) parameter in th
 
 ### Distances
 
-- **Levensthein Distance (Char.)**: Levenshtein distance (sum of operations between character strings) at character level.
+- **Levenshtein Distance (Char.)**: Levenshtein distance (sum of operations between character strings) at character level.
 
 
 $$total \ substitutions_{char} + total\ deletions_{char} + total\ insertions_{char}$$
 
 
-- **Levensthein Distance (Words)**: Levenshtein distance (sum of operations between character strings) at word level.
+- **Levenshtein Distance (Words)**: Levenshtein distance (sum of operations between character strings) at word level.
 
 $$total\ substitutions_{word} + total\ deletions_{word} + total\ insertions_{word}$$
 
@@ -354,7 +354,7 @@ where $N_{word}$ is a total of words in reference string.
 
 corresponding to 
 
-$$WER = \frac{Levensthein\ distance_{word}}{N_{word}}$$
+$$WER = \frac{Levenshtein\ distance_{word}}{N_{word}}$$
 
 It is generally between $[0, 1.0]$, the closer it is to $0$ the better the recognition. However, a bad recognition can lead to a $WER> 1.0$.
 
@@ -366,7 +366,7 @@ where $N_{char}$ is a total of characters in reference string.
 
 corresponding to 
 
-$$CER = \frac{Levensthein\ distance_{char}}{N_{char}}$$
+$$CER = \frac{Levenshtein\ distance_{char}}{N_{char}}$$
 
 It is generally between $[0, 1.0]$, the closer it is to $0$ the better the recognition. However, a bad recognition can lead to a $CER> 1.0$.
 
