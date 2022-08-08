@@ -5,8 +5,6 @@ import io
 import setuptools
 import subprocess
 
-import kami
-
 here = path.abspath(path.dirname(__file__))
 
 kamilib_version = subprocess.run(['git', 'describe', '--tags'], stdout=subprocess.PIPE).stdout.decode("utf-8").strip()
@@ -39,12 +37,12 @@ CLASSIFIERS = [
 
 
 setuptools.setup(
-    name=kami.__title__,
+    name="kamilib",
     version=kamilib_version,
     author="Lucas Terriel, Alix Chagué",
     author_email="lucas.terriel@inria.fr, alix.chague@inria.fr",
-    license=kami.__licence__,
-    description=kami.__doc__,
+    license="MIT",
+    description="HTR / OCR models evaluation agnostic Python package, originally based on the Kraken transcription system.",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/KaMI-tools-project/KaMi-lib",
