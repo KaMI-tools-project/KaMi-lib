@@ -7,8 +7,8 @@ authors:
 - family-names: "Chagué"
   given-names: "Alix"
   orcid: "https://orcid.org/0000-0002-0136-4434"
-title: "KaMI Lib"
-version: 0.1.1
+title: "KaMI-lib"
+version: 0.1.3
 doi: 10.5281/zenodo.1234
-date-released: 2021-08-24
-url: "https://gitlab.inria.fr/dh-projects/kami/kami-lib/-/releases/0.1.1"
+date-released: 2022-08
+url: "https://github.com/KaMI-tools-project/KaMi-lib"

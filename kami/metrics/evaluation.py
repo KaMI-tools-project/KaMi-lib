@@ -190,7 +190,9 @@ class Scorer:
                 "hits": self.hits,
                 "substitutions": self.substs,
                 "deletions": self.deletions,
-                "insertions": self.insertions
+                "insertions": self.insertions,
+                "Length_reference": self.length_char_reference,
+                "Length_prediction": self.length_char_prediction
         }
 
     # Collection of distance metrics # 
@@ -276,24 +278,51 @@ class Scorer:
             + self.deletions
             + self.insertions)
 
-    def _get_operation_counts(self) -> Tuple[int, int, int, int]:
+    @staticmethod
+    def sentence_blocks(sentence, n=10):
+        s = sentence.split("\n")
+        for i in range(0, len(s), n):
+            yield " ".join(s[i:i + n])
+
+    def _get_operation_counts(self) -> Tuple[int, int, int, int, float, float, float, int, int, int, float, float, float]:
         """Find sequence of edit operations transforming one string to another.
         Based on editops function from C extension module python-Levenshtein."""
-        result_editops_char = editops(self.reference, self.prediction)
-        result_editops_word = editops(*_hot_encode(
-            [
-                self.reference.split(), 
-                self.prediction.split()
+
+        # Texts over ~7000/8000 characters can cause a MemoryError with
+        # editops function; the strategy is to tokenize sentences and pass
+        # in editops with a batch process.
+        try:
+            result_editops_char = editops(self.reference, self.prediction)
+            result_editops_word = editops(*_hot_encode(
+                [
+                    self.reference.split(),
+                    self.prediction.split()
                 ]
             )
-        )
+                                          )
+        except MemoryError:
+            result_editops_char = []
+            result_editops_word = []
+
+            for r, p in zip(self.sentence_blocks(self.reference), self.sentence_blocks(self.prediction)):
+                result_editops_char.extend(editops(r, p))
+                result_editops_word.extend(editops(*_hot_encode(
+                    [
+                        r.split(),
+                        p.split()
+                    ]
+                )
+                                                   ))
+
+
+
 
         def _sum_operations(keyword: str, results: Sequence[Tuple[str, int, int]]) -> int:
             """Compute a sum of define operations"""
             total = sum(1 if operations[0] == keyword else 0 for operations in results)
             return total
 
-        def _sum_operations_weighted(keyword: str, results: Sequence[Tuple[str, int, int]], weight: int) -> float:
+        def _sum_operations_weighted(keyword: str, results: Sequence[Tuple[str, int, int]], weight: float) -> float:
             total = sum(1 * weight if operations[0] == keyword else 0 for operations in results)
             return total
 

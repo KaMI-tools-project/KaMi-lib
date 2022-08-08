@@ -28,3 +28,4 @@ setup_cpp_evaluation.py
 runpackage.txt
 programKami.prof
 test_transcribe.py
+test_huge.py

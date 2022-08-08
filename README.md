@@ -27,7 +27,7 @@ $ pip install kamilib
 1. Create a local branch of the kami-lib project
 
 ```bash
-$ git clone https://gitlab.inria.fr/dh-projects/kami/kami-lib.git
+$ git clone https://github.com/KaMI-tools-project/KaMi-lib.git
 ```
 
 2. Create a virtual environment
@@ -81,14 +81,14 @@ The following sections describe two use cases :
 ----- 
 ### Summary
 
-1. Compare a reference and a prediction, independently from the Kraken engine
+1. Compare a reference and a prediction, independently of the Kraken engine
 2. Evaluate the prediction of a model generated with the Kraken engine
 3. Use text preprocessing to get different scores
 4. Metrics options
 5. Others
 ----
 
-### 1. Compare a reference and a prediction, independently from the Kraken engine
+### 1. Compare a reference and a prediction, independently of the Kraken engine
 
 KaMI-lib allows you to compare two strings or two text files by accessing them with their path.
 
@@ -406,8 +406,7 @@ This metric shows the importance of customizing the weighting of operations made
 @misc{Kami-lib,
     author = "Lucas Terriel (Inria - ALMAnaCH) and Alix Chagué (Inria - ALMAnaCH)",
     title = {Kami-lib - Kraken model inspector},
-    howpublished = {\url{https://gitlab.inria.fr/dh-projects/kami/kami-lib}},
-    publisher = {GitLab-inria},
+    howpublished = {\url{https://github.com/KaMI-tools-project/KaMi-lib.git}},
     year = {2021}
 }
 ```

@@ -283,10 +283,9 @@ class Kami:
                 new_score["Total_char_pass_in_lowercase_in_prediction"] = total_upper_prediction
 
             if "D" or "P" or "L" or "U" or "X" in apply_transforms:
-                new_score["Length_reference"] = len(self.reference)
-                new_score["Length_prediction"] = len(self.prediction)
                 new_score["Length_reference_transformed"] = len(self.reference_preprocess)
                 new_score["Length_prediction_transformed"] = len(self.prediction_preprocess)
+
 
             # Add all scores to a final board
             self.scores.board = new_score

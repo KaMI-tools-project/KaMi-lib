@@ -3,7 +3,6 @@
 
 import pprint
 import time
-
 from kami.Kami import Kami
 from kami.preprocessing.transformation import (ToCompose,
                                                ToLowerCase,
