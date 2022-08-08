@@ -14,6 +14,8 @@
 """
 
 from multiprocessing import Pool
+from concurrent.futures import ThreadPoolExecutor, as_completed
+
 import numpy as np
 np.seterr(divide='ignore', invalid='ignore')
 from PIL import Image
@@ -50,7 +52,7 @@ class _KrakenPrediction:
                     model_path : str, 
                     seg_bounds : list, 
                     verbosity: bool = False, 
-                    workers: int = 3) -> None:
+                    workers: int = 7) -> None:
         self.im = Image.open(image_path)
         self.model = models.load_any(model_path)
         self.bounds = seg_bounds
@@ -58,10 +60,13 @@ class _KrakenPrediction:
         try:
             if verbosity:
                 _report_log("Start with Kraken prediction...", type_log="I")
-            # Create a pool process executor for turbo-charge (heavy cpu task) Kraken transcription model inference function (repred.rpred)
+
+            # Create a pool process executor for turbo-charge (heavy cpu task)
+            # Kraken transcription model inference function (repred.rpred)
             with Pool(processes=workers) as p:
                 self.pred_sentences = p.map(self._transcribe, self.bounds)
-            # if pool remove : self.pred_sentences = [self._transcribe(bound) for bound in self.bounds]
+                # if pool remove : self.pred_sentences = [self._transcribe(bound) for bound in self.bounds]
+
             if verbosity:
                 _report_log("Kraken prediction finished with success.", type_log="I")
         except Exception as e:

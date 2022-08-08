@@ -18,8 +18,9 @@ HTR / OCR models evaluation agnostic Python package, originally based on the [Kr
 
 Use pip to install package:
 
-`$ pip install kamilib`
-
+```bash
+$ pip install kamilib
+```
 
 ### Developer installation
 
@@ -394,8 +395,8 @@ This metric shows the importance of customizing the weighting of operations made
 
 #### Please use the issue templates:
 
-#### :beetle: Bug report: [here](https://gitlab.inria.fr/dh-projects/kami/kami-lib/-/issues/new?issuable_template=bug_report)
-#### :fireworks: Features request: [here](https://gitlab.inria.fr/dh-projects/kami/kami-lib/-/issues/new?issuable_template=feature_request)
+#### :beetle: Bug report: [here]()
+#### :fireworks: Features request: [here]()
 
 *if aforementioned cases does not apply, feel free to open an issue.*
 

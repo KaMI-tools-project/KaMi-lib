@@ -2,6 +2,7 @@
 env-kamilib/
 kraken3.0.6py3.8/
 Kamivenvtest38/
+venv/
 
 # Jetbrains (IDE)
 .idea/
