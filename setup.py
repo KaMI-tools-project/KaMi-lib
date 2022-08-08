@@ -49,7 +49,13 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     url="https://github.com/KaMI-tools-project/KaMi-lib",
     packages=setuptools.find_packages(exclude=['tests']),
-    install_requires=install_requires,
+    install_requires=[
+                        "termcolor==1.1.0",
+                        "kraken==3.0.6",
+                        "unidecode==1.3.4",
+                        "protobuf==3.20.0",
+                        "python-Levenshtein==0.12.2"
+    ],
     python_requires='>=3.7',
     classifiers=CLASSIFIERS,
     keywords=["HTR", "OCR", "Evaluation framework", "metrics", "handwritten text recognition", "optical character recognition"],
