@@ -395,8 +395,8 @@ This metric shows the importance of customizing the weighting of operations made
 
 #### Please use the issue templates:
 
-#### :beetle: Bug report: [here]()
-#### :fireworks: Features request: [here]()
+#### :beetle: Bug report: [here](https://github.com/KaMI-tools-project/KaMi-lib/issues/new?assignees=&labels=&template=bug_report.md&title=)
+#### :fireworks: Features request: [here](https://github.com/KaMI-tools-project/KaMi-lib/issues/new?assignees=&labels=&template=feature_request.md&title=)
 
 *if aforementioned cases does not apply, feel free to open an issue.*
 
