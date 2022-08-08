@@ -8,7 +8,7 @@
 <!--![KaMI lib logo](./docs/static/kramin_carmin_lib.png)-->
 
 
-<img src="./docs/static/kramin_carmin_lib.png" alt="KaMI lib logo" height="100" width ="100"/>
+<img src="docs/static/kamilib_logo.png" alt="KaMI lib logo" height="100" width ="100"/>
 
 
 HTR / OCR models evaluation agnostic Python package, originally based on the [Kraken](http://kraken.re/) transcription system.
@@ -346,9 +346,9 @@ For debugging you can pass the `verbosity` (defaults to `False`) parameter in th
 
 - **Levensthein Distance (Char.)**: Levenshtein distance (sum of operations between character strings) at character level.
 
-```math
-total\,substitutions_{char} + total\,deletions_{char} + total\,insertions_{char}
-```
+
+$$total\,substitutions_{char} + total\,deletions_{char} + total\,insertions_{char}$$
+
 
 - **Levensthein Distance (Words)**: Levenshtein distance (sum of operations between character strings) at word level.
 

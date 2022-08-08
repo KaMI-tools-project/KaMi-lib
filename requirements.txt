@@ -1,7 +1,9 @@
-kraken==3.0.6
-python-Levenshtein==0.12.2
-termcolor==1.1.0
-torch==1.9.0
-torchvision==0.10.0
+kraken
+python-Levenshtein
+termcolor
+torch
+torchvision
 Unidecode
 cython
+pylint
+pytest
