@@ -155,13 +155,13 @@ which returns a dictionary containing your metrics (for more details on metrics 
 
 Depending on the size of the ground truth file, the prediction process may take more or less time.
 
-Kraken parameters can be modified. You can specify the number of CPU workers for inference (default 3) with the `workers` parameter and you can set the principal text direction with the `text_direction` parameter ("horizontal-lr", "horizontal-rl", "vertical-lr ", "vertical-rl". By default Kami uses "horizontal-lr".).
+Kraken parameters can be modified. You can specify the number of CPU workers for inference (default 7) with the `workers` parameter, and you can set the principal text direction with the `text_direction` parameter ("horizontal-lr", "horizontal-rl", "vertical-lr ", "vertical-rl". By default Kami uses "horizontal-lr".).
 
 ```python
 k = Kami(alto_gt,
          model=model,
          image=image,
-         workers=3,
+         workers=7,
          text_direction="horizontal-lr")  
 ```
 

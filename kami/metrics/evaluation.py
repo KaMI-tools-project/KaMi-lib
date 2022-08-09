@@ -8,12 +8,19 @@
 """
 
 from typing import Sequence, Tuple, Union
-from Levenshtein import (distance, 
-                         hamming, 
+from Levenshtein import (hamming,
                          editops)
 from ._base_metrics import (_truncate_score,
                             _hot_encode,
                             _get_percent)
+
+from ._shared_lib import (WER,
+                          CER,
+                          WACC,
+                          WERHUNT,
+                          CIP,
+                          CIL,
+                          MER)
 
 __all__ = [
     "Scorer",
@@ -110,9 +117,9 @@ class Scorer:
     def __init__(self,
                  reference: str,
                  prediction: str,
-                 insertion_cost: int = 1.0,
-                 deletion_cost: int = 1.0,
-                 substitution_cost: int = 1.0,
+                 insertion_cost: float = 1.0,
+                 deletion_cost: float = 1.0,
+                 substitution_cost: float = 1.0,
                  show_percent: bool = False,
                  truncate_score: bool = False,
                  round_digits: str = '.01') -> None:
@@ -142,9 +149,9 @@ class Scorer:
 
         # Distances
         if self.insertion_cost == 1 and self.deletion_cost  == 1 and self.substitution_cost == 1:
-            self.lev_distance_words, self.lev_distance_char = self._levensthein_distance()
+            self.lev_distance_words, self.lev_distance_char = self._levenshtein_distance()
         else:
-            self.lev_distance_words, self.lev_distance_char = self._weighted_levensthein_distance()
+            self.lev_distance_words, self.lev_distance_char = self._weighted_levenshtein_distance()
 
         self.hamming = self._hamming_distance()
 
@@ -195,91 +202,137 @@ class Scorer:
                 "Length_prediction": self.length_char_prediction
         }
 
-    # Collection of distance metrics # 
-    def _levensthein_distance(self) -> Tuple[float, float]:
-        """Compute Levensthein distance from C extension module Python-Levensthein.
-        
-        Returns:
-            Tuple[float, float]: weighted levensthein distance based on char level, weighted levensthein distance based on word level
-        """
-        return distance(*_hot_encode(
-            [self.reference.split(), self.prediction.split()])), distance(self.reference, self.prediction)
+    # Collection of distance metrics  #
+    # - Levenshtein distance (Sum edit operations with python-Levenshtein C extension)
+    # - Weighted Levenshtein distance (Sum edit operations (add costs) with python-Levenshtein C extension)
+    # - Hamming distance (python-Levenshtein C extension)
 
-    def _weighted_levensthein_distance(self) -> Tuple[float, float]:
-        """Compute Levensthein distance from predefined cost.
+    def _levenshtein_distance(self) -> Tuple[float, float]:
+        """Compute Levenshtein distance.
+
+        Lev = Substitutions + Deletions + Insertions
 
         Returns:
-            Tuple[float, float]: weighted levensthein distance based on word level, weighted levensthein distance based on char level
+            Tuple[float, float]: Levenshtein distance based on word level, Levenshtein distance based on char level
         """
-        return sum(
-            [self.word_substs_weighted,
+        return sum([
+                self.word_substs,
+                self.word_deletions,
+                self.word_insertions]),\
+            sum([
+                self.substs,
+                self.deletions,
+                self.insertions])
+
+    def _weighted_levenshtein_distance(self) -> Tuple[float, float]:
+        """Compute Levenshtein distance from predefined cost.
+
+        w_Lev = w1*Substitutions + w2*Deletions + w3*Insertions
+
+        where w1, w2 and w3 are user's cost
+
+        Returns: Tuple[float, float]: weighted Levenshtein distance based on word level, weighted Levenshtein
+        distance based on char level
+        """
+        return sum([
+            self.word_substs_weighted,
             self.word_deletions_weighted,
-            self.word_insertions_weighted]
-            ), sum(
-            [self.substs_weighted,
-            self.deletions_weighted,
-            self.insertions_weighted]
-            )
+            self.word_insertions_weighted]), \
+            sum([
+                self.substs_weighted,
+                self.deletions_weighted,
+                self.insertions_weighted])
 
     def _hamming_distance(self) -> Union[str, int]:
-        """Compute Hamming distance from C extension module Python-Levensthein."""
-        return "Ø" if self.length_char_reference != self.length_char_prediction else hamming(self.reference, self.prediction)
+        """Compute Hamming distance."""
+        return "Ø" \
+            if self.length_char_reference != self.length_char_prediction \
+            else hamming(self.reference, self.prediction)
 
-    # Collection of HTR/OCR metrics #
+    # Collection of HTR/OCR metrics      #
+    # C implementations (_metrics_lib.c) #
+    # - Word Error Rate (WER)
+    # - Hunt's Word Error Rate
+    # - Character Error Rate (CER)
+    # - Word Accuracy (Wacc)
 
     def _wer(self) -> float:
-        """Compute word error rate (WER)."""
-        return (self.lev_distance_words/self.length_words_reference)
+        """Compute word error rate (WER).
+
+        WER = Levenshtein on words / total words in reference
+        """
+        return WER(self.lev_distance_words, self.length_words_reference)
 
     def _wer_hunt(self) -> float:
-        """Compute Hunt word error rate that minimize errors of deletions and insertions."""
-        return (sum([
-                self.word_substs,
-                0.5 * self.word_deletions, 
-                0.5 * self.word_insertions
-                ]
-                )/self.length_words_reference)if (
-                    self.insertion_cost == 1 
-                    and self.deletion_cost  == 1 
-                    and self.substitution_cost == 1)else (sum(
-                        [
-                            self.word_substs_weighted,
-                            0.5 * self.word_deletions_weighted,
-                            0.5 * self.word_insertions_weighted
-                        ]
-                        )/self.length_words_reference)
+        """Compute Hunt word error rate that minimize errors of deletions and insertions.
+
+        Hunt WER = (S + D*0.5 + I*0.5) / total words in reference
+        """
+        return WERHUNT(
+                sum([
+                    float(self.word_substs),
+                    float(self.word_deletions)*0.5,
+                    float(self.word_insertions)*0.5]), float(self.length_words_reference)
+            ) if (
+                self.insertion_cost == 1.0
+                and self.deletion_cost == 1.0
+                and self.substitution_cost == 1.0) \
+            else \
+            WERHUNT(
+                sum([
+                    float(self.word_substs_weighted),
+                    float(self.word_deletions_weighted)*0.5,
+                    float(self.word_insertions_weighted)*0.5]), float(self.length_words_reference)
+            )
 
     def _cer(self) -> float:
-        """Compute character error rate (CER)."""
-        return (self.lev_distance_char/self.length_char_reference)
+        """Compute character error rate (CER).
+
+        CER = Levenshtein on characters / total characters in reference
+        """
+        return CER(self.lev_distance_char, self.length_char_reference)
 
     def _wacc(self) -> float:
-        """Compute word accuracy (Wacc)."""
-        return (1 - (self.lev_distance_words/self.length_words_reference))
+        """Compute word accuracy (Wacc).
+
+        Wacc = 1 - WER
+        """
+        return WACC(self.wer)
 
     # Collection of experimental ASR (Automatic Speech Recognition) metrics #
+    # C implementations (_metrics_lib.c)                                    #
+    # - Character Information Preserved (CIP)
+    # - Character Information Lost (CIL)
+    # - Match Error Rate (MER)
+
     def _cip(self) -> float:
-        """Compute character information preserved (CIP)."""
-        return (float(self.hits)/self.length_char_reference)*(float(self.hits)/self.length_char_prediction) if self.prediction else 0.0
+        """Compute character information preserved (CIP).
+
+        CIP = (Hits/total characters in reference)*(Hits/total characters in prediction)
+
+        where Hits are characters that matched in reference and in prediction
+        """
+        return CIP(self.hits, self.length_char_reference, self.length_char_prediction) if self.prediction else 0.0
 
     def _cil(self) -> float:
-        """Compute character information lost (CIL)."""
-        return (1 - (float(self.hits)/self.length_char_reference)*(float(self.hits)/self.length_char_prediction)) if self.prediction else 0.0
+        """Compute character information lost (CIL).
+
+        CIL = 1 - CIP
+        """
+        return CIL(self.cip) if self.prediction else 0.0
 
     def _mer(self) -> float:
-        """Compute match error rate (MER)."""
-        return float(
-            self.substs
-            + self.deletions
-            + self.insertions) \
-            / float(
-            self.hits
-            + self.substs
-            + self.deletions
-            + self.insertions)
+        """Compute match error rate (MER).
+
+        MER = Lev distance on characters / Hits + Lev distance on characters
+        """
+        return MER(self.hits, self.lev_distance_char)
 
     @staticmethod
-    def sentence_blocks(sentence, n=10):
+    def sentence_blocks(sentence, n=30):
+        """Split text into sentences and generate blocks of n sentences"""
+        # not the best sentence tokenization
+        # but use it only for very long text
         s = sentence.split("\n")
         for i in range(0, len(s), n):
             yield " ".join(s[i:i + n])
@@ -289,8 +342,9 @@ class Scorer:
         Based on editops function from C extension module python-Levenshtein."""
 
         # Texts over ~7000/8000 characters can cause a MemoryError with
-        # editops function; the strategy is to tokenize sentences and pass
-        # in editops with a batch process.
+        # .editops() function; the strategy is to tokenize sentences and pass
+        # in .editops() with a batch process.
+
         try:
             result_editops_char = editops(self.reference, self.prediction)
             result_editops_word = editops(*_hot_encode(
@@ -303,8 +357,7 @@ class Scorer:
         except MemoryError:
             result_editops_char = []
             result_editops_word = []
-
-            for r, p in zip(self.sentence_blocks(self.reference), self.sentence_blocks(self.prediction)):
+            for  r, p in zip(self.sentence_blocks(self.reference), self.sentence_blocks(self.prediction)):
                 result_editops_char.extend(editops(r, p))
                 result_editops_word.extend(editops(*_hot_encode(
                     [
@@ -313,9 +366,6 @@ class Scorer:
                     ]
                 )
                                                    ))
-
-
-
 
         def _sum_operations(keyword: str, results: Sequence[Tuple[str, int, int]]) -> int:
             """Compute a sum of define operations"""
@@ -327,20 +377,48 @@ class Scorer:
             return total
 
         substitutions = _sum_operations("replace", result_editops_char)
-        deletions     = _sum_operations("delete", result_editops_char)
-        insertions    = _sum_operations("insert", result_editops_char)
+        deletions = _sum_operations("delete", result_editops_char)
+        insertions = _sum_operations("insert", result_editops_char)
 
-        substitutions_weighted = _sum_operations_weighted("replace", result_editops_char, weight=self.substitution_cost)
-        deletions_weighted     = _sum_operations_weighted("delete", result_editops_char, weight=self.deletion_cost)
-        insertions_weighted    = _sum_operations_weighted("insert", result_editops_char, weight=self.insertion_cost)
+        substitutions_weighted = _sum_operations_weighted("replace",
+                                                          result_editops_char,
+                                                          weight=self.substitution_cost)
+        deletions_weighted = _sum_operations_weighted("delete",
+                                                      result_editops_char,
+                                                      weight=self.deletion_cost)
+        insertions_weighted = _sum_operations_weighted("insert",
+                                                       result_editops_char,
+                                                       weight=self.insertion_cost)
 
-        word_substitutions = _sum_operations("replace", result_editops_word)
-        word_deletions     = _sum_operations("delete", result_editops_word)
-        word_insertions    = _sum_operations("insert", result_editops_word)
+        word_substitutions = _sum_operations("replace",
+                                             result_editops_word)
+        word_deletions = _sum_operations("delete",
+                                         result_editops_word)
+        word_insertions = _sum_operations("insert",
+                                          result_editops_word)
 
-        word_substitutions_weighted = _sum_operations_weighted("replace", result_editops_word, weight=self.substitution_cost)
-        word_deletions_weighted     = _sum_operations_weighted("delete", result_editops_word, weight=self.deletion_cost)
-        word_insertions_weighted    = _sum_operations_weighted("insert", result_editops_word, weight=self.insertion_cost)
+        word_substitutions_weighted = _sum_operations_weighted("replace",
+                                                               result_editops_word,
+                                                               weight=self.substitution_cost)
+        word_deletions_weighted = _sum_operations_weighted("delete",
+                                                           result_editops_word,
+                                                           weight=self.deletion_cost)
+        word_insertions_weighted = _sum_operations_weighted("insert",
+                                                            result_editops_word,
+                                                            weight=self.insertion_cost)
 
         hits = self.length_char_reference - (substitutions + deletions)
-        return hits, substitutions, deletions, insertions, substitutions_weighted, deletions_weighted, insertions_weighted, word_substitutions, word_deletions, word_insertions, word_substitutions_weighted, word_deletions_weighted, word_insertions_weighted
+        return \
+            hits, \
+            substitutions, \
+            deletions, \
+            insertions, \
+            substitutions_weighted, \
+            deletions_weighted, \
+            insertions_weighted, \
+            word_substitutions, \
+            word_deletions, \
+            word_insertions, \
+            word_substitutions_weighted, \
+            word_deletions_weighted, \
+            word_insertions_weighted

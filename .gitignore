@@ -29,3 +29,6 @@ runpackage.txt
 programKami.prof
 test_transcribe.py
 test_huge.py
+datatest/auto_transcript_letter_0607(1).txt
+datatest/manual_transcript_letter_0607(1).txt
+main_test.py

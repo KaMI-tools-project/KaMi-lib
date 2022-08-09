@@ -171,7 +171,7 @@ Depending on the size of the ground truth file, the prediction process
 may take more or less time.
 
 Kraken parameters can be modified. You can specify the number of CPU
-workers for inference (default 3) with the ``workers`` parameter and you
+workers for inference (default 7) with the ``workers`` parameter and you
 can set the principal text direction with the ``text_direction``
 parameter ("horizontal-lr", "horizontal-rl", "vertical-lr ",
 "vertical-rl". By default Kami uses "horizontal-lr".).
@@ -181,7 +181,7 @@ parameter ("horizontal-lr", "horizontal-rl", "vertical-lr ",
     k = Kami(alto_gt,
              model=model,
              image=image,
-             workers=3,
+             workers=7,
              text_direction="horizontal-lr")  
 
 3. Use text preprocessing to get different scores
@@ -470,7 +470,7 @@ version named Kraken-Benchmark in 2020) with contributions of
 
 |forthebadge made-with-python|
 
-.. |Logo| image:: https://gitlab.inria.fr/dh-projects/kami/kami-lib/-/raw/master/docs/static/kramin_carmin_lib.png
+.. |Logo| image:: https://raw.githubusercontent.com/KaMI-tools-project/KaMi-lib/master/docs/static/kamilib_logo.png
     :width: 100px
 .. |Python Version| image:: https://img.shields.io/badge/Python-%3E%3D%203.7-%2313aab7
    :target: https://img.shields.io/badge/Python-%3E%3D%203.7-%2313aab7
