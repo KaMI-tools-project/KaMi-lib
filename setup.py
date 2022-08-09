@@ -58,7 +58,7 @@ setuptools.setup(
                         "python-Levenshtein==0.12.2"
     ],
     package_data={
-        "kami": ["metrics/*.so"]
+        "kami": ["metrics/*.so", "metrics/*.c", "metrics/*.h"]
     },
     include_package_data=True,
     python_requires='>=3.7',

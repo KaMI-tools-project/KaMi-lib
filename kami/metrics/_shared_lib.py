@@ -1,40 +1,43 @@
 """Python's bridges for C shared metrics functions
 """
-import ctypes
+import os
+from ctypes import *
 
-METRICS_FUNCTIONS = ctypes.CDLL("kami/metrics/metrics_lib.so")
+PATH = os.path.dirname(os.path.abspath(__file__))
+METRICS_FUNCTIONS = CDLL(os.path.join(PATH, "metrics_lib.so"))
 
 
 # HTR/OCR Metrics
 
+
 WER = METRICS_FUNCTIONS.WordErrorRate
-WER.argtypes = [ctypes.c_int, ctypes.c_int]
-WER.restype = ctypes.c_float
+WER.argtypes = [c_int, c_int]
+WER.restype = c_float
 
 CER = METRICS_FUNCTIONS.CharacterErrorRate
-CER.argtypes = [ctypes.c_int, ctypes.c_int]
-CER.restype = ctypes.c_float
+CER.argtypes = [c_int, c_int]
+CER.restype = c_float
 
 WACC = METRICS_FUNCTIONS.WordAccuracy
-WACC.argtypes = [ctypes.c_float]
-WACC.restype = ctypes.c_float
+WACC.argtypes = [c_float]
+WACC.restype = c_float
 
 WERHUNT = METRICS_FUNCTIONS.WordErrorRateHuntStyle
-WERHUNT.argtypes = [ctypes.c_float, ctypes.c_float]
-WERHUNT.restype = ctypes.c_float
+WERHUNT.argtypes = [c_float, c_float]
+WERHUNT.restype = c_float
 
 
 # ASR Metrics
 
 CIP = METRICS_FUNCTIONS.CharacterInformationPreserve
-CIP.argtypes = [ctypes.c_int, ctypes.c_int, ctypes.c_int]
-CIP.restype = ctypes.c_float
+CIP.argtypes = [c_int, c_int, c_int]
+CIP.restype = c_float
 
 CIL = METRICS_FUNCTIONS.CharacterInformationLost
-CIL.argtypes = [ctypes.c_float]
-CIL.restype = ctypes.c_float
+CIL.argtypes = [c_float]
+CIL.restype = c_float
 
 
 MER = METRICS_FUNCTIONS.MatchErrorRate
-MER.argtypes = [ctypes.c_int, ctypes.c_int]
-MER.restype = ctypes.c_float
+MER.argtypes = [c_int, c_int]
+MER.restype = c_float

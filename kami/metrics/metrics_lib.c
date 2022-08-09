@@ -1,5 +1,6 @@
 #include <stdio.h>
-
+#include <stdlib.h>
+#include "metrics_lib.h"
 
 /* HTR OCR metrics functions */
 

@@ -14,13 +14,8 @@ from ._base_metrics import (_truncate_score,
                             _hot_encode,
                             _get_percent)
 
-from ._shared_lib import (WER,
-                          CER,
-                          WACC,
-                          WERHUNT,
-                          CIP,
-                          CIL,
-                          MER)
+from ._shared_lib import METRICS_FUNCTIONS
+
 
 
 __all__ = [
@@ -262,14 +257,14 @@ class Scorer:
 
         WER = Levenshtein on words / total words in reference
         """
-        return WER(self.lev_distance_words, self.length_words_reference)
+        return METRICS_FUNCTIONS.WordErrorRate(self.lev_distance_words, self.length_words_reference)
 
     def _wer_hunt(self) -> float:
         """Compute Hunt word error rate that minimize errors of deletions and insertions.
 
         Hunt WER = (S + D*0.5 + I*0.5) / total words in reference
         """
-        return WERHUNT(
+        return METRICS_FUNCTIONS.WordErrorRateHuntStyle(
                 sum([
                     float(self.word_substs),
                     float(self.word_deletions)*0.5,
@@ -279,7 +274,7 @@ class Scorer:
                 and self.deletion_cost == 1.0
                 and self.substitution_cost == 1.0) \
             else \
-            WERHUNT(
+            METRICS_FUNCTIONS.WordErrorRateHuntStyle(
                 sum([
                     float(self.word_substs_weighted),
                     float(self.word_deletions_weighted)*0.5,
@@ -291,14 +286,14 @@ class Scorer:
 
         CER = Levenshtein on characters / total characters in reference
         """
-        return CER(self.lev_distance_char, self.length_char_reference)
+        return METRICS_FUNCTIONS.CharacterErrorRate(self.lev_distance_char, self.length_char_reference)
 
     def _wacc(self) -> float:
         """Compute word accuracy (Wacc).
 
         Wacc = 1 - WER
         """
-        return WACC(self.wer)
+        return METRICS_FUNCTIONS.WordAccuracy(self.wer)
 
     # Collection of experimental ASR (Automatic Speech Recognition) metrics #
     # C implementations (_metrics_lib.c)                                    #
@@ -313,21 +308,21 @@ class Scorer:
 
         where Hits are characters that matched in reference and in prediction
         """
-        return CIP(self.hits, self.length_char_reference, self.length_char_prediction) if self.prediction else 0.0
+        return METRICS_FUNCTIONS.CharacterInformationPreserve(self.hits, self.length_char_reference, self.length_char_prediction) if self.prediction else 0.0
 
     def _cil(self) -> float:
         """Compute character information lost (CIL).
 
         CIL = 1 - CIP
         """
-        return CIL(self.cip) if self.prediction else 0.0
+        return METRICS_FUNCTIONS.CharacterInformationLost(self.cip) if self.prediction else 0.0
 
     def _mer(self) -> float:
         """Compute match error rate (MER).
 
         MER = Lev distance on characters / Hits + Lev distance on characters
         """
-        return MER(self.hits, self.lev_distance_char)
+        return METRICS_FUNCTIONS.MatchErrorRate(self.hits, self.lev_distance_char)
 
     @staticmethod
     def sentence_blocks(sentence, n=30):
