@@ -2,7 +2,7 @@
 """
 import ctypes
 
-METRICS_FUNCTIONS = ctypes.CDLL("kami/metrics/_metrics_lib.so")
+METRICS_FUNCTIONS = ctypes.CDLL("kami/metrics/metrics_lib.so")
 
 
 # HTR/OCR Metrics

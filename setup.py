@@ -36,6 +36,9 @@ CLASSIFIERS = [
     ]
 
 
+
+
+
 setuptools.setup(
     name="kamilib",
     version=kamilib_version,
@@ -54,6 +57,10 @@ setuptools.setup(
                         "protobuf==3.20.0",
                         "python-Levenshtein==0.12.2"
     ],
+    package_data={
+        "kami": ["metrics/*.so"]
+    },
+    include_package_data=True,
     python_requires='>=3.7',
     classifiers=CLASSIFIERS,
     keywords=["HTR", "OCR", "Evaluation framework", "metrics", "handwritten text recognition", "optical character recognition"]

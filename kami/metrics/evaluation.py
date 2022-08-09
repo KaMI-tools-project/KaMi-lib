@@ -22,6 +22,7 @@ from ._shared_lib import (WER,
                           CIL,
                           MER)
 
+
 __all__ = [
     "Scorer",
 ]
