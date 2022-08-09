@@ -49,7 +49,7 @@ setuptools.setup(
     long_description=long_description,
     long_description_content_type="text/x-rst",
     url="https://github.com/KaMI-tools-project/KaMi-lib",
-    packages=setuptools.find_packages(),
+    packages=setuptools.find_packages(exclude=['tests']),
     install_requires=[
                         "termcolor==1.1.0",
                         "kraken==3.0.6",
@@ -58,7 +58,7 @@ setuptools.setup(
                         "python-Levenshtein==0.12.2"
     ],
     package_data={
-        "kami": ["metrics/*.so", "metrics/*.c", "metrics/*.h"]
+        "kami": ["metrics/*.so"]
     },
     include_package_data=True,
     python_requires='>=3.7',
