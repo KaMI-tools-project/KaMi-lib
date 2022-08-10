@@ -22,6 +22,8 @@ Use pip to install package:
 $ pip install kamilib
 ```
 
+> If you encounter some problems on Windows OS, you can use the stable version 0.1.2 (and you can open an issue), otherwise use the latest version.
+
 ### Developer installation
 
 1. Create a local branch of the kami-lib project
