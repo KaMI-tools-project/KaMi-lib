@@ -57,15 +57,17 @@ class _KrakenPrediction:
         self.model = models.load_any(model_path)
         self.bounds = seg_bounds
         self.pred_sentences = []
+
         try:
             if verbosity:
                 _report_log("Start with Kraken prediction...", type_log="I")
 
             # Create a pool process executor for turbo-charge (heavy cpu task)
             # Kraken transcription model inference function (repred.rpred)
-            with Pool(processes=workers) as p:
-                self.pred_sentences = p.map(self._transcribe, self.bounds)
-                # if pool remove : self.pred_sentences = [self._transcribe(bound) for bound in self.bounds]
+            # with Pool(processes=workers) as p:
+            # self.pred_sentences = p.map(self._transcribe, self.bounds)
+                # if pool remove :
+            self.pred_sentences = [self._transcribe(bound) for bound in self.bounds]
 
             if verbosity:
                 _report_log("Kraken prediction finished with success.", type_log="I")
@@ -74,6 +76,7 @@ class _KrakenPrediction:
         
         # Retrieve all text with one sentence per line
         self.pred_content = "\n".join(self.pred_sentences)
+
 
     def _transcribe(self, bound):
         """Kraken method for recognition.
@@ -85,7 +88,7 @@ class _KrakenPrediction:
             [str]: prediction.
         """
         return next(rpred.rpred(
-            network=self.model, 
+            network=self.model,
             im=self.im, 
             bounds=bound, 
             pad=16,

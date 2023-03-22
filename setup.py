@@ -43,7 +43,7 @@ setuptools.setup(
     name="kamilib",
     version=kamilib_version,
     author="Lucas Terriel, Alix Chagué",
-    author_email="lucas.terriel@inria.fr, alix.chague@inria.fr",
+    author_email="lucas.terriel@chartes.psl.eu, alix.chague@inria.fr",
     license="MIT",
     description="HTR / OCR models evaluation agnostic Python package, originally based on the Kraken transcription system.",
     long_description=long_description,
@@ -52,7 +52,7 @@ setuptools.setup(
     packages=setuptools.find_packages(exclude=['tests']),
     install_requires=[
                         "termcolor==1.1.0",
-                        "kraken==3.0.6",
+                        "kraken==4.3.5",
                         "unidecode==1.3.4",
                         "protobuf==3.20.0",
                         "python-Levenshtein==0.12.2"

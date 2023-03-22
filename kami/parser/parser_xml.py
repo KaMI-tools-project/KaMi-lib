@@ -78,7 +78,8 @@ class _XMLParser:
                     'baseline': bound['baseline'],
                     'boundary': bound['boundary'],
                     'text_direction': self.TEXT_DIRECTION,
-                    'script': self.SCRIPT}
+                    'script': self.SCRIPT,
+                    'tags': bound['tags']}
                     ],  
                 'type': 'baselines',
             } for bound in self.base_bounds['lines']] 
