@@ -54,7 +54,6 @@ setuptools.setup(
                         "termcolor==1.1.0",
                         "kraken==4.3.5",
                         "unidecode==1.3.4",
-                        "protobuf==3.20.0",
                         "levenshtein==0.20.9"
     ],
     #package_data={
