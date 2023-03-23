@@ -62,7 +62,7 @@ An "end-to-end pipeline" example that uses Kamilib (written in French) is availa
 
 ## Tools build with KaMI-lib
 
-A turn-key graphical interface : [KaMI-app](https://kami-app.herokuapp.com/)
+A turn-key graphical interface : [KaMI-app](https://huggingface.co/spaces/lterriel/kami-app)
 
 ## :key: Quickstart
 
@@ -157,13 +157,12 @@ which returns a dictionary containing your metrics (for more details on metrics 
 
 Depending on the size of the ground truth file, the prediction process may take more or less time.
 
-Kraken parameters can be modified. You can specify the number of CPU workers for inference (default 7) with the `workers` parameter, and you can set the principal text direction with the `text_direction` parameter ("horizontal-lr", "horizontal-rl", "vertical-lr ", "vertical-rl". By default Kami uses "horizontal-lr".).
+Kraken parameters can be modified: you can set the principal text direction with the `text_direction` parameter ("horizontal-lr", "horizontal-rl", "vertical-lr ", "vertical-rl". By default Kami uses "horizontal-lr".).
 
 ```python
 k = Kami(alto_gt,
          model=model,
          image=image,
-         workers=7,
          text_direction="horizontal-lr")  
 ```
 
@@ -275,7 +274,7 @@ If you have used text preprocessing, for example:
 
 ### 4. Metrics options
 
-KaMI provides the possibility to weight differently the operations made between the ground truth and the prediction (as insertions, substitutions or deletions). By default this operations have a weight of 1. You can change these weigthts with the parameters in the `Kami()` class:
+KaMI provides the possibility to weight differently the operations made between the ground truth and the prediction (as insertions, substitutions or deletions). By default this operations have a weight of 1.0. You can change these weigthts with the parameters in the `Kami()` class:
 
 - `insertion_cost`
 - `substitution_cost`
@@ -288,9 +287,9 @@ Example:
 ```python
 k = Kami(
     [ground_truth, prediction],
-    insertion_cost=1,
+    insertion_cost=1.0,
     substitution_cost=0.5,
-    deletion_cost=1
+    deletion_cost=1.0
     )  
 ```
 

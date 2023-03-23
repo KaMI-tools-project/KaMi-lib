@@ -55,13 +55,13 @@ setuptools.setup(
                         "kraken==4.3.5",
                         "unidecode==1.3.4",
                         "protobuf==3.20.0",
-                        "python-Levenshtein==0.12.2"
+                        "levenshtein==0.20.9"
     ],
-    package_data={
-        "kami": ["metrics/*.so"]
-    },
+    #package_data={
+    #    "kami": ["metrics/*.so"]
+    #},
     include_package_data=True,
-    python_requires='>=3.7',
+    python_requires='>=3.8',
     classifiers=CLASSIFIERS,
     keywords=["HTR", "OCR", "Evaluation framework", "metrics", "handwritten text recognition", "optical character recognition"]
 )

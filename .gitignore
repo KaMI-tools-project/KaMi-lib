@@ -24,7 +24,7 @@ kamilib.egg-info/
 
 # built Cython
 setup_cpp_evaluation.py
-kami/metrics/process_c2py.txt
+kami/metrics/legacy/process_c2py.txt
 
 
 # others
@@ -37,3 +37,4 @@ datatest/manual_transcript_letter_0607(1).txt
 main_test.py
 test.py
 endp_set/
+legacy/

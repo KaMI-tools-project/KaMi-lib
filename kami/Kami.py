@@ -120,9 +120,9 @@ class Kami:
                  ) -> None:
 
         # Data inputs
-        self.reference = None
-        self.prediction = None
-        self.model = None
+        self.reference = ""
+        self.prediction = ""
+        self.model = ""
 
         # Preprocessing options inputs
         self.apply_transforms = [code for line in apply_transforms.split() for code in line]
@@ -136,9 +136,9 @@ class Kami:
         self.verbosity = verbosity
 
         # Options for score weighting
-        self.insertion_weigtht=insertion_cost
-        self.substitution_weigtht=substitution_cost
-        self.deletion_weight=deletion_cost
+        self.insertion_weigtht = insertion_cost
+        self.substitution_weigtht = substitution_cost
+        self.deletion_weight = deletion_cost
 
         # Display options for scores output
         self.truncate = truncate

@@ -4,19 +4,15 @@
 """
     The ``evaluation`` module to assess text recognition (OCR/HTR) scores
     ======================================================================
-
 """
 
 from typing import Sequence, Tuple, Union
-from Levenshtein import (hamming,
+from Levenshtein import (distance,
+                         hamming,
                          editops)
 from ._base_metrics import (_truncate_score,
                             _hot_encode,
                             _get_percent)
-
-from ._shared_lib import METRICS_FUNCTIONS
-
-
 
 __all__ = [
     "Scorer",
@@ -25,13 +21,10 @@ __all__ = [
 
 class Scorer:
     """This class calculates the set of HTR / OCR scores.
-
     User can accesses directly to metrics/scores via the attributes of the :class: `Scorer` class
     in constructor method or via :class: `Kami` facade class.
-
     Parameters
     ----------
-
         :param reference: Ground-truth text or string.
         :type reference: str
         :param prediction: model string or text prediction or test text or string.
@@ -50,25 +43,23 @@ class Scorer:
         :type truncate_score: bool, optional
         :param round_digits: Set the number of digits after floating point in string form, defaults to '.01'.
         :type round_digits: str, optional
-
     Attributes
     ----------
-
-        :ivar _opt_percent: Option to show result in percent. 
+        :ivar _opt_percent: Option to show result in percent.
         :type _opt_percent: bool
-        :ivar _opt_truncate: Option to truncate result. 
+        :ivar _opt_truncate: Option to truncate result.
         :type _opt_truncate: bool
-        :ivar _round_digits: Number of digits after floating point. 
+        :ivar _round_digits: Number of digits after floating point.
         :type _round_digits: str
         :ivar reference: Ground-truth text or string.
         :type reference: str
         :ivar prediction: Text to compare or predicted sequence.
         :type prediction: str
-        :ivar insertion_cost: predefined a weight for insertions errors. 
+        :ivar insertion_cost: predefined a weight for insertions errors.
         :type insertion_cost: float
-        :ivar substitution_cost: predefined a weight for substitution errors. 
+        :ivar substitution_cost: predefined a weight for substitution errors.
         :type substitution_cost: float
-        :ivar deletion_cost: predefined a weight for insertions errors. 
+        :ivar deletion_cost: predefined a weight for insertions errors.
         :type deletion_cost: float
         :ivar length_char_reference: Total number of characters in reference string
         :type length_char_reference: int
@@ -107,9 +98,8 @@ class Scorer:
         :type insertions: int
         :ivar board: A benchmark of all metrics
         :type board: dict
-
-
     """
+
     def __init__(self,
                  reference: str,
                  prediction: str,
@@ -121,226 +111,182 @@ class Scorer:
                  round_digits: str = '.01') -> None:
 
         # Scores display options
-        self._opt_percent  = show_percent
+        self._opt_percent = show_percent
         self._opt_truncate = truncate_score
         self._round_digits = round_digits
-        
+
         # Strings to compare
-        self.reference  = reference
+        self.reference = reference
         self.prediction = prediction
 
         # Operations weigthts pre-defined (default to 1)
-        self.insertion_cost    = insertion_cost
-        self.deletion_cost     = deletion_cost
+        self.insertion_cost = insertion_cost
+        self.deletion_cost = deletion_cost
         self.substitution_cost = substitution_cost
 
         # Length set of sentences
-        self.length_char_reference   = len(reference)
-        self.length_char_prediction  = len(prediction)
-        self.length_words_reference  = len(reference.split())
+        self.length_char_reference = len(reference)
+        self.length_char_prediction = len(prediction)
+        self.length_words_reference = len(reference.split())
         self.length_words_prediction = len(prediction.split())
 
         # Strings operations (weighted and unweighted / char-based and word-based)
         self.hits, self.substs, self.deletions, self.insertions, self.substs_weighted, self.deletions_weighted, self.insertions_weighted, self.word_substs, self.word_deletions, self.word_insertions, self.word_substs_weighted, self.word_deletions_weighted, self.word_insertions_weighted = self._get_operation_counts()
 
         # Distances
-        if self.insertion_cost == 1 and self.deletion_cost  == 1 and self.substitution_cost == 1:
-            self.lev_distance_words, self.lev_distance_char = self._levenshtein_distance()
+        if self.insertion_cost == 1 and self.deletion_cost == 1 and self.substitution_cost == 1:
+            self.lev_distance_words, self.lev_distance_char = self._levensthein_distance()
         else:
-            self.lev_distance_words, self.lev_distance_char = self._weighted_levenshtein_distance()
+            self.lev_distance_words, self.lev_distance_char = self._weighted_levensthein_distance()
 
         self.hamming = self._hamming_distance()
 
         # HTR/OCR Metrics
-        self.wer      = self._wer()
+        self.wer = self._wer()
         self.wer_hunt = self._wer_hunt()
-        self.cer      = self._cer()
-        self.wacc     = self._wacc()
-        self.cip      = self._cip()
-        self.cil      = self._cil()
-        self.mer      = self._mer()
+        self.cer = self._cer()
+        self.wacc = self._wacc()
+        self.cip = self._cip()
+        self.cil = self._cil()
+        self.mer = self._mer()
 
         if self._opt_percent:
-            self.wer       = _get_percent(self.wer)
-            self.wer_hunt  = _get_percent(self.wer_hunt)
-            self.cer       = _get_percent(self.cer)
-            self.wacc      = _get_percent(self.wacc)
-            self.cip       = _get_percent(self.cip)
-            self.cil       = _get_percent(self.cil)
-            self.mer       = _get_percent(self.mer)
+            self.wer = _get_percent(self.wer)
+            self.wer_hunt = _get_percent(self.wer_hunt)
+            self.cer = _get_percent(self.cer)
+            self.wacc = _get_percent(self.wacc)
+            self.cip = _get_percent(self.cip)
+            self.cil = _get_percent(self.cil)
+            self.mer = _get_percent(self.mer)
 
         if self._opt_truncate:
-            self.wer       = _truncate_score(self.wer, self._round_digits)
-            self.wer_hunt  = _truncate_score(self.wer_hunt, self._round_digits)
-            self.cer       = _truncate_score(self.cer, self._round_digits)
-            self.wacc      = _truncate_score(self.wacc, self._round_digits)
-            self.cip       = _truncate_score(self.cip, self._round_digits)
-            self.cil       = _truncate_score(self.cil, self._round_digits)
-            self.mer       = _truncate_score(self.mer, self._round_digits)
+            self.wer = _truncate_score(self.wer, self._round_digits)
+            self.wer_hunt = _truncate_score(self.wer_hunt, self._round_digits)
+            self.cer = _truncate_score(self.cer, self._round_digits)
+            self.wacc = _truncate_score(self.wacc, self._round_digits)
+            self.cip = _truncate_score(self.cip, self._round_digits)
+            self.cil = _truncate_score(self.cil, self._round_digits)
+            self.mer = _truncate_score(self.mer, self._round_digits)
 
         # Summary of all metrics
         self.board = {
-                "levensthein_distance_char": self.lev_distance_char,
-                "levensthein_distance_words": self.lev_distance_words,
-                "hamming_distance": self.hamming,
-                "wer": self.wer,
-                "cer": self.cer,
-                "wacc": self.wacc,
-                "wer_hunt": self.wer_hunt,
-                "mer": self.mer,
-                "cil": self.cil,
-                "cip": self.cip,
-                "hits": self.hits,
-                "substitutions": self.substs,
-                "deletions": self.deletions,
-                "insertions": self.insertions,
-                "Length_reference": self.length_char_reference,
-                "Length_prediction": self.length_char_prediction
+            "levensthein_distance_char": self.lev_distance_char,
+            "levensthein_distance_words": self.lev_distance_words,
+            "hamming_distance": self.hamming,
+            "wer": self.wer,
+            "cer": self.cer,
+            "wacc": self.wacc,
+            "wer_hunt": self.wer_hunt,
+            "mer": self.mer,
+            "cil": self.cil,
+            "cip": self.cip,
+            "hits": self.hits,
+            "substitutions": self.substs,
+            "deletions": self.deletions,
+            "insertions": self.insertions,
+            "Length_reference": self.length_char_reference,
+            "Length_prediction": self.length_char_prediction
         }
 
-    # Collection of distance metrics  #
-    # - Levenshtein distance (Sum edit operations with python-Levenshtein C extension)
-    # - Weighted Levenshtein distance (Sum edit operations (add costs) with python-Levenshtein C extension)
-    # - Hamming distance (python-Levenshtein C extension)
-
-    def _levenshtein_distance(self) -> Tuple[float, float]:
-        """Compute Levenshtein distance.
-
-        Lev = Substitutions + Deletions + Insertions
+    # Collection of distance metrics #
+    def _levensthein_distance(self) -> Tuple[float, float]:
+        """Compute Levensthein distance from C extension module Python-Levensthein.
 
         Returns:
-            Tuple[float, float]: Levenshtein distance based on word level, Levenshtein distance based on char level
+            Tuple[float, float]: weighted levensthein distance based on char level, weighted levensthein distance based on word level
         """
-        return sum([
-                self.word_substs,
-                self.word_deletions,
-                self.word_insertions]),\
-            sum([
-                self.substs,
-                self.deletions,
-                self.insertions])
+        return distance(*_hot_encode(
+            [self.reference.split(), self.prediction.split()])), distance(self.reference, self.prediction)
 
-    def _weighted_levenshtein_distance(self) -> Tuple[float, float]:
-        """Compute Levenshtein distance from predefined cost.
-
-        w_Lev = w1*Substitutions + w2*Deletions + w3*Insertions
-
-        where w1, w2 and w3 are user's cost
-
-        Returns: Tuple[float, float]: weighted Levenshtein distance based on word level, weighted Levenshtein
-        distance based on char level
+    def _weighted_levensthein_distance(self) -> Tuple[float, float]:
+        """Compute Levensthein distance from predefined cost.
+        Returns:
+            Tuple[float, float]: weighted levensthein distance based on word level, weighted levensthein distance based on char level
         """
-        return sum([
-            self.word_substs_weighted,
-            self.word_deletions_weighted,
-            self.word_insertions_weighted]), \
-            sum([
-                self.substs_weighted,
-                self.deletions_weighted,
-                self.insertions_weighted])
+        return sum(
+            [self.word_substs_weighted,
+             self.word_deletions_weighted,
+             self.word_insertions_weighted]
+        ), sum(
+            [self.substs_weighted,
+             self.deletions_weighted,
+             self.insertions_weighted]
+        )
 
     def _hamming_distance(self) -> Union[str, int]:
-        """Compute Hamming distance."""
-        return "Ø" \
-            if self.length_char_reference != self.length_char_prediction \
-            else hamming(self.reference, self.prediction)
+        """Compute Hamming distance from C extension module Python-Levensthein."""
+        return "Ø" if self.length_char_reference != self.length_char_prediction else hamming(self.reference,
+                                                                                             self.prediction)
 
-    # Collection of HTR/OCR metrics      #
-    # C implementations (_metrics_lib.c) #
-    # - Word Error Rate (WER)
-    # - Hunt's Word Error Rate
-    # - Character Error Rate (CER)
-    # - Word Accuracy (Wacc)
+    # Collection of HTR/OCR metrics #
 
     def _wer(self) -> float:
-        """Compute word error rate (WER).
-
-        WER = Levenshtein on words / total words in reference
-        """
-        return METRICS_FUNCTIONS.WordErrorRate(self.lev_distance_words, self.length_words_reference)
+        """Compute word error rate (WER)."""
+        return (self.lev_distance_words / self.length_words_reference)
 
     def _wer_hunt(self) -> float:
-        """Compute Hunt word error rate that minimize errors of deletions and insertions.
-
-        Hunt WER = (S + D*0.5 + I*0.5) / total words in reference
-        """
-        return METRICS_FUNCTIONS.WordErrorRateHuntStyle(
-                sum([
-                    float(self.word_substs),
-                    float(self.word_deletions)*0.5,
-                    float(self.word_insertions)*0.5]), float(self.length_words_reference)
-            ) if (
-                self.insertion_cost == 1.0
-                and self.deletion_cost == 1.0
-                and self.substitution_cost == 1.0) \
-            else \
-            METRICS_FUNCTIONS.WordErrorRateHuntStyle(
-                sum([
-                    float(self.word_substs_weighted),
-                    float(self.word_deletions_weighted)*0.5,
-                    float(self.word_insertions_weighted)*0.5]), float(self.length_words_reference)
-            )
+        """Compute Hunt word error rate that minimize errors of deletions and insertions."""
+        return (sum([
+            self.word_substs,
+            0.5 * self.word_deletions,
+            0.5 * self.word_insertions
+        ]
+        ) / self.length_words_reference) if (
+                self.insertion_cost == 1
+                and self.deletion_cost == 1
+                and self.substitution_cost == 1) else (sum(
+            [
+                self.word_substs_weighted,
+                0.5 * self.word_deletions_weighted,
+                0.5 * self.word_insertions_weighted
+            ]
+        ) / self.length_words_reference)
 
     def _cer(self) -> float:
-        """Compute character error rate (CER).
-
-        CER = Levenshtein on characters / total characters in reference
-        """
-        return METRICS_FUNCTIONS.CharacterErrorRate(self.lev_distance_char, self.length_char_reference)
+        """Compute character error rate (CER)."""
+        return (self.lev_distance_char / self.length_char_reference)
 
     def _wacc(self) -> float:
-        """Compute word accuracy (Wacc).
-
-        Wacc = 1 - WER
-        """
-        return METRICS_FUNCTIONS.WordAccuracy(self.wer)
+        """Compute word accuracy (Wacc)."""
+        return (1 - (self.lev_distance_words / self.length_words_reference))
 
     # Collection of experimental ASR (Automatic Speech Recognition) metrics #
-    # C implementations (_metrics_lib.c)                                    #
-    # - Character Information Preserved (CIP)
-    # - Character Information Lost (CIL)
-    # - Match Error Rate (MER)
-
     def _cip(self) -> float:
-        """Compute character information preserved (CIP).
-
-        CIP = (Hits/total characters in reference)*(Hits/total characters in prediction)
-
-        where Hits are characters that matched in reference and in prediction
-        """
-        return METRICS_FUNCTIONS.CharacterInformationPreserve(self.hits, self.length_char_reference, self.length_char_prediction) if self.prediction else 0.0
+        """Compute character information preserved (CIP)."""
+        return (float(self.hits) / self.length_char_reference) * (
+                    float(self.hits) / self.length_char_prediction) if self.prediction else 0.0
 
     def _cil(self) -> float:
-        """Compute character information lost (CIL).
-
-        CIL = 1 - CIP
-        """
-        return METRICS_FUNCTIONS.CharacterInformationLost(self.cip) if self.prediction else 0.0
+        """Compute character information lost (CIL)."""
+        return (1 - (float(self.hits) / self.length_char_reference) * (
+                    float(self.hits) / self.length_char_prediction)) if self.prediction else 0.0
 
     def _mer(self) -> float:
-        """Compute match error rate (MER).
-
-        MER = Lev distance on characters / Hits + Lev distance on characters
-        """
-        return METRICS_FUNCTIONS.MatchErrorRate(self.hits, self.lev_distance_char)
+        """Compute match error rate (MER)."""
+        return float(
+            self.substs
+            + self.deletions
+            + self.insertions) \
+            / float(
+                self.hits
+                + self.substs
+                + self.deletions
+                + self.insertions)
 
     @staticmethod
-    def sentence_blocks(sentence, n=30):
-        """Split text into sentences and generate blocks of n sentences"""
-        # not the best sentence tokenization
-        # but use it only for very long text
+    def sentence_blocks(sentence, n=10):
         s = sentence.split("\n")
         for i in range(0, len(s), n):
             yield " ".join(s[i:i + n])
 
-    def _get_operation_counts(self) -> Tuple[int, int, int, int, float, float, float, int, int, int, float, float, float]:
+    def _get_operation_counts(self) -> Tuple[
+        int, int, int, int, float, float, float, int, int, int, float, float, float]:
         """Find sequence of edit operations transforming one string to another.
         Based on editops function from C extension module python-Levenshtein."""
 
         # Texts over ~7000/8000 characters can cause a MemoryError with
-        # .editops() function; the strategy is to tokenize sentences and pass
-        # in .editops() with a batch process.
-
+        # editops function; the strategy is to tokenize sentences and pass
+        # in editops with a batch process.
         try:
             result_editops_char = editops(self.reference, self.prediction)
             result_editops_word = editops(*_hot_encode(
@@ -353,7 +299,8 @@ class Scorer:
         except MemoryError:
             result_editops_char = []
             result_editops_word = []
-            for  r, p in zip(self.sentence_blocks(self.reference), self.sentence_blocks(self.prediction)):
+
+            for r, p in zip(self.sentence_blocks(self.reference), self.sentence_blocks(self.prediction)):
                 result_editops_char.extend(editops(r, p))
                 result_editops_word.extend(editops(*_hot_encode(
                     [
@@ -376,36 +323,21 @@ class Scorer:
         deletions = _sum_operations("delete", result_editops_char)
         insertions = _sum_operations("insert", result_editops_char)
 
-        substitutions_weighted = _sum_operations_weighted("replace",
-                                                          result_editops_char,
-                                                          weight=self.substitution_cost)
-        deletions_weighted = _sum_operations_weighted("delete",
-                                                      result_editops_char,
-                                                      weight=self.deletion_cost)
-        insertions_weighted = _sum_operations_weighted("insert",
-                                                       result_editops_char,
-                                                       weight=self.insertion_cost)
+        substitutions_weighted = _sum_operations_weighted("replace", result_editops_char, weight=self.substitution_cost)
+        deletions_weighted = _sum_operations_weighted("delete", result_editops_char, weight=self.deletion_cost)
+        insertions_weighted = _sum_operations_weighted("insert", result_editops_char, weight=self.insertion_cost)
 
-        word_substitutions = _sum_operations("replace",
-                                             result_editops_word)
-        word_deletions = _sum_operations("delete",
-                                         result_editops_word)
-        word_insertions = _sum_operations("insert",
-                                          result_editops_word)
+        word_substitutions = _sum_operations("replace", result_editops_word)
+        word_deletions = _sum_operations("delete", result_editops_word)
+        word_insertions = _sum_operations("insert", result_editops_word)
 
-        word_substitutions_weighted = _sum_operations_weighted("replace",
-                                                               result_editops_word,
+        word_substitutions_weighted = _sum_operations_weighted("replace", result_editops_word,
                                                                weight=self.substitution_cost)
-        word_deletions_weighted = _sum_operations_weighted("delete",
-                                                           result_editops_word,
-                                                           weight=self.deletion_cost)
-        word_insertions_weighted = _sum_operations_weighted("insert",
-                                                            result_editops_word,
-                                                            weight=self.insertion_cost)
+        word_deletions_weighted = _sum_operations_weighted("delete", result_editops_word, weight=self.deletion_cost)
+        word_insertions_weighted = _sum_operations_weighted("insert", result_editops_word, weight=self.insertion_cost)
 
         hits = self.length_char_reference - (substitutions + deletions)
-        return \
-            hits, \
+        return hits, \
             substitutions, \
             deletions, \
             insertions, \
