@@ -3,7 +3,7 @@
 KaMI-lib (Kraken Model Inspector)
 =====
 
-![Python Version](https://img.shields.io/badge/Python-%3E%3D%203.7-%2313aab7)
+![Python Version](https://img.shields.io/badge/Python-%3E%3D%203.8-%2313aab7)
 
 [![KaMI-lib Tests](https://github.com/KaMI-tools-project/KaMi-lib/actions/workflows/tests.yml/badge.svg)](https://github.com/KaMI-tools-project/KaMi-lib/actions/workflows/tests.yml)
 [![Version](https://badge.fury.io/py/kamilib.svg)](https://badge.fury.io/py/kamilib)
@@ -420,7 +420,7 @@ Mail authors and contact: Alix Chagué (alix.chague@inria.fr) and Lucas Terriel 
 
 Special thanks: Hugo Scheithauer (hugo.scheithauer@inria.fr)
 
-*KaMI-lib* is developed and maintained by authors (2021-2022, first version named Kraken-Benchmark in 2020) 
+*KaMI-lib* is developed and maintained by authors (2021-2023, first version named Kraken-Benchmark in 2020) 
 with contributions of [ALMAnaCH](http://almanach.inria.fr/index-en.html) at [Inria](https://www.inria.fr/en) Paris.
 
 
